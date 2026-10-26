@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD</title>
+  <link rel="stylesheet" href="styles.css?v=20261024c" />
+  <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+</head>
+<body>
+
+  <!-- HERO HEADER -->
+  <header class="hero-header">
+    <div class="container">
+      <div class="badge-row">
+        <span class="badge highlight">Collinearity-Free Rerun (Median VIF = 1.022)</span>
+        <span class="badge">missense_ind &amp; GERP Removed</span>
+        <span class="badge">16,820,350 Coding Variants Merged</span>
+        <span class="badge">Ultra-Rare AF &le; 0.0001</span>
+        <span class="badge">Firth 2&times;2 Fallback (64.12%)</span>
+        <span class="badge">20 Strict / 36 Exome-Wide Ultra-Rare IBD Genes</span>
+      </div>
+      <h1 class="hero-title">
+        Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD
+      </h1>
+      <p style="font-size: 0.98rem; font-weight: 600; color: #e2e8f0; margin-bottom: 0.55rem;">
+        <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305
+      </p>
+      <p class="hero-subtitle">
+        Explore all ultra-rare (AF &le; 0.0001) exome-wide significant IBD risk genes across CD, UC, and Combined IBD and their core biological pathways below.
+      </p>
+      <div class="hero-actions">
+        <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261025d" target="_blank" class="btn btn-primary">
+          &#128196; Download Ultra-Rare (AF &lt; 0.0001) Manuscript (PDF)
+        </a>
+        <a href="#section-pathways" class="btn btn-outline">
+          &#129516; Ultra-Rare Pathway Architecture (AF &le; 0.0001)
+        </a>
+        <a href="#section-gene-size" class="btn btn-outline">
+          &#128200; Gene Size (AA) vs. &minus;log<sub>10</sub>(p)
+        </a>
+        <a href="#section-figures" class="btn btn-outline">
+          &#128444; Publication Figures (AF &le; 0.0001)
+        </a>
+        <a href="#section-gene-table" class="btn btn-outline">
+          &#128269; Gene-Level Results Table
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY GLOBAL CONTROLS -->
+  <nav class="control-bar">
+    <div class="container">
+      <div class="control-grid">
+        <div class="control-group">
+          <label for="ctrl-af">Allele Frequency Threshold</label>
+          <select id="ctrl-af">
+            <option value="af0001" selected>AF &le; 0.0001 (0.01% — Ultra-Rare)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="ctrl-spec">Coding Baseline &amp; Estimator</label>
+          <select id="ctrl-spec">
+            <option value="hybrid_nonsyn" selected>Non-Synonymous Coding (Aguilar et al. 2025, Hybrid β + Firth)</option>
+            <option value="hybrid_synbase">Synonymous-Referenced Coding (Lauer &amp; Rivas 2025, Hybrid β + Firth)</option>
+            <option value="firth_nonsyn">Pure Firth 2&times;2 Sensitivity (100% Firth Odds Ratios)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="ctrl-group">Phenotype Cohort</label>
+          <select id="ctrl-group">
+            <option value="ALL" selected>All Cohorts Combined (IBD + CD + UC)</option>
+            <option value="CD">CD — Crohn's Disease (19,924 cases)</option>
+            <option value="UC">UC — Ulcerative Colitis (14,836 cases)</option>
+            <option value="IBD">IBD — Combined IBD (37,708 cases)</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="ctrl-model">Active Collinearity-Free Model</label>
+          <select id="ctrl-model">
+            <option value="M7" selected>M7: AM + LoF + Constraint (3 d.f. Full Unified)</option>
+            <option value="M5">M5: AM + LoF (2 d.f. Pathogenicity + LoF)</option>
+            <option value="M2">M2: AlphaMissense Only (1 d.f.)</option>
+            <option value="M4">M4: LoF + Constraint (2 d.f.)</option>
+            <option value="M1">M1: LoF Only (1 d.f.)</option>
+            <option value="M3">M3: HMM Constraint Only (1 d.f.)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content container">
+
+    <!-- LIVE KPI STRIP -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Gene-Phenotype Tests (N &ge; 25)</div>
+        <div class="kpi-value" id="kpi-tests-val">51,407</div>
+        <div class="kpi-sub" id="kpi-tests-sub">Median VIF = 1.022 (17,189 genes)</div>
+      </div>
+      <div class="kpi-card m1" id="kpi-card-M1">
+        <div class="kpi-label">M1: LoF Only (1 df)</div>
+        <div class="kpi-value" id="kpi-val-M1">3 (3)</div>
+        <div class="kpi-sub" id="kpi-sub-M1">p &lt; 3.4e-7</div>
+      </div>
+      <div class="kpi-card m2" id="kpi-card-M2">
+        <div class="kpi-label">M2: AM Only (1 df)</div>
+        <div class="kpi-value" id="kpi-val-M2">13 (9)</div>
+        <div class="kpi-sub" id="kpi-sub-M2">p &lt; 3.4e-7</div>
+      </div>
+      <div class="kpi-card m3" id="kpi-card-M4">
+        <div class="kpi-label">M4: LoF + Constraint (2 df)</div>
+        <div class="kpi-value" id="kpi-val-M4">3 (3)</div>
+        <div class="kpi-sub" id="kpi-sub-M4">p &lt; 3.4e-7</div>
+      </div>
+      <div class="kpi-card m4" id="kpi-card-M5">
+        <div class="kpi-label">M5: AM + LoF (2 df)</div>
+        <div class="kpi-value" id="kpi-val-M5">18 (16)</div>
+        <div class="kpi-sub" id="kpi-sub-M5">p &lt; 3.4e-7</div>
+      </div>
+      <div class="kpi-card m5 active-model" id="kpi-card-M7">
+        <div class="kpi-label">M7: AM + LoF + Con (3 df)</div>
+        <div class="kpi-value" id="kpi-val-M7">9 (9)</div>
+        <div class="kpi-sub" id="kpi-sub-M7">p &lt; 3.4e-7</div>
+      </div>
+    </section>
+
+    <!-- ROW 1: PROGRESSION CHART & UNIFIED VS BROWSER SCATTER -->
+    <div class="chart-row-2col">
+      <div class="section-card" style="margin-bottom: 0;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">1. Collinearity-Free Stepwise Progression (M1 &rarr; M7)</h2>
+            <p class="section-desc">Exome-wide significant associations (<em>p</em> &lt; 3.4&times;10<sup>&minus;7</sup>) without <code>missense_ind</code> or <code>GERP_RS</code>.</p>
+          </div>
+        </div>
+        <div id="plot-progression" class="plot-box"></div>
+      </div>
+
+      <div class="section-card" style="margin-bottom: 0;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">2. Unified Meta-Regression vs. Exome Browser Burden</h2>
+            <p class="section-desc">Click any gene point to inspect its stepwise trajectory and orthogonal partial <em>R</em>&sup2; breakdown below.</p>
+          </div>
+        </div>
+        <div id="plot-vs-browser" class="plot-box"></div>
+      </div>
+    </div>
+
+    <!-- ROW 2: GENE TRAJECTORY & ORTHOGONAL PARTIAL R2 INSPECTOR -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">3. Interactive Gene Trajectory &amp; Orthogonal 3-Moderator Partial R&sup2; Inspector</h2>
+          <p class="section-desc" id="inspector-gene-summary">Select any gene from the dropdown or click a row in the table below.</p>
+        </div>
+        <div style="min-width: 360px;">
+          <select id="select-inspector-gene" style="width: 100%; padding: 0.5rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600;"></select>
+        </div>
+      </div>
+      <div class="chart-row-2col" style="margin-bottom: 0;">
+        <div id="plot-gene-trajectory" class="plot-box" style="height: 360px;"></div>
+        <div id="plot-gene-partial-r2" class="plot-box" style="height: 360px;"></div>
+      </div>
+    </section>
+
+    <!-- ROW 3: DEEP BIOLOGICAL PATHWAY EXPLORER -->
+    <section class="section-card" id="section-pathways">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title" id="pathway-section-title">4. Deep Biological Pathway Architecture — Ultra-Rare Coding Variants (AF &le; 0.0001)</h2>
+          <p class="section-desc">
+            Pathway enrichment is computed at the ultra-rare variant threshold <strong>AF &le; 0.0001</strong> across GO, Reactome, KEGG, WikiPathways, and 9 curated biological modules. Click any module card below to filter the scatter plot and gene table.
+          </p>
+        </div>
+      </div>
+      <div class="methods-grid" id="pathway-cards-grid" style="margin-bottom: 1.25rem;"></div>
+      <div class="table-wrapper" style="margin-bottom: 1.25rem; max-height: 340px;">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>Database Library</th>
+              <th>Enriched Pathway / Ontology Term (AF &le; 0.0001)</th>
+              <th>Odds Ratio</th>
+              <th>Fisher P-value</th>
+              <th>Overlap</th>
+              <th>Overlapping Significant IBD Genes (AF &le; 0.0001)</th>
+            </tr>
+          </thead>
+          <tbody id="enrichr-table-body"></tbody>
+        </table>
+      </div>
+      <div class="fig-grid" style="grid-template-columns: 1fr;">
+        <div class="fig-card">
+          <a id="link-fig7-pathway-1" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" target="_blank">
+            <img id="img-fig7-pathway" src="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" alt="Figure 7: Ultra-Rare Pathway Enrichment and Functional Architecture" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 7. Ultra-Rare (AF &le; 0.0001) Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and 9-Module Functional Breakdown Across CD, UC, and Combined IBD.</strong></span>
+            <a id="link-fig7-pathway-2" class="fig-open-link" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" target="_blank">
+            <img src="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" alt="Nano Banana Biological Illustration: Epithelial Barrier and Hemidesmosome Complex" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Biological Pathway Illustration 1 (Nano Banana). Intestinal Epithelial Barrier, Goblet Cell Mucin Layer, Apical MLCK Tight Junctions, and Basal Type I Hemidesmosome&ndash;Laminin-511 Basement Membrane Anchoring Complex (96.5&times; Enriched in IBD Exome).</strong></span>
+            <a class="fig-open-link" href="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" target="_blank">&#128269; Open High-Res PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261024d" target="_blank">
+            <img src="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261024d" alt="Figure 8: Epithelial Barrier and Hemidesmosome Schematic" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 8. Quantitative Molecular Architecture &amp; Discovery Gain Across the Intestinal Epithelial Barrier, Mucin Gel, Apical MLCK Ring, Rho/Rac/Cdc42 GEFs, and Basal Type I Hemidesmosome &amp; Lamina Densa Basement Membrane Complex (OR = 96.5&times;, p = 2.17&times;10<sup>&minus;5</sup>).</strong></span>
+            <a class="fig-open-link" href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261024d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" target="_blank">
+            <img src="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" alt="Nano Banana Biological Illustration: Intracellular Xenophagy and Inflammasome Restraint" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Biological Pathway Illustration 2 (Nano Banana). Intracellular Bacterial Sensing (NOD2, RNF213, SMURF1), DPP9&ndash;NLRP1/CARD8 Inflammasome Restraint, Sequential WIPI2&ndash;ATG16L1 Xenophagy &amp; ATG2A/VPS13D Lipid Transfer, HOPS/CORVET Lysosomal Fusion, and Microbial Acetate Epigenetic Remodeling.</strong></span>
+            <a class="fig-open-link" href="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" target="_blank">&#128269; Open High-Res PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261024d" target="_blank">
+            <img src="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261024d" alt="Figure 9: Innate Immunity and Autophagy Pathway Map" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 9. Quantitative Pathway Map &amp; Orthogonal 3-Moderator Partial R&sup2; Decomposition Across Intracellular Innate Immunity, Sequential Xenophagy, HOPS/CORVET Tethering, Paneth/Goblet ERAD (SEL1L), and Microbial Acetate &rarr; Acetyl-CoA Chromatin Remodeling.</strong></span>
+            <a class="fig-open-link" href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261024d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROW 3B: RELATIONSHIP BETWEEN M7 -LOG10(P), EXPLAINED VARIANCE R2, AND GENE SIZE (AMINO ACIDS) -->
+    <section class="section-card" id="section-gene-size">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">4B. Relationship Between Ultra-Rare Unified M7 &minus;log<sub>10</sub>(p-value), Explained Variance (R&sup2;), and Gene Size (Amino Acids, L<sub>AA</sub>) at AF &le; 0.0001</h2>
+          <p class="section-desc">
+            Across 51,407 ultra-rare gene&ndash;phenotype tests at AF &le; 0.0001, canonical protein length <em>L</em><sub>AA</sub> correlates linearly with ultra-rare coding variant count <em>M<sub>g</sub></em> (<em>r</em> = +0.907, &approx;0.32 variants/AA), while exhibiting minimal correlation with &minus;log<sub>10</sub>(<em>p</em><sub>M7</sub>) (Pearson <em>r</em>(log<sub>10</sub>AA) = +0.1352, Spearman &rho; = +0.1063) and an inverse critical variance law <em>R</em>&sup2;<sub>crit</sub>(<em>L</em><sub>AA</sub>) &approx; 31.8 / (0.32 <em>L</em><sub>AA</sub> + 27.8).
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+          <select id="select-genesize-yaxis" style="padding: 0.48rem 0.7rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600;">
+            <option value="neglog10_p" selected>Y-Axis: Unified M7 &minus;log10(p-value)</option>
+            <option value="r2_pct">Y-Axis: Explained Variance R&sup2; (%) + Iso-Significance Curve</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-row-2col" style="margin-bottom: 1.25rem;">
+        <div id="plot-gene-size-scatter" class="plot-box" style="height: 410px;"></div>
+        <div id="plot-gene-size-bins" class="plot-box" style="height: 410px;"></div>
+      </div>
+      <div class="fig-card">
+        <a id="link-fig10-genesize-1" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" target="_blank">
+          <img id="img-fig10-genesize" src="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" alt="Figure 10: M7 -log10(p) vs Gene Size in Amino Acids at AF <= 0.0001" />
+        </a>
+        <div class="fig-caption">
+          <span><strong>Figure 10 (Ultra-Rare AF &le; 0.0001). 4-Panel Analysis of Unified Model M7 Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>, GENCODE v44).</strong></span>
+          <a id="link-fig10-genesize-2" class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROW 4: VARIANT-LEVEL WLS PROFILE VIEWER -->
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">5. Variant-Level WLS Meta-Regression Profile Viewer</h2>
+          <p class="section-desc">
+            Inspect individual rare coding variants (sized by inverse-variance weight <em>w<sub>i</sub></em> = 1/SE<sub><em>i</em></sub>&sup2;), comparing Browser meta-analysis &beta; vs. Firth 2&times;2 penalized-likelihood fallback estimates.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
+          <select id="select-variant-gene" style="padding: 0.48rem 0.7rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600;">
+            <option value="NOD2_CD" selected>NOD2 (CD) — Innate MDP Sensor (M5 p=2.51e-16, p_AM=6.0e-12, p_LoF=8.2e-7)</option>
+            <option value="SBNO2_CD">SBNO2 (CD) — IL-10/STAT3 Corepressor (M5 p=4.52e-10, R²=8.0%)</option>
+            <option value="LAMA5_UC">LAMA5 (UC) — Laminin-511 Basement Membrane (M7 p=1.61e-13, 3-Axis Synergy)</option>
+            <option value="PLEC_CD">PLEC (CD) — Hemidesmosome Plakin Cytolinker (M7 p=1.06e-12)</option>
+            <option value="BSN_CD">BSN (CD) — 3p21 Presynaptic/Enteric Scaffold (M7 p=6.35e-14)</option>
+            <option value="SYNE2_UC">SYNE2 (UC) — LINC Nuclear-Cytoskeletal Linker (M7 p=4.68e-12, Con p=1.4e-7)</option>
+            <option value="VPS13D_UC">VPS13D (UC) — Autophagosome/Mitophagy Lipid Channel (M7 p=5.60e-11)</option>
+            <option value="DOCK7_UC">DOCK7 (UC) — Rac1/Cdc42 Cytoskeletal GEF (M7 p=1.34e-11)</option>
+            <option value="TRIO_CD">TRIO (CD) — Rho/Rac Dual GEF (M7 p=8.19e-12)</option>
+            <option value="AGER_UC">AGER (UC) — MHC-III RAGE Calprotectin Receptor (M7 p=1.78e-11, R²=20.6%)</option>
+            <option value="RUNX1_IBD">RUNX1 (IBD) — Treg/Th17 Master Transcription Factor (M1 p=1.37e-12, R²=19.6%)</option>
+            <option value="DPP9_CD">DPP9 (CD) — NLRP1/CARD8 Inflammasome Checkpoint (AM p=3.9e-8)</option>
+            <option value="MUC5B_UC">MUC5B (UC) — Secreted Gel-Forming Mucin (M7 p=3.44e-11)</option>
+            <option value="SACS_UC">SACS (UC) — Intermediate Filament Chaperone (M5 p=1.05e-13)</option>
+            <option value="ZNF462_IBD">ZNF462 (IBD) — Chromatin Remodeling Factor (AF 0.0001 M5 p=1.23e-8)</option>
+            <option value="HPD_UC">HPD (UC) — Tyrosine Immunometabolism (AF 0.0001 M7 p=9.20e-8, R²=22.7%)</option>
+          </select>
+          <select id="select-variant-xaxis" style="padding: 0.48rem 0.7rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600;">
+            <option value="log_am" selected>X-Axis: AlphaMissense [-log(1 - s_AM)]</option>
+            <option value="log_con">X-Axis: HMM Constraint [-log(1 - p_con)]</option>
+          </select>
+        </div>
+      </div>
+      <div id="plot-variant-profile" class="plot-box" style="height: 420px;"></div>
+    </section>
+
+    <!-- ROW 5: INTERACTIVE GENE RESULTS TABLE -->
+    <section class="section-card" id="section-gene-table">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">6. Interactive Gene-Level Results Table (Collinearity-Free Models &amp; Partial R&sup2;)</h2>
+          <p class="section-desc">Click any column header to sort; click any gene row to load its trajectory and partial <em>R</em>&sup2; decomposition in Section 3.</p>
+        </div>
+        <div id="table-count-label" style="font-size: 0.82rem; font-weight: 600; color: #475569;"></div>
+      </div>
+
+      <div class="table-controls">
+        <input type="text" id="input-gene-search" placeholder="Search gene symbol (e.g., NOD2, LAMA5, PLEC, DPP9, WIPI2, SEL1L, MYLK)..." />
+        <select id="select-pathway-filter">
+          <option value="ALL" selected>All Biological Pathways</option>
+          <option value="M1_HEMIDESMOSOME">1. Hemidesmosome &amp; Basement Membrane (10 genes)</option>
+          <option value="M2_TIGHT_JUNCTION">2. Apical Tight/Adherens Junction &amp; MLCK (16 genes)</option>
+          <option value="M3_RHO_GTPASE">3. Rho/Rac/Cdc42 Small GTPase GEFs (14 genes)</option>
+          <option value="M4_INNATE_IMMUNE">4. Innate Immunity, Inflammasome &amp; CBM (13 genes)</option>
+          <option value="M5_AUTOPHAGY_ERAD">5. Autophagy, Xenophagy, HOPS &amp; ERAD (15 genes)</option>
+          <option value="M6_MUCIN_BILE">6. Mucin Gel Layer, O-Glycans &amp; Bile Transport (11 genes)</option>
+          <option value="M7_CALCIUM_CHANNELS">7. Epithelial &amp; Enteric Ca2+ Signaling (10 genes)</option>
+          <option value="M8_CHROMATIN">8. Chromatin Remodeling SWI/SNF &amp; MLL (16 genes)</option>
+          <option value="M9_IMMUNOMETABOLISM">9. SCFA / Acetyl-CoA Immunometabolism (8 genes)</option>
+        </select>
+        <select id="select-sig-filter">
+          <option value="all" selected>Show All Loaded Genes</option>
+          <option value="exome">Exome-Wide Significant Only (p &lt; 3.4e-7)</option>
+          <option value="sug">Suggestive &amp; Significant (p &lt; 2.5e-6)</option>
+          <option value="rescued">Novel Rescued Only (Unified p &lt; 3.4e-7 &amp; Browser p &ge; 3.4e-7)</option>
+        </select>
+        <button id="btn-export-csv" class="btn btn-primary" style="background: #0f172a; color: #ffffff;">
+          &#11015; Export Filtered Table (.CSV)
+        </button>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th data-sort="gene">Gene &#8597;</th>
+              <th data-sort="group">Group &#8597;</th>
+              <th data-sort="aa_len">Length (AA) &#8597;</th>
+              <th data-sort="n_var">N<sub>var</sub> &#8597;</th>
+              <th>pLoF / Mis</th>
+              <th data-sort="vif">VIF &#8597;</th>
+              <th data-sort="p_M1">M1: LoF &#8597;</th>
+              <th data-sort="p_M2">M2: AM &#8597;</th>
+              <th data-sort="p_M3">M3: Con &#8597;</th>
+              <th data-sort="p_M5">M5: AM+LoF &#8597;</th>
+              <th data-sort="p_M7">M7: AM+LoF+Con &#8597;</th>
+              <th data-sort="r2_M7">R&sup2; (M7) &#8597;</th>
+              <th data-sort="p_am">p<sub>AM</sub> (partial R&sup2;) &#8597;</th>
+              <th data-sort="p_lof">p<sub>LoF</sub> (partial R&sup2;) &#8597;</th>
+              <th data-sort="p_con">p<sub>Con</sub> (partial R&sup2;) &#8597;</th>
+              <th data-sort="p_bro">Browser min p &#8597;</th>
+            </tr>
+          </thead>
+          <tbody id="gene-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ROW 6: PUBLICATION FIGURES GALLERY -->
+    <section class="section-card" id="section-figures">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">7. Publication-Quality Figures (300 DPI — Click Any Figure to Open Full-Resolution PNG)</h2>
+          <p class="section-desc">All 7 figures from the collinearity-free rerun are embedded in the PDF technical report and displayed at full width below.</p>
+        </div>
+      </div>
+
+      <div class="fig-grid">
+        <div class="fig-card">
+          <a href="assets/fig1_model_progression.png?v=20261025d" target="_blank">
+            <img src="assets/fig1_model_progression.png?v=20261025d" alt="Figure 1: Stepwise Model Progression" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 1. Collinearity-Free Stepwise Discovery Progression Across Models M1&ndash;M7.</strong></span>
+            <a class="fig-open-link" href="assets/fig1_model_progression.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig3_unified_vs_browser_af0001.png?v=20261025d" target="_blank">
+            <img src="assets/fig3_unified_vs_browser_af0001.png?v=20261025d" alt="Figure 2: Unified vs Browser AF 0.0001" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 2. Ultra-Rare Variant Meta-Regression (AF &le; 0.0001, 64.1% Firth Fallback) vs. Browser Burden Masks.</strong></span>
+            <a class="fig-open-link" href="assets/fig3_unified_vs_browser_af0001.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig4_moderator_trajectories.png?v=20261025d" target="_blank">
+            <img src="assets/fig4_moderator_trajectories.png?v=20261025d" alt="Figure 3: Moderator Trajectories" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 3. Stepwise Moderator Trajectories Across Collinearity-Free Models (M1 &rarr; M7) for Key Pathway Genes.</strong></span>
+            <a class="fig-open-link" href="assets/fig4_moderator_trajectories.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig5_af001_vs_af0001_and_r2.png?v=20261025d" target="_blank">
+            <img src="assets/fig5_af001_vs_af0001_and_r2.png?v=20261025d" alt="Figure 4: Orthogonal Partial R2 Decomposition" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 4. Ultra-Rare Concordance and True Orthogonal Moderator Partial R&sup2; Decomposition.</strong></span>
+            <a class="fig-open-link" href="assets/fig5_af001_vs_af0001_and_r2.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261025d" target="_blank">
+            <img src="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261025d" alt="Figure 5: NOD2 and SBNO2 Variant Profiles" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 5. Variant-Level WLS Meta-Regression Profiles for <em>NOD2</em> and <em>SBNO2</em> in Crohn's Disease.</strong></span>
+            <a class="fig-open-link" href="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" target="_blank">
+            <img src="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" alt="Figure 6: Ultra-Rare Pathway Enrichment Network" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 6. Ultra-Rare (AF &le; 0.0001) Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and Functional Module Breakdown Across CD, UC, and Combined IBD.</strong></span>
+            <a class="fig-open-link" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261025d" target="_blank">
+            <img src="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261025d" alt="Figure 7: Epithelial Barrier and Hemidesmosome Schematic" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 7. High-Impact Molecular Schematic of the Intestinal Epithelial Barrier, Mucin Gel, Apical MLCK Ring, and Basal Type I Hemidesmosome &amp; Basement Membrane Complex.</strong></span>
+            <a class="fig-open-link" href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261025d" target="_blank">
+            <img src="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261025d" alt="Figure 8: Innate Immunity and Autophagy Pathway Map" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 8. Intracellular Innate Immunity, Sequential Xenophagy, HOPS/CORVET Tethering, Paneth/Goblet ERAD (SEL1L), and Microbial Acetate &rarr; Acetyl-CoA Epigenetics.</strong></span>
+            <a class="fig-open-link" href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" target="_blank">
+            <img src="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" alt="Figure 9: M7 -log10(p) vs Gene Size in Amino Acids at AF <= 0.0001" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 9. Ultra-Rare (AF &le; 0.0001) Relationship Between Unified Meta-Regression Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>).</strong></span>
+            <a class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" target="_blank">
+            <img src="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" alt="Figure 11: Nano Banana Epithelial Barrier and Hemidesmosome" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 11 (Nano Banana Biological Illustration). Intestinal Epithelial Barrier, Goblet Cell Mucin Layer, Apical MLCK Tight Junctions, and Basal Type I Hemidesmosome&ndash;Laminin-511 Complex (OR = 96.5&times;).</strong></span>
+            <a class="fig-open-link" href="assets/fig11_nanobanana_epithelial_barrier_hemidesmosome.png?v=20261024e" target="_blank">&#128269; Open High-Res PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" target="_blank">
+            <img src="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" alt="Figure 12: Nano Banana Intracellular Xenophagy and Inflammasome" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 12 (Nano Banana Biological Illustration). Intracellular Bacterial Sensing, DPP9&ndash;NLRP1 Inflammasome Restraint, Sequential WIPI2&ndash;ATG16L1 Xenophagy, and Microbial Acetate Epigenetic Remodeling.</strong></span>
+            <a class="fig-open-link" href="assets/fig12_nanobanana_xenophagy_inflammasome_immunity.png?v=20261024e" target="_blank">&#128269; Open High-Res PNG</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROW 7: ACKNOWLEDGEMENTS & DATA RESOURCES -->
+    <section class="section-card" id="section-acknowledgements">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">8. Acknowledgements &amp; Data Resources</h2>
+          <p class="section-desc">
+            Author: <strong>Manuel A. Rivas</strong> (Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305).
+          </p>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; line-height: 1.65; color: #334155;">
+        <p style="margin-bottom: 0.75rem;">
+          <strong>IBD Exome Sequencing Browser (<a href="https://ibdseq.broadinstitute.org" target="_blank">https://ibdseq.broadinstitute.org</a>) &amp; International Inflammatory Bowel Disease Genetics Consortium (IIBDGC):</strong>
+          In accordance with the citation and acknowledgement requirements of <a href="https://ibdseq.broadinstitute.org" target="_blank">ibdseq.broadinstitute.org</a>, we cite the consortium's paper, <em>&ldquo;Large-scale sequencing identifies multiple genes and rare variants associated with Crohn's disease susceptibility&rdquo;</em> (Sazonovs et al., <em>Nature Genetics</em> 2022; PMID: 36038634), and provide a link to the browser (<a href="https://ibdseq.broadinstitute.org" target="_blank">https://ibdseq.broadinstitute.org</a>; public data download <a href="https://storage.googleapis.com/exome-results-browsers-public/downloads/2026-10-19/IBD/IBD_variant_results.tsv.bgz" target="_blank">IBD_variant_results.tsv.bgz</a>).
+        </p>
+        <blockquote style="margin: 0.75rem 0; padding: 0.8rem 1.1rem; background: #f8fafc; border-left: 4px solid #7b558c; font-style: italic;">
+          &ldquo;The Inflammatory Bowel Disease (IBD) Sequencing Consortium is a global collaboration dedicated to aggregating, generating, and analyzing high-throughput sequencing data of inflammatory bowel disease patients to improve our understanding of disease architecture and advance gene discovery. The consortium was formed in 2014 with a commitment to data sharing, diversity, and inclusivity &mdash; we hope that the findings from this study and others like it will provide a foundation for further investigation of disease mechanisms and therapeutic discovery. This browser is part of that overall effort to display and share these results with the wider scientific community. Partnering with the Broad Institute, the IBD Sequencing Consortium has sequenced more than 50,000 patients as of 2024 from 50 research cohorts across the world. The IBD phase 1 dataset (hg38) analyzes exomes from 28,718 Crohn’s disease cases, 17,991 Ulcerative Colitis cases, 3,417 Inflammatory Bowel disease cases, and over 97,000 control samples. We thank the tens of thousands of patients and families who generously contributed to our effort. This project is made possible by the generosity of many funders, including the Helmsley Charitable Foundation and the National Human Genome Research Institute (NHGRI), and the leadership of its members. We are incredibly grateful to all the IIBDGC consortium members for their gracious contribution to make this collaboration possible. Individual-level data is available for approved researchers via the dbGaP accession phs001642.v2.p1: Center for Common Disease Genomics [CCDG] - Autoimmune: Inflammatory Bowel Disease (IBD) Exomes and Genomes.&rdquo;
+        </blockquote>
+        <p style="margin-bottom: 0.5rem;">
+          We also acknowledge the IBD Exome Browser Data Production and Analysis team (Aleksejs Sazonovs, Christine R. Stevens, Mingrui Yu, Kai Yuan, Qian Zhang), Browser team (Riley Grant, Matthew Solomonson), Principal Investigators (Hailiang Huang, Carl A. Anderson, Mark J. Daly), and all contributing collections and consortia (International IBD Genetics Consortium [IIBDGC], Ashkenazi Jewish Collections, SUIVITHEQUE Biobank, RISK Collection, The Netherlands Collection, Lithuanian Collection, Mount Sinai Crohn's and Colitis Registry [MSCCR], PROTECT Collection, Global Microbiome Conservancy, Massachusetts General Brigham Collections [PRISM, GIDER, MGB Biobank], REMIND Network, Canadian IBD Collections [IMAGINE, Manitoba IBD Registry, iGenoMed, Génome Québec, NIDDK-Quebec], SPARC IBD Network &amp; Crohn's &amp; Colitis Foundation IBD Plexus Program, Miami IBD Cohort, Cedars-Sinai IBD Consortium &amp; MIRIAD Biobank, Nurses' Health Study, Finland IBD Collections [FINRISK], NIDDK IBD Genetics Consortium, Pediatric IBD Collections, SHARE Consortium, German IBD Consortium [CCIM], Belgium IBD Consortium, and Control Collections).
+        </p>
+        <p style="margin-bottom: 0;">
+          <strong>Functional Annotation &amp; Constraint Resources:</strong> We thank Google DeepMind (Cheng et al., <em>Science</em> 2023) for proteome-wide AlphaMissense pathogenicity predictions, Aguilar, Rivas &amp; Rivas (<em>medRxiv</em> 2025; <a href="https://github.com/healthcare-medicine-ai/wgs-constraint-llm" target="_blank">wgs-constraint-llm</a>) for base-pair resolution WES hidden Markov model mutational constraint probabilities and the unified rare-variant meta-regression framework, and the GENCODE Consortium (Frankish et al., <em>Nucleic Acids Research</em> 2021) for human reference gene annotations.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305 &bull;
+    Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD &bull;
+    Reference: Aguilar, Rivas &amp; Rivas (2025) <code>medRxiv 10.1101/2024.06.27.24309590v3</code>
+  </footer>
+
+  <script src="data.js?v=20261025b"></script>
+  <script src="app.js?v=20261025b"></script>
+</body>
+</html>
