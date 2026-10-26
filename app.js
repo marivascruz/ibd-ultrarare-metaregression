@@ -498,7 +498,7 @@
     const fig7Img = document.getElementById("img-fig7-pathway");
     const fig7Link1 = document.getElementById("link-fig7-pathway-1");
     const fig7Link2 = document.getElementById("link-fig7-pathway-2");
-    const fig7Src = "assets/fig7_pathway_enrichment_network_af0001.png?v=20261025d";
+    const fig7Src = "assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d";
     if (fig7Img) fig7Img.src = fig7Src;
     if (fig7Link1) fig7Link1.href = fig7Src;
     if (fig7Link2) fig7Link2.href = fig7Src;
@@ -662,7 +662,7 @@
     const fig10Img = document.getElementById("img-fig10-genesize");
     const fig10Link1 = document.getElementById("link-fig10-genesize-1");
     const fig10Link2 = document.getElementById("link-fig10-genesize-2");
-    const fig10Src = "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261025d";
+    const fig10Src = "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d";
     if (fig10Img) fig10Img.src = fig10Src;
     if (fig10Link1) fig10Link1.href = fig10Src;
     if (fig10Link2) fig10Link2.href = fig10Src;
