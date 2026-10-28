@@ -277,12 +277,14 @@
       ? ` &nbsp;|&nbsp; <span style="color:#0f766e;font-weight:700;">${pwayObj.name}</span>`
       : "";
 
+    const benchOR = rec.b_bench ? Math.exp(Math.min(rec.b_bench, 8)).toFixed(2) : "—";
     document.getElementById("inspector-gene-summary").innerHTML =
       `<strong>${rec.gene}</strong> (<span class="pill-group pill-${rec.group}">${rec.group}</span>) &nbsp;|&nbsp; ` +
       `Length: <strong>${(rec.aa_len || 0).toLocaleString()} AA</strong> &nbsp;|&nbsp; ` +
       `Variants: <strong>${rec.n_var}</strong> (pLoF: ${rec.n_lof}, Missense: ${rec.n_mis}, Firth: ${rec.n_firth}, Max VIF: ${rec.vif ?? "1.02"}) &nbsp;|&nbsp; ` +
-      `M5 (AM+LoF) <em>p</em> = <strong>${fmtP(rec.p_M5)}</strong> &nbsp;|&nbsp; ` +
-      `M7 (AM+LoF+Con) <em>p</em> = <strong>${fmtP(rec.p_M7)}</strong> (<em>R</em>² = <strong>${fmtPct(rec.r2_M7)}</strong>)` +
+      `M5 <em>p</em> = <strong>${fmtP(rec.p_M5)}</strong> &nbsp;|&nbsp; ` +
+      `M7 <em>p</em> = <strong>${fmtP(rec.p_M7)}</strong> (<em>R</em>² = <strong>${fmtPct(rec.r2_M7)}</strong>) &nbsp;|&nbsp; ` +
+      `&Delta;log-OR<sub>bench</sub> = <strong>${rec.b_bench !== null && rec.b_bench !== undefined ? "+" + Number(rec.b_bench).toFixed(2) : "—"}</strong> (OR = <strong>${benchOR}&times;</strong>)` +
       pwayBadge;
 
     const mLabels = [
@@ -349,13 +351,17 @@
     ];
     const modPs = [rec.p_am, rec.p_lof, rec.p_con];
     const modBetas = [rec.b_am, rec.b_lof, rec.b_con];
+    const modEBs = [rec.eb_am, rec.eb_lof, rec.eb_con];
 
     const tracePR2 = {
       x: modNames,
       y: pr2,
       type: "bar",
       marker: { color: ["#d97706", "#e11d48", "#0d9488"] },
-      text: pr2.map((v, i) => `${v.toFixed(2)}% (p=${fmtP(modPs[i])}, β=${modBetas[i] ?? "—"})`),
+      text: pr2.map(
+        (v, i) =>
+          `${v.toFixed(2)}% (p=${fmtP(modPs[i])}, β_EB=${modEBs[i] ?? "—"}, raw β=${modBetas[i] ?? "—"})`
+      ),
       textposition: "outside"
     };
 
@@ -502,8 +508,8 @@
     const fig7Link2 = document.getElementById("link-fig7-pathway-2");
     const fig7Src =
       state.af === "af0001"
-        ? "assets/fig7_pathway_enrichment_network_af0001.png?v=20261028b"
-        : "assets/fig7_pathway_enrichment_network_af001.png?v=20261028b";
+        ? "assets/fig7_pathway_enrichment_network_af0001.png?v=20261028c"
+        : "assets/fig7_pathway_enrichment_network_af001.png?v=20261028c";
     if (fig7Img) fig7Img.src = fig7Src;
     if (fig7Link1) fig7Link1.href = fig7Src;
     if (fig7Link2) fig7Link2.href = fig7Src;
@@ -654,8 +660,8 @@
     const fig10Link2 = document.getElementById("link-fig10-genesize-2");
     const fig10Src =
       state.af === "af0001"
-        ? "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261028b"
-        : "assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261028b";
+        ? "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261028c"
+        : "assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261028c";
     if (fig10Img) fig10Img.src = fig10Src;
     if (fig10Link1) fig10Link1.href = fig10Src;
     if (fig10Link2) fig10Link2.href = fig10Src;
@@ -730,7 +736,12 @@
 
     const activePCol = `p_${state.model}`;
     if (state.sigFilter === "exome") {
-      rows = rows.filter((r) => r[activePCol] !== null && r[activePCol] < EXOME_ALPHA);
+      rows = rows.filter(
+        (r) =>
+          (r[activePCol] !== null && r[activePCol] < EXOME_ALPHA) ||
+          (r.p_M7 !== null && r.p_M7 < EXOME_ALPHA) ||
+          (r.p_M5 !== null && r.p_M5 < EXOME_ALPHA)
+      );
     } else if (state.sigFilter === "sug") {
       rows = rows.filter((r) => r[activePCol] !== null && r[activePCol] < 2.5e-6);
     } else if (state.sigFilter === "rescued") {
@@ -764,10 +775,25 @@
     return s;
   }
 
+  function fmtBetaCell(ebVal, rawVal, lcbVal) {
+    if (ebVal === null || ebVal === undefined || isNaN(ebVal)) return "—";
+    const ebStr = (ebVal >= 0 ? "+" : "") + Number(ebVal).toFixed(2);
+    const rawStr = rawVal !== null && rawVal !== undefined && !isNaN(rawVal) ? (rawVal >= 0 ? "+" : "") + Number(rawVal).toFixed(2) : "—";
+    const lcbStr = lcbVal !== null && lcbVal !== undefined && !isNaN(lcbVal) ? (lcbVal >= 0 ? "+" : "") + Number(lcbVal).toFixed(2) : "—";
+    const cls = ebVal >= 0.25 ? "style='color:#0f766e;font-weight:700;'" : "";
+    return `<span ${cls} title="95% Lower Confidence Bound: ${lcbStr}">${ebStr}</span> <span style="color:#64748b;font-size:0.74rem;">(${rawStr})</span>`;
+  }
+
+  function fmtBenchCell(bBench) {
+    if (bBench === null || bBench === undefined || isNaN(bBench)) return "—";
+    const orVal = Math.exp(Math.min(Math.max(bBench, -5), 8)).toFixed(1);
+    return `<strong style="color:#be123c;">+${Number(bBench).toFixed(2)}</strong> <span style="color:#475569;font-size:0.75rem;">(${orVal}&times;)</span>`;
+  }
+
   function renderGeneTable() {
     const rows = getFilteredRows();
     document.getElementById("table-count-label").textContent =
-      `Showing ${Math.min(rows.length, 300)} of ${rows.length} matching gene-phenotype pairs`;
+      `Showing ${Math.min(rows.length, 300)} of ${rows.length} matching gene-phenotype pairs (Sorted by ${state.sortCol} ${state.sortAsc ? "ASC" : "DESC"})`;
 
     const tbody = document.getElementById("gene-table-body");
     const html = rows
@@ -782,15 +808,15 @@
           <td>${(r.aa_len || 0).toLocaleString()} AA</td>
           <td>${r.n_var}</td>
           <td>${r.n_lof} / ${r.n_mis}</td>
-          <td>${r.vif ?? "1.02"}</td>
-          <td>${formatPCell(r.p_M1)}</td>
-          <td>${formatPCell(r.p_M2)}</td>
-          <td>${formatPCell(r.p_M3)}</td>
           <td>${formatPCell(r.p_M5)}</td>
           <td>${formatPCell(r.p_M7)}</td>
           <td><strong>${fmtPct(r.r2_M7)}</strong></td>
+          <td>${fmtBenchCell(r.b_bench)}</td>
+          <td>${fmtBetaCell(r.eb_am, r.b_am, r.lcb_am)}</td>
           <td>${formatPCell(r.p_am)} (${fmtPct(r.pr2_am)})</td>
+          <td>${fmtBetaCell(r.eb_lof, r.b_lof, r.lcb_lof)}</td>
           <td>${formatPCell(r.p_lof)} (${fmtPct(r.pr2_lof)})</td>
+          <td>${fmtBetaCell(r.eb_con, r.b_con, r.lcb_con)}</td>
           <td>${formatPCell(r.p_con)} (${fmtPct(r.pr2_con)})</td>
           <td>${formatPCell(r.p_bro)}</td>
         </tr>`;
@@ -812,19 +838,24 @@
   function exportTableCSV() {
     const rows = getFilteredRows();
     const headers = [
-      "gene_id", "gene", "group", "pathway", "n_var", "n_lof", "n_mis", "n_firth", "max_vif",
+      "gene_id", "gene", "group", "pathway", "aa_len", "n_var", "n_lof", "n_mis", "n_firth", "max_vif",
       "p_M1_LoF_only", "p_M2_AM_only", "p_M3_Constraint_only", "p_M4_LoF_Constraint",
-      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "r2_M7",
-      "p_pathogenicity", "partial_r2_am", "p_pLoF", "partial_r2_lof",
-      "p_constraint", "partial_r2_con", "browser_min_p"
+      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "r2_M7", "delta_log_or_bench",
+      "beta_am_raw", "beta_am_eb", "beta_am_lcb95", "p_pathogenicity", "partial_r2_am",
+      "beta_lof_raw", "beta_lof_eb", "beta_lof_lcb95", "p_pLoF", "partial_r2_lof",
+      "beta_con_raw", "beta_con_eb", "beta_con_lcb95", "p_constraint", "partial_r2_con",
+      "browser_min_p"
     ];
     const lines = [headers.join(",")];
     rows.forEach((r) => {
       lines.push(
         [
-          r.gene_id, r.gene, r.group, r.pathway, r.n_var, r.n_lof, r.n_mis, r.n_firth, r.vif,
-          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.r2_M7,
-          r.p_am, r.pr2_am, r.p_lof, r.pr2_lof, r.p_con, r.pr2_con, r.p_bro
+          r.gene_id, r.gene, r.group, r.pathway, r.aa_len, r.n_var, r.n_lof, r.n_mis, r.n_firth, r.vif,
+          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.r2_M7, r.b_bench,
+          r.b_am, r.eb_am, r.lcb_am, r.p_am, r.pr2_am,
+          r.b_lof, r.eb_lof, r.lcb_lof, r.p_lof, r.pr2_lof,
+          r.b_con, r.eb_con, r.lcb_con, r.p_con, r.pr2_con,
+          r.p_bro
         ].join(",")
       );
     });
@@ -889,6 +920,21 @@
       renderGeneTable();
     });
 
+    const rankPresetEl = document.getElementById("select-ranking-preset");
+    if (rankPresetEl) {
+      rankPresetEl.addEventListener("change", (e) => {
+        const parts = e.target.value.split(":");
+        state.sortCol = parts[0];
+        state.sortAsc = parts[1] === "asc";
+        if (state.sortCol !== "p_M7" && state.sortCol !== "p_M5" && state.sigFilter === "all") {
+          state.sigFilter = "exome";
+          const sigFilterEl = document.getElementById("select-sig-filter");
+          if (sigFilterEl) sigFilterEl.value = "exome";
+        }
+        renderGeneTable();
+      });
+    }
+
     document.getElementById("select-sig-filter").addEventListener("change", (e) => {
       state.sigFilter = e.target.value;
       renderGeneTable();
@@ -917,7 +963,8 @@
           state.sortAsc = !state.sortAsc;
         } else {
           state.sortCol = col;
-          state.sortAsc = col.startsWith("r2_") || col.startsWith("pr2_") ? false : true;
+          const descCols = ["r2_M7", "pr2_am", "pr2_lof", "pr2_con", "b_bench", "eb_am", "b_am", "lcb_am", "eb_lof", "b_lof", "lcb_lof", "eb_con", "b_con", "lcb_con", "aa_len", "n_var"];
+          state.sortAsc = !descCols.includes(col);
         }
         renderGeneTable();
       });
