@@ -16,9 +16,9 @@
         <span class="badge highlight">Collinearity-Free Rerun (Median VIF = 1.022)</span>
         <span class="badge">missense_ind &amp; GERP Removed</span>
         <span class="badge">16,820,350 Coding Variants Merged</span>
-        <span class="badge">Ultra-Rare AF &le; 0.0001</span>
-        <span class="badge">Firth 2&times;2 Fallback (64.12%)</span>
-        <span class="badge">20 Strict / 36 Exome-Wide Ultra-Rare IBD Genes</span>
+        <span class="badge">AF &le; 0.001 &amp; AF &le; 0.0001</span>
+        <span class="badge">Firth 2&times;2 Fallback (59.68%)</span>
+        <span class="badge">208 Exome-Wide Significant Genes</span>
       </div>
       <h1 class="hero-title">
         Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD
@@ -27,20 +27,20 @@
         <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305
       </p>
       <p class="hero-subtitle">
-        Explore all ultra-rare (AF &le; 0.0001) exome-wide significant IBD risk genes across CD, UC, and Combined IBD and their core biological pathways below.
+        Explore all 208 exome-wide significant genes and their 9 core biological pathways below.
       </p>
       <div class="hero-actions">
+        <a href="ibd_unified_metaregression_report.pdf?v=20261026d" target="_blank" class="btn btn-primary" style="background:#0d9488;border-color:#0d9488;">
+          &#128196; Download Rare (AF &le; 0.001) Manuscript (PDF)
+        </a>
         <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261026d" target="_blank" class="btn btn-primary">
-          &#128196; Download Ultra-Rare (AF &lt; 0.0001) Manuscript (PDF)
+          &#128196; Ultra-Rare (AF &le; 0.0001) Manuscript (PDF)
         </a>
         <a href="#section-pathways" class="btn btn-outline">
-          &#129516; Ultra-Rare Pathway Architecture (AF &le; 0.0001)
-        </a>
-        <a href="#section-gene-size" class="btn btn-outline">
-          &#128200; Gene Size (AA) vs. &minus;log<sub>10</sub>(p)
+          &#129516; Pathway Architecture (AF &le; 0.001 &amp; AF &le; 0.0001)
         </a>
         <a href="#section-figures" class="btn btn-outline">
-          &#128444; Publication Figures (AF &le; 0.0001)
+          &#128444; Publication Figures (300 DPI)
         </a>
         <a href="#section-gene-table" class="btn btn-outline">
           &#128269; Gene-Level Results Table
@@ -56,7 +56,8 @@
         <div class="control-group">
           <label for="ctrl-af">Allele Frequency Threshold</label>
           <select id="ctrl-af">
-            <option value="af0001" selected>AF &le; 0.0001 (0.01% — Ultra-Rare)</option>
+            <option value="af001" selected>AF &le; 0.001 (0.1% — Primary Rare)</option>
+            <option value="af0001">AF &le; 0.0001 (0.01% — Ultra-Rare)</option>
           </select>
         </div>
         <div class="control-group">
@@ -98,32 +99,32 @@
     <section class="kpi-grid">
       <div class="kpi-card">
         <div class="kpi-label">Gene-Phenotype Tests (N &ge; 25)</div>
-        <div class="kpi-value" id="kpi-tests-val">51,407</div>
-        <div class="kpi-sub" id="kpi-tests-sub">Median VIF = 1.022 (17,189 genes)</div>
+        <div class="kpi-value" id="kpi-tests-val">51,484</div>
+        <div class="kpi-sub" id="kpi-tests-sub">Median VIF = 1.022 (17,206 genes)</div>
       </div>
       <div class="kpi-card m1" id="kpi-card-M1">
         <div class="kpi-label">M1: LoF Only (1 df)</div>
-        <div class="kpi-value" id="kpi-val-M1">3 (3)</div>
+        <div class="kpi-value" id="kpi-val-M1">37 (32)</div>
         <div class="kpi-sub" id="kpi-sub-M1">p &lt; 3.4e-7</div>
       </div>
       <div class="kpi-card m2" id="kpi-card-M2">
         <div class="kpi-label">M2: AM Only (1 df)</div>
-        <div class="kpi-value" id="kpi-val-M2">13 (9)</div>
+        <div class="kpi-value" id="kpi-val-M2">170 (134)</div>
         <div class="kpi-sub" id="kpi-sub-M2">p &lt; 3.4e-7</div>
       </div>
       <div class="kpi-card m3" id="kpi-card-M4">
         <div class="kpi-label">M4: LoF + Constraint (2 df)</div>
-        <div class="kpi-value" id="kpi-val-M4">3 (3)</div>
+        <div class="kpi-value" id="kpi-val-M4">42 (36)</div>
         <div class="kpi-sub" id="kpi-sub-M4">p &lt; 3.4e-7</div>
       </div>
       <div class="kpi-card m4" id="kpi-card-M5">
         <div class="kpi-label">M5: AM + LoF (2 df)</div>
-        <div class="kpi-value" id="kpi-val-M5">18 (16)</div>
+        <div class="kpi-value" id="kpi-val-M5">241 (189)</div>
         <div class="kpi-sub" id="kpi-sub-M5">p &lt; 3.4e-7</div>
       </div>
       <div class="kpi-card m5 active-model" id="kpi-card-M7">
         <div class="kpi-label">M7: AM + LoF + Con (3 df)</div>
-        <div class="kpi-value" id="kpi-val-M7">9 (9)</div>
+        <div class="kpi-value" id="kpi-val-M7">208 (162)</div>
         <div class="kpi-sub" id="kpi-sub-M7">p &lt; 3.4e-7</div>
       </div>
     </section>
@@ -172,9 +173,9 @@
     <section class="section-card" id="section-pathways">
       <div class="section-header">
         <div>
-          <h2 class="section-title" id="pathway-section-title">4. Deep Biological Pathway Architecture — Ultra-Rare Coding Variants (AF &le; 0.0001)</h2>
+          <h2 class="section-title" id="pathway-section-title">4. Deep Biological Pathway Architecture — Paper 2: Rare Coding Variants (AF &le; 0.001)</h2>
           <p class="section-desc">
-            Pathway enrichment is computed at the ultra-rare variant threshold <strong>AF &le; 0.0001</strong> across GO, Reactome, KEGG, WikiPathways, and 9 curated biological modules. Click any module card below to filter the scatter plot and gene table.
+            Pathway enrichment is computed separately at <strong>AF &le; 0.0001 (Paper 1: Ultra-Rare)</strong> and <strong>AF &le; 0.001 (Paper 2: Rare)</strong> across GO, Reactome, KEGG, WikiPathways, and 9 curated biological modules. Toggle the <strong>Allele Frequency Threshold</strong> dropdown in the top bar to switch between the AF &le; 0.0001 and AF &le; 0.001 pathway enrichments, or click any module card below to filter the scatter plot and gene table.
           </p>
         </div>
       </div>
@@ -184,11 +185,11 @@
           <thead>
             <tr>
               <th>Database Library</th>
-              <th>Enriched Pathway / Ontology Term (AF &le; 0.0001)</th>
+              <th>Enriched Pathway / Ontology Term (Threshold-Specific)</th>
               <th>Odds Ratio</th>
               <th>Fisher P-value</th>
               <th>Overlap</th>
-              <th>Overlapping Significant IBD Genes (AF &le; 0.0001)</th>
+              <th>Overlapping Significant IBD Genes</th>
             </tr>
           </thead>
           <tbody id="enrichr-table-body"></tbody>
@@ -196,12 +197,12 @@
       </div>
       <div class="fig-grid" style="grid-template-columns: 1fr;">
         <div class="fig-card">
-          <a id="link-fig7-pathway-1" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" target="_blank">
-            <img id="img-fig7-pathway" src="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" alt="Figure 7: Ultra-Rare Pathway Enrichment and Functional Architecture" />
+          <a id="link-fig7-pathway-1" href="assets/fig7_pathway_enrichment_network_af001.png?v=20261026d" target="_blank">
+            <img id="img-fig7-pathway" src="assets/fig7_pathway_enrichment_network_af001.png?v=20261026d" alt="Figure 7: Threshold-Specific Pathway Enrichment and Functional Architecture" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 7. Ultra-Rare (AF &le; 0.0001) Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and 9-Module Functional Breakdown Across CD, UC, and Combined IBD.</strong></span>
-            <a id="link-fig7-pathway-2" class="fig-open-link" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 7 (Updates Dynamically with AF Threshold). Unbiased Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and 9-Module Functional Breakdown Across CD, UC, and Combined IBD (Shown for Active AF Threshold; Compare AF &le; 0.001 vs. AF &le; 0.0001).</strong></span>
+            <a id="link-fig7-pathway-2" class="fig-open-link" href="assets/fig7_pathway_enrichment_network_af001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
@@ -247,15 +248,15 @@
     <section class="section-card" id="section-gene-size">
       <div class="section-header">
         <div>
-          <h2 class="section-title">4B. Relationship Between Ultra-Rare Unified M7 &minus;log<sub>10</sub>(p-value), Explained Variance (R&sup2;), and Gene Size (Amino Acids, L<sub>AA</sub>) at AF &le; 0.0001</h2>
+          <h2 class="section-title">4B. Relationship Between Unified M7 &minus;log<sub>10</sub>(p-value), Explained Variance (R&sup2;), and Gene Size (Amino Acids, L<sub>AA</sub>)</h2>
           <p class="section-desc">
-            Across 51,407 ultra-rare gene&ndash;phenotype tests at AF &le; 0.0001, canonical protein length <em>L</em><sub>AA</sub> correlates linearly with ultra-rare coding variant count <em>M<sub>g</sub></em> (<em>r</em> = +0.907, &approx;0.32 variants/AA), while exhibiting minimal correlation with &minus;log<sub>10</sub>(<em>p</em><sub>M7</sub>) (Pearson <em>r</em>(log<sub>10</sub>AA) = +0.1352, Spearman &rho; = +0.1063) and an inverse critical variance law <em>R</em>&sup2;<sub>crit</sub>(<em>L</em><sub>AA</sub>) &approx; 31.8 / (0.32 <em>L</em><sub>AA</sub> + 27.8).
+            Across 51,484 gene&ndash;phenotype tests at AF &le; 0.001, canonical protein length <em>L</em><sub>AA</sub> correlates linearly with rare coding variant count <em>M<sub>g</sub></em> (<em>r</em> = +0.905, &approx;0.34 variants/AA), producing a positive correlation with &minus;log<sub>10</sub>(<em>p</em><sub>M7</sub>) (Pearson <em>r</em>(log<sub>10</sub>AA) = +0.321, Spearman &rho; = +0.274) and an inverse trade-off with total explained variance <em>R</em>&sup2; (<em>r</em> = &minus;0.369).
           </p>
         </div>
         <div style="display: flex; gap: 0.65rem; flex-wrap: wrap;">
           <select id="select-genesize-yaxis" style="padding: 0.48rem 0.7rem; border-radius: 6px; border: 1px solid #cbd5e1; font-weight: 600;">
             <option value="neglog10_p" selected>Y-Axis: Unified M7 &minus;log10(p-value)</option>
-            <option value="r2_pct">Y-Axis: Explained Variance R&sup2; (%) + Iso-Significance Curve</option>
+            <option value="r2_pct">Y-Axis: Explained Variance R&sup2; (%)</option>
           </select>
         </div>
       </div>
@@ -264,12 +265,12 @@
         <div id="plot-gene-size-bins" class="plot-box" style="height: 410px;"></div>
       </div>
       <div class="fig-card">
-        <a id="link-fig10-genesize-1" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" target="_blank">
-          <img id="img-fig10-genesize" src="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" alt="Figure 10: M7 -log10(p) vs Gene Size in Amino Acids at AF <= 0.0001" />
+        <a id="link-fig10-genesize-1" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261026d" target="_blank">
+          <img id="img-fig10-genesize" src="assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261026d" alt="Figure 10: M7 -log10(p) vs Gene Size in Amino Acids" />
         </a>
         <div class="fig-caption">
-          <span><strong>Figure 10 (Ultra-Rare AF &le; 0.0001). 4-Panel Analysis of Unified Model M7 Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>, GENCODE v44).</strong></span>
-          <a id="link-fig10-genesize-2" class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          <span><strong>Figure 10 (Updates Dynamically with AF Threshold). 4-Panel Analysis of Unified Model M7 Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>, GENCODE v44).</strong></span>
+          <a id="link-fig10-genesize-2" class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
         </div>
       </div>
     </section>
@@ -278,7 +279,7 @@
     <section class="section-card">
       <div class="section-header">
         <div>
-          <h2 class="section-title">5. Variant-Level WLS Meta-Regression Profile Viewer</h2>
+          <h2 class="section-title">5. Variant-Level WLS Meta-Regression Profile Viewer (AF &le; 0.001)</h2>
           <p class="section-desc">
             Inspect individual rare coding variants (sized by inverse-variance weight <em>w<sub>i</sub></em> = 1/SE<sub><em>i</em></sub>&sup2;), comparing Browser meta-analysis &beta; vs. Firth 2&times;2 penalized-likelihood fallback estimates.
           </p>
@@ -388,80 +389,89 @@
             <img src="assets/fig1_model_progression.png?v=20261026d" alt="Figure 1: Stepwise Model Progression" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 1. Collinearity-Free Stepwise Discovery Progression Across Models M1&ndash;M7.</strong></span>
+            <span><strong>Figure 1. Collinearity-Free Stepwise Discovery Progression Across Models M1&ndash;M7 (AF &le; 0.001 &amp; AF &le; 0.0001).</strong></span>
             <a class="fig-open-link" href="assets/fig1_model_progression.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig3_unified_vs_browser_af0001.png?v=20261026d" target="_blank">
-            <img src="assets/fig3_unified_vs_browser_af0001.png?v=20261026d" alt="Figure 2: Unified vs Browser AF 0.0001" />
+          <a href="assets/fig2_unified_vs_browser_af001.png?v=20261026d" target="_blank">
+            <img src="assets/fig2_unified_vs_browser_af001.png?v=20261026d" alt="Figure 2: Unified vs Browser AF 0.001" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 2. Ultra-Rare Variant Meta-Regression (AF &le; 0.0001, 64.1% Firth Fallback) vs. Browser Burden Masks.</strong></span>
+            <span><strong>Figure 2. Unified Meta-Regression (M7: AM + LoF + Constraint) vs. Browser Burden Masks at AF &le; 0.001.</strong></span>
+            <a class="fig-open-link" href="assets/fig2_unified_vs_browser_af001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig3_unified_vs_browser_af0001.png?v=20261026d" target="_blank">
+            <img src="assets/fig3_unified_vs_browser_af0001.png?v=20261026d" alt="Figure 3: Unified vs Browser AF 0.0001" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 3. Ultra-Rare Variant Meta-Regression (AF &le; 0.0001, 64.1% Firth Fallback) vs. Browser Burden Masks.</strong></span>
             <a class="fig-open-link" href="assets/fig3_unified_vs_browser_af0001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
           <a href="assets/fig4_moderator_trajectories.png?v=20261026d" target="_blank">
-            <img src="assets/fig4_moderator_trajectories.png?v=20261026d" alt="Figure 3: Moderator Trajectories" />
+            <img src="assets/fig4_moderator_trajectories.png?v=20261026d" alt="Figure 4: Moderator Trajectories" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 3. Stepwise Moderator Trajectories Across Collinearity-Free Models (M1 &rarr; M7) for Key Pathway Genes.</strong></span>
+            <span><strong>Figure 4. Stepwise Moderator Trajectories Across Collinearity-Free Models (M1 &rarr; M7) for Key Pathway Genes.</strong></span>
             <a class="fig-open-link" href="assets/fig4_moderator_trajectories.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
           <a href="assets/fig5_af001_vs_af0001_and_r2.png?v=20261026d" target="_blank">
-            <img src="assets/fig5_af001_vs_af0001_and_r2.png?v=20261026d" alt="Figure 4: Orthogonal Partial R2 Decomposition" />
+            <img src="assets/fig5_af001_vs_af0001_and_r2.png?v=20261026d" alt="Figure 5: AF 0.001 vs 0.0001 and Partial R2" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 4. Ultra-Rare Concordance and True Orthogonal Moderator Partial R&sup2; Decomposition.</strong></span>
+            <span><strong>Figure 5. Cross-Threshold Concordance (AF &le; 0.001 vs. AF &le; 0.0001) and True Orthogonal Moderator Partial R&sup2; Decomposition.</strong></span>
             <a class="fig-open-link" href="assets/fig5_af001_vs_af0001_and_r2.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
           <a href="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261026d" target="_blank">
-            <img src="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261026d" alt="Figure 5: NOD2 and SBNO2 Variant Profiles" />
+            <img src="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261026d" alt="Figure 6: NOD2 and SBNO2 Variant Profiles" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 5. Variant-Level WLS Meta-Regression Profiles for <em>NOD2</em> and <em>SBNO2</em> in Crohn's Disease.</strong></span>
+            <span><strong>Figure 6. Variant-Level WLS Meta-Regression Profiles for <em>NOD2</em> and <em>SBNO2</em> in Crohn's Disease.</strong></span>
             <a class="fig-open-link" href="assets/fig6_nod2_sbno2_variant_profiles.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" target="_blank">
-            <img src="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" alt="Figure 6: Ultra-Rare Pathway Enrichment Network" />
+          <a href="assets/fig7_pathway_enrichment_network.png?v=20261026d" target="_blank">
+            <img src="assets/fig7_pathway_enrichment_network.png?v=20261026d" alt="Figure 7: Pathway Enrichment Network" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 6. Ultra-Rare (AF &le; 0.0001) Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and Functional Module Breakdown Across CD, UC, and Combined IBD.</strong></span>
-            <a class="fig-open-link" href="assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 7. Unbiased Pathway Over-Representation Analysis (GO / Reactome / KEGG / WikiPathways) and Functional Module Breakdown Across CD, UC, and Combined IBD.</strong></span>
+            <a class="fig-open-link" href="assets/fig7_pathway_enrichment_network.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
           <a href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261026d" target="_blank">
-            <img src="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261026d" alt="Figure 7: Epithelial Barrier and Hemidesmosome Schematic" />
+            <img src="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261026d" alt="Figure 8: Epithelial Barrier and Hemidesmosome Schematic" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 7. High-Impact Molecular Schematic of the Intestinal Epithelial Barrier, Mucin Gel, Apical MLCK Ring, and Basal Type I Hemidesmosome &amp; Basement Membrane Complex.</strong></span>
+            <span><strong>Figure 8. High-Impact Molecular Schematic of the Intestinal Epithelial Barrier, Mucin Gel, Apical MLCK Ring, and Basal Type I Hemidesmosome &amp; Basement Membrane Complex (OR = 96.5&times;).</strong></span>
             <a class="fig-open-link" href="assets/fig8_epithelial_barrier_hemidesmosome_schematic.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
           <a href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261026d" target="_blank">
-            <img src="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261026d" alt="Figure 8: Innate Immunity and Autophagy Pathway Map" />
+            <img src="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261026d" alt="Figure 9: Innate Immunity and Autophagy Pathway Map" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 8. Intracellular Innate Immunity, Sequential Xenophagy, HOPS/CORVET Tethering, Paneth/Goblet ERAD (SEL1L), and Microbial Acetate &rarr; Acetyl-CoA Epigenetics.</strong></span>
+            <span><strong>Figure 9. Intracellular Innate Immunity, Sequential Xenophagy (PIK3R4 &rarr; WIPI2&ndash;ATG16L1 &rarr; ATG2A/VPS13D), HOPS/CORVET Tethering, Paneth/Goblet ERAD (SEL1L), and Microbial Acetate &rarr; Acetyl-CoA Epigenetics.</strong></span>
             <a class="fig-open-link" href="assets/fig9_innate_immunity_autophagy_pathway_map.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" target="_blank">
-            <img src="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" alt="Figure 9: M7 -log10(p) vs Gene Size in Amino Acids at AF <= 0.0001" />
+          <a href="assets/fig10_m7_pvalue_vs_gene_size_aa.png?v=20261026d" target="_blank">
+            <img src="assets/fig10_m7_pvalue_vs_gene_size_aa.png?v=20261026d" alt="Figure 10: M7 -log10(p) vs Gene Size in Amino Acids" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 9. Ultra-Rare (AF &le; 0.0001) Relationship Between Unified Meta-Regression Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>).</strong></span>
-            <a class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 10. Relationship Between Unified Meta-Regression Significance (&minus;log<sub>10</sub> p<sub>M7</sub>), Explained Variance (R&sup2;), and Canonical Protein Length in Amino Acids (L<sub>AA</sub>).</strong></span>
+            <a class="fig-open-link" href="assets/fig10_m7_pvalue_vs_gene_size_aa.png?v=20261026d" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
@@ -507,7 +517,7 @@
           We also acknowledge the IBD Exome Browser Data Production and Analysis team (Aleksejs Sazonovs, Christine R. Stevens, Mingrui Yu, Kai Yuan, Qian Zhang), Browser team (Riley Grant, Matthew Solomonson), Principal Investigators (Hailiang Huang, Carl A. Anderson, Mark J. Daly), and all contributing collections and consortia (International IBD Genetics Consortium [IIBDGC], Ashkenazi Jewish Collections, SUIVITHEQUE Biobank, RISK Collection, The Netherlands Collection, Lithuanian Collection, Mount Sinai Crohn's and Colitis Registry [MSCCR], PROTECT Collection, Global Microbiome Conservancy, Massachusetts General Brigham Collections [PRISM, GIDER, MGB Biobank], REMIND Network, Canadian IBD Collections [IMAGINE, Manitoba IBD Registry, iGenoMed, Génome Québec, NIDDK-Quebec], SPARC IBD Network &amp; Crohn's &amp; Colitis Foundation IBD Plexus Program, Miami IBD Cohort, Cedars-Sinai IBD Consortium &amp; MIRIAD Biobank, Nurses' Health Study, Finland IBD Collections [FINRISK], NIDDK IBD Genetics Consortium, Pediatric IBD Collections, SHARE Consortium, German IBD Consortium [CCIM], Belgium IBD Consortium, and Control Collections).
         </p>
         <p style="margin-bottom: 0;">
-          <strong>Functional Annotation, Constraint &amp; Meta-Regression Framework:</strong> We thank Google DeepMind (Cheng et al., <em>Science</em> 2023) for proteome-wide AlphaMissense pathogenicity predictions, <strong>Aguilar, Rivas &amp; Rivas</strong> (<em>medRxiv</em> 2025; <a href="https://github.com/healthcare-medicine-ai/wgs-constraint-llm" target="_blank">wgs-constraint-llm</a>; <code>10.1101/2024.06.27.24309590</code>) and <strong>Lauer &amp; Rivas</strong> (<em>bioRxiv</em> 2025; <code>10.1101/2025.01.23.634522</code>; PMID: 39896616) for base-pair resolution WES hidden Markov model mutational constraint probabilities and the unified rare-variant meta-regression methodology, and the GENCODE Consortium (Frankish et al., <em>Nucleic Acids Research</em> 2021) for human reference gene annotations.
+          <strong>Functional Annotation &amp; Constraint Resources:</strong> We thank Google DeepMind (Cheng et al., <em>Science</em> 2023) for proteome-wide AlphaMissense pathogenicity predictions, Aguilar, Rivas &amp; Rivas (<em>medRxiv</em> 2025, <code>10.1101/2024.06.27.24309590</code>; <a href="https://github.com/healthcare-medicine-ai/wgs-constraint-llm" target="_blank">wgs-constraint-llm</a>) and Lauer &amp; Rivas (<em>bioRxiv</em> 2025, <code>10.1101/2025.01.23.634522</code>; PMID: 39896616) for base-pair resolution WES hidden Markov model mutational constraint probabilities and the unified rare-variant meta-regression framework, and the GENCODE Consortium (Frankish et al., <em>Nucleic Acids Research</em> 2021) for human reference gene annotations.
         </p>
       </div>
     </section>
@@ -517,7 +527,7 @@
   <footer>
     <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305 &bull;
     Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD &bull;
-    References: Aguilar, Rivas &amp; Rivas (2025) <code>medRxiv 10.1101/2024.06.27.24309590</code> &bull; Lauer &amp; Rivas (2025) <code>bioRxiv 10.1101/2025.01.23.634522</code>
+    References: Aguilar, Rivas &amp; Rivas (2025) <code>medRxiv 10.1101/2024.06.27.24309590</code>; Lauer &amp; Rivas (2025) <code>bioRxiv 10.1101/2025.01.23.634522</code>
   </footer>
 
   <script src="data.js?v=20261026d"></script>

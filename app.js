@@ -9,7 +9,7 @@
   const EXOME_LOG10 = -Math.log10(EXOME_ALPHA);
 
   const state = {
-    af: "af0001",
+    af: "af001",
     spec: "hybrid_nonsyn",
     group: "ALL",
     model: "M7",
@@ -483,22 +483,27 @@
     );
   }
 
-  // 6. Render Interactive Pathway Cards (Ultra-Rare AF <= 0.0001)
+  // 6. Render Interactive Pathway Cards (Threshold-Stratified: AF <= 0.001 vs AF <= 0.0001)
   function renderPathwayCards() {
     const container = document.getElementById("pathway-cards-grid");
-    const activePathways = (DATA.pathways_by_af && DATA.pathways_by_af["af0001"]) || DATA.pathways;
+    const activePathways = (DATA.pathways_by_af && DATA.pathways_by_af[state.af]) || DATA.pathways;
     if (!container || !activePathways) return;
 
     const pTitle = document.getElementById("pathway-section-title");
     if (pTitle) {
       pTitle.innerHTML =
-        "4. Deep Biological Pathway Architecture — Ultra-Rare Coding Variants (AF &le; 0.0001)";
+        state.af === "af0001"
+          ? "4. Deep Biological Pathway Architecture — Paper 1: Ultra-Rare Coding Variants (AF &le; 0.0001)"
+          : "4. Deep Biological Pathway Architecture — Paper 2: Rare Coding Variants (AF &le; 0.001)";
     }
 
     const fig7Img = document.getElementById("img-fig7-pathway");
     const fig7Link1 = document.getElementById("link-fig7-pathway-1");
     const fig7Link2 = document.getElementById("link-fig7-pathway-2");
-    const fig7Src = "assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d";
+    const fig7Src =
+      state.af === "af0001"
+        ? "assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d"
+        : "assets/fig7_pathway_enrichment_network_af001.png?v=20261026d";
     if (fig7Img) fig7Img.src = fig7Src;
     if (fig7Link1) fig7Link1.href = fig7Src;
     if (fig7Link2) fig7Link2.href = fig7Src;
@@ -616,21 +621,6 @@
         name: "Exome Threshold (p = 3.4e-7)",
         line: { color: "#e11d48", width: 1.8, dash: "dash" }
       });
-    } else {
-      const aaGrid = [];
-      const r2Crit = [];
-      for (let i = 0; i <= 80; i++) {
-        const aa = Math.pow(10, 1.9 + (i / 80) * (4.58 - 1.9));
-        aaGrid.push(aa);
-        r2Crit.push((31.8 / (0.34 * aa + 27.8)) * 100);
-      }
-      traces.push({
-        x: aaGrid,
-        y: r2Crit,
-        mode: "lines",
-        name: "Theoretical R²_crit(L_AA) Boundary",
-        line: { color: "#e11d48", width: 2.4, dash: "dash" }
-      });
     }
 
     Plotly.react(
@@ -662,7 +652,10 @@
     const fig10Img = document.getElementById("img-fig10-genesize");
     const fig10Link1 = document.getElementById("link-fig10-genesize-1");
     const fig10Link2 = document.getElementById("link-fig10-genesize-2");
-    const fig10Src = "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d";
+    const fig10Src =
+      state.af === "af0001"
+        ? "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d"
+        : "assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261026d";
     if (fig10Img) fig10Img.src = fig10Src;
     if (fig10Link1) fig10Link1.href = fig10Src;
     if (fig10Link2) fig10Link2.href = fig10Src;
