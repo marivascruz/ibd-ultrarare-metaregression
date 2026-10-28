@@ -211,7 +211,7 @@
       paper_bgcolor: "transparent",
       plot_bgcolor: "transparent",
       xaxis: {
-        title: "Exome Browser Best Burden -log10(p) [PTV / Nsyn / Nsyn+AM]",
+        title: "Exome Browser Best Burden -log10(p) [PTV / Nsyn]",
         gridcolor: "#e2e8f0",
         range: [-0.5, 62]
       },
@@ -502,8 +502,8 @@
     const fig7Link2 = document.getElementById("link-fig7-pathway-2");
     const fig7Src =
       state.af === "af0001"
-        ? "assets/fig7_pathway_enrichment_network_af0001.png?v=20261026d"
-        : "assets/fig7_pathway_enrichment_network_af001.png?v=20261026d";
+        ? "assets/fig7_pathway_enrichment_network_af0001.png?v=20261028b"
+        : "assets/fig7_pathway_enrichment_network_af001.png?v=20261028b";
     if (fig7Img) fig7Img.src = fig7Src;
     if (fig7Link1) fig7Link1.href = fig7Src;
     if (fig7Link2) fig7Link2.href = fig7Src;
@@ -654,8 +654,8 @@
     const fig10Link2 = document.getElementById("link-fig10-genesize-2");
     const fig10Src =
       state.af === "af0001"
-        ? "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261026d"
-        : "assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261026d";
+        ? "assets/fig10_m7_pvalue_vs_gene_size_aa_af0001.png?v=20261028b"
+        : "assets/fig10_m7_pvalue_vs_gene_size_aa_af001.png?v=20261028b";
     if (fig10Img) fig10Img.src = fig10Src;
     if (fig10Link1) fig10Link1.href = fig10Src;
     if (fig10Link2) fig10Link2.href = fig10Src;
