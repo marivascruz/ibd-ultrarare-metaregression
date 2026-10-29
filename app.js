@@ -844,9 +844,9 @@
     const regimeSel = document.getElementById("select-lt2000-regime");
     const activeRegime = regimeSel ? regimeSel.value : "lt2000_aa";
     const regimeLabelMap = {
-      lt2000_aa: "L_AA < 2,000 AA Only (Compact/Standard)",
-      all_aa: "All Protein Lengths (Adding Back L_AA >= 2,000 AA)",
-      ge2000_aa: "L_AA >= 2,000 AA Stratum Only (Giant Scaffolds)"
+      lt2000_aa: "<em>L</em><sub>AA</sub> &lt; 2,000 AA Only (Compact/Standard)",
+      all_aa: "All Protein Lengths (Adding Back <em>L</em><sub>AA</sub> &ge; 2,000 AA)",
+      ge2000_aa: "<em>L</em><sub>AA</sub> &ge; 2,000 AA Stratum Only (Giant Scaffolds)"
     };
 
     const sliceKeyLt = `${state.af}_${state.group}_${activeRegime}`;
@@ -885,23 +885,23 @@
     const kpiModsSub = document.getElementById("kpi-lt2000-mods-sub");
 
     if (kpiBg) kpiBg.textContent = `${s.bg_lt2000.toLocaleString()} / ${s.bg_total.toLocaleString()} (${s.bg_lt2000_pct}%)`;
-    if (kpiBgSub) kpiBgSub.textContent = `Exact tested universe in ${state.group}: only ${s.bg_ge2000} genes (2.66%) have canonical length >= 2,000 AA`;
+    if (kpiBgSub) kpiBgSub.textContent = `Exact tested universe in ${state.group}: only ${s.bg_ge2000} genes (2.66%) have canonical length ≥ 2,000 AA`;
 
     if (state.af === "af0001") {
       if (kpiSig) kpiSig.textContent = `${s.n_sig_strict_lt2000}/${s.n_sig_strict_total} Strict (${s.pct_strict_lt2000}%) | ${s.n_sig_sug_lt2000}/${s.n_sig_sug_total} Sug (${s.pct_sug_lt2000}%)`;
-      if (kpiSigSub) kpiSigSub.textContent = `[${state.group}] Median length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (>=2,000 AA)`;
+      if (kpiSigSub) kpiSigSub.textContent = `[${state.group}] Median length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (≥2,000 AA)`;
     } else {
       if (kpiSig) kpiSig.textContent = `${s.n_sig_strict_lt2000} / ${s.n_sig_strict_total} (${s.pct_strict_lt2000}%)`;
-      if (kpiSigSub) kpiSigSub.textContent = `[${state.group}] Median length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (>=2,000 AA)`;
+      if (kpiSigSub) kpiSigSub.textContent = `[${state.group}] Median length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (≥2,000 AA)`;
     }
 
     if (kpiR2) kpiR2.textContent = `${s.med_r2_lt2000.toFixed(2)}% vs. ${s.med_r2_ge2000.toFixed(2)}% (${s.r2_ratio}×)`;
-    if (kpiR2Sub) kpiR2Sub.textContent = `[${state.group}] Compact < 2,000 AA significant genes explain ${s.r2_ratio}× more variance per gene than >= 2,000 AA genes`;
+    if (kpiR2Sub) kpiR2Sub.textContent = `[${state.group}] Compact < 2,000 AA significant genes explain ${s.r2_ratio}× more variance per gene than ≥ 2,000 AA genes`;
 
     const nUnbSig = unbLtRows.filter((r) => (r.p_len_adj || 1) < 0.01).length;
-    if (kpiMods) kpiMods.textContent = `${nUnbSig} Top Unbiased Terms (p_len < 0.01)`;
+    if (kpiMods) kpiMods.innerHTML = `${nUnbSig} Top Unbiased Terms (<em>p</em><sub>len</sub> &lt; 0.01)`;
     if (kpiModsSub) {
-      const topTerm = unbLtRows[0] ? `${unbLtRows[0].term} (OR_len=${Number(unbLtRows[0].or_len_adj).toFixed(1)}×)` : "";
+      const topTerm = unbLtRows[0] ? `${unbLtRows[0].term} (OR_len = ${Number(unbLtRows[0].or_len_adj).toFixed(1)}×)` : "";
       kpiModsSub.textContent = `Lead in ${state.group}: ${topTerm}`;
     }
 
