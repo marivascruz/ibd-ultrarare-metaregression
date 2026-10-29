@@ -192,6 +192,51 @@
         </div>
       </div>
       <div class="methods-grid" id="pathway-cards-grid" style="margin-bottom: 1.25rem;"></div>
+
+      <!-- CLINICAL DISGENET, HPO & 9 FUNCTIONAL MODULES HIGHLIGHT BANNER + QUICK FILTER PILLS -->
+      <div style="margin-bottom: 1.1rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #7c3aed; border-radius: 8px; padding: 0.9rem 1.1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
+          <h4 style="margin: 0; font-size: 0.9rem; font-weight: 700; color: #0f172a;">
+            &#9733; Clinical Disease (DisGeNET), Phenotype (HPO) &amp; 9 Functional Biological Modules — Unbiased Length-Adjusted Highlights
+          </h4>
+          <div style="display: inline-flex; gap: 0.35rem; flex-wrap: wrap;">
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="ALL" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #0f172a; color: #fff;">All 9 Libraries</button>
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="Functional_Biological_Modules" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #0f766e; color: #fff;">&#9733; 9 Functional Modules</button>
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="CLINICAL_DISGENET_HPO" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #7c3aed; color: #fff;">DisGeNET + HPO Clinical</button>
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="DisGeNET" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #e2e8f0; color: #0f172a;">DisGeNET Disease</button>
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="Human_Phenotype_Ontology" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #e2e8f0; color: #0f172a;">HPO Phenotype</button>
+            <button type="button" class="btn lib-quick-btn" data-lib-quick="ALL_MOLECULAR" style="padding: 0.28rem 0.6rem; font-size: 0.73rem; background: #e2e8f0; color: #0f172a;">6 Molecular Ontologies</button>
+          </div>
+        </div>
+        <div style="font-size: 0.78rem; color: #334155; line-height: 1.5; display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 0.75rem;">
+          <div>
+            <strong style="color: #7c3aed;">DisGeNET &amp; HPO Extraintestinal / Mucosal Enrichments:</strong>
+            <strong>Primary Sclerosing Cholangitis</strong> (<code>CD</code> AF &le; 0.0001: 3/124, OR<sub>len</sub> = <strong>30.3&times;</strong>, <em>p</em><sub>len</sub> = 2.21&times;10<sup>&minus;4</sup> [<em>NOD2, SBNO2, BSN</em>]; <code>IBD</code> &lt;2,000 AA: 5/122, OR<sub>len</sub> = <strong>17.5&times;</strong>, <em>p</em><sub>len</sub> = 1.68&times;10<sup>&minus;5</sup> [<em>NOD2, DNMT3A, BANK1, SBNO2, SIK2</em>]),
+            <strong>Sacroiliitis</strong> (<code>CD</code> &lt;2,000 AA: 2/10, OR<sub>len</sub> = <strong>244.0&times;</strong>, <em>p</em><sub>len</sub> = 1.84&times;10<sup>&minus;4</sup> [<em>NOD2, POMC</em>]),
+            <strong>Ankylosing Spondylitis</strong> (<code>IBD</code>: 4/297, OR<sub>len</sub> = <strong>7.6&times;</strong>, <em>p</em><sub>len</sub> = 2.62&times;10<sup>&minus;3</sup> [<em>NOD2, BSN, ADGRL2, SBNO2</em>]),
+            <strong>Septicemia</strong> (<code>CD</code>: 10/402, OR<sub>len</sub> = <strong>5.0&times;</strong>, <em>p</em><sub>len</sub> = 1.59&times;10<sup>&minus;4</sup> [<em>NOD2, PLEC, MYLK, CREBBP, APOB, AGER, PFKFB3, POMC, ITGB4, FER</em>]),
+            <strong>Paratuberculosis</strong> (2/22, OR<sub>len</sub> = <strong>62.6&times;</strong> [<em>NOD2, SGSM3</em>]),
+            <strong>Chronic Intestinal Pseudo-Obstruction</strong> (2/5, OR<sub>len</sub> = <strong>988.1&times;</strong> [<em>RUNX1, APOB</em>]),
+            <strong>HPO Keratitis (<code>HP:0000491</code>) &amp; Skin Blistering (<code>HP:0008066</code>)</strong> (OR<sub>len</sub> = <strong>53.4&times;</strong> &amp; <strong>18.2&times;</strong> [<em>NOD2, PLEC, DST, LAMA5, COL7A1, ITGB4</em>]),
+            <strong>Hashimoto Disease</strong> (6/156, OR<sub>len</sub> = <strong>12.0&times;</strong>, <em>p</em><sub>len</sub> = 2.03&times;10<sup>&minus;5</sup> [<em>ZFAT, AGER, EPHB2, RASGRF1, ERBB2, VAV3</em>]), and
+            <strong>Hypertyrosinemia</strong> (2/6, OR<sub>len</sub> = <strong>1,022.0&times;</strong> [<em>HPD, SACS</em>]).
+          </div>
+          <div>
+            <strong style="color: #0f766e;">9 Highlighted Functional Biological Modules (AF &le; 0.001, All Lengths):</strong>
+            All 9 modules achieve length-adjusted or Fisher enrichment:
+            <strong>M5 Xenophagy, HOPS/CORVET &amp; ERAD</strong> (14/152, OR<sub>len</sub> = <strong>7.0&times;</strong>, <em>p</em><sub>len</sub> = 4.26&times;10<sup>&minus;8</sup>),
+            <strong>M4 Innate Sensing, DPP9&ndash;NLRP1 &amp; CBM</strong> (10/144, OR<sub>len</sub> = <strong>9.3&times;</strong>, <em>p</em><sub>len</sub> = 6.05&times;10<sup>&minus;8</sup>; <code>IBD</code> <strong>20.2&times;</strong>; <code>CD</code> <strong>14.6&times;</strong>),
+            <strong>M9 Microbial Acetate-to-Acetyl-CoA</strong> (6/61, OR<sub>len</sub> = <strong>16.8&times;</strong>, <em>p</em><sub>len</sub> = 1.33&times;10<sup>&minus;7</sup>; <code>UC</code> <strong>20.0&times;</strong>),
+            <strong>M3 Rho/Rac/Cdc42 GEF/GAPs</strong> (12/138, OR<sub>len</sub> = <strong>4.1&times;</strong>, <em>p</em><sub>len</sub> = 8.42&times;10<sup>&minus;6</sup>),
+            <strong>M2 Apical Tight Junctions &amp; MLCK Ring</strong> (11/117, OR<sub>len</sub> = <strong>4.0&times;</strong>; &lt;2,000 AA <strong>6.5&times;</strong>, <em>p</em><sub>len</sub> = 4.84&times;10<sup>&minus;6</sup>),
+            <strong>M8 SWI/SNF &amp; MLL Chromatin</strong> (13/210, OR<sub>len</sub> = <strong>3.0&times;</strong>, <em>p</em><sub>len</sub> = 1.65&times;10<sup>&minus;4</sup>),
+            <strong>M7 Epithelial Ca<sup>2+</sup> Channels</strong> (10/116, OR<sub>len</sub> = <strong>2.8&times;</strong>; <code>UC</code> <strong>3.8&times;</strong>),
+            <strong>M6 Mucin O-Glycan &amp; Bile Transport</strong> (&lt;2,000 AA: 5/76, OR<sub>len</sub> = <strong>7.8&times;</strong>), and
+            <strong>M1 Hemidesmosome &amp; Lamina Densa</strong> (11/66, OR<sub>Fisher</sub> = <strong>17.2&times;</strong>, <em>p</em><sub>Fisher</sub> = 4.63&times;10<sup>&minus;10</sup>; OR<sub>len</sub> = <strong>2.4&times;</strong>, <em>p</em><sub>len</sub> = 0.0439).
+            <br><span style="color: #64748b; font-size: 0.74rem;"><em>Note on CARD9:</em> Although <em>CARD9</em> has a protective Sanger aggregate burden (<em>p</em><sub>meta</sub> = 4.78&times;10<sup>&minus;11</sup>, &beta;&#770; = &minus;0.492), its within-gene moderator slope across rare coding variants is flat (<em>p</em><sub>M7</sub> = 0.384 in <code>CD</code>, 0.559 in <code>IBD</code>, 0.759 in <code>UC</code> at AF &le; 0.001; 0.184 in <code>CD</code> at AF &le; 0.0001), so <em>CARD9</em> is not significant in meta-regression and is excluded from all enrichment counts.</span>
+          </div>
+        </div>
+      </div>
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.6rem;">
         <h3 id="all-aa-unbiased-title" style="font-size: 0.94rem; font-weight: 700; color: #0f172a; margin: 0;">
           Unbiased Exact-Universe &amp; Length-Adjusted Ontology Enrichment (All Protein Lengths — Cohort: ALL)
@@ -323,7 +368,7 @@
             4C. Unbiased Size-Restricted Pathway Enrichment of Compact Proteins (L<sub>AA</sub> &lt; 2,000 AA) — AF &le; 0.001
           </h2>
           <p class="section-desc" id="lt2000-section-desc">
-            Strictly unbiased over-representation and competitive enrichment across all <strong>9,953 pre-defined ontology gene sets</strong> (GO, Reactome, KEGG, WikiPathways) restricted to the exact tested universe of proteins with <strong><em>L</em><sub>AA</sub> &lt; 2,000 amino acids</strong> (<strong>16,919 / 17,376 = 97.37%</strong> of tested genes), with <strong>exact Poisson-Binomial adjustment for gene length log<sub>10</sub>(<em>L</em><sub>AA</sub>) and variant count log<sub>10</sub>(<em>M<sub>g</sub></em>)</strong>. Switch between <strong>All Combined (ALL)</strong>, <strong>Crohn's Disease (CD)</strong>, <strong>Ulcerative Colitis (UC)</strong>, and <strong>Combined IBD (IBD)</strong> below.
+            Strictly unbiased over-representation and competitive enrichment across all <strong>21,568 pre-defined gene sets across 9 libraries</strong> (<strong>DisGeNET Disease</strong>, <strong>HPO Clinical Phenotype</strong>, <strong>9 Highlighted Functional Biological Modules</strong>, GO, Reactome, KEGG, and WikiPathways) restricted to the exact tested universe of proteins with <strong><em>L</em><sub>AA</sub> &lt; 2,000 amino acids</strong> (<strong>16,919 / 17,376 = 97.37%</strong> of tested genes), with <strong>exact Poisson-Binomial adjustment for gene length log<sub>10</sub>(<em>L</em><sub>AA</sub>) and variant count log<sub>10</sub>(<em>M<sub>g</sub></em>)</strong>, plus head-to-head comparison when <strong>adding back <em>L</em><sub>AA</sub> &ge; 2,000 AA</strong>. Switch between <strong>All Combined (ALL)</strong>, <strong>Crohn's Disease (CD)</strong>, <strong>Ulcerative Colitis (UC)</strong>, and <strong>Combined IBD (IBD)</strong> below.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">

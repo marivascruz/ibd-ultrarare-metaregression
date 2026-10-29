@@ -991,9 +991,30 @@
     // Right Chart: Cross-Disease Comparison (CD vs UC vs IBD in activeRegime) for Top Unbiased Pathways
     const r2PlotEl = document.getElementById("plot-lt2000-r2-comparison");
     if (r2PlotEl && DATA.unbiased_enrichment) {
-      const cdRows = DATA.unbiased_enrichment[`${state.af}_CD_${activeRegime}`] || [];
-      const ucRows = DATA.unbiased_enrichment[`${state.af}_UC_${activeRegime}`] || [];
-      const ibdRows = DATA.unbiased_enrichment[`${state.af}_IBD_${activeRegime}`] || [];
+      const libSelChart2 = document.getElementById("select-lt2000-lib");
+      const libValChart2 = libSelChart2 ? libSelChart2.value : "ALL";
+      const filterByLib = (arr) => {
+        if (!libValChart2 || libValChart2 === "ALL") return arr;
+        if (libValChart2 === "CLINICAL_DISGENET_HPO") {
+          return arr.filter((r) => r.library === "DisGeNET" || r.library === "Human_Phenotype_Ontology");
+        }
+        if (libValChart2 === "ALL_MOLECULAR") {
+          return arr.filter(
+            (r) =>
+              r.library !== "DisGeNET" &&
+              r.library !== "Human_Phenotype_Ontology" &&
+              r.library !== "Functional_Biological_Modules"
+          );
+        }
+        return arr.filter((r) => r.library === libValChart2);
+      };
+
+      const cdRowsAll = DATA.unbiased_enrichment[`${state.af}_CD_${activeRegime}`] || [];
+      const ucRowsAll = DATA.unbiased_enrichment[`${state.af}_UC_${activeRegime}`] || [];
+      const ibdRowsAll = DATA.unbiased_enrichment[`${state.af}_IBD_${activeRegime}`] || [];
+      const cdRows = filterByLib(cdRowsAll);
+      const ucRows = filterByLib(ucRowsAll);
+      const ibdRows = filterByLib(ibdRowsAll);
 
       // Collect union of top 4 pathways from CD, top 4 from UC, top 3 from IBD
       const seenTerms = new Set();
@@ -1542,10 +1563,42 @@
       });
     });
 
+    function syncLibQuickButtons(activeLib) {
+      document.querySelectorAll(".lib-quick-btn").forEach((btn) => {
+        const val = btn.getAttribute("data-lib-quick");
+        const isAct = val === activeLib;
+        if (val === "Functional_Biological_Modules") {
+          btn.style.background = isAct ? "#0f766e" : "#ccfbf1";
+          btn.style.color = isAct ? "#ffffff" : "#0f766e";
+        } else if (val === "CLINICAL_DISGENET_HPO") {
+          btn.style.background = isAct ? "#7c3aed" : "#ede9fe";
+          btn.style.color = isAct ? "#ffffff" : "#6d28d9";
+        } else {
+          btn.style.background = isAct ? "#0f172a" : "#e2e8f0";
+          btn.style.color = isAct ? "#ffffff" : "#0f172a";
+        }
+      });
+    }
+
+    document.querySelectorAll(".lib-quick-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const libVal = btn.getAttribute("data-lib-quick");
+        if (!libVal) return;
+        const selAll = document.getElementById("select-allaa-lib");
+        const selLt = document.getElementById("select-lt2000-lib");
+        if (selAll) selAll.value = libVal;
+        if (selLt) selLt.value = libVal;
+        syncLibQuickButtons(libVal);
+        renderPathwayCards();
+        renderLt2000Section();
+      });
+    });
+
     ["select-allaa-lib", "select-allaa-sort"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener("change", () => {
+          if (id === "select-allaa-lib") syncLibQuickButtons(el.value);
           renderPathwayCards();
         });
       }
@@ -1555,6 +1608,7 @@
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener("change", () => {
+          if (id === "select-lt2000-lib") syncLibQuickButtons(el.value);
           renderLt2000Section();
         });
       }
