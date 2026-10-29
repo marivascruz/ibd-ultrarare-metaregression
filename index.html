@@ -178,7 +178,7 @@
         <div>
           <h2 class="section-title" id="pathway-section-title">4. Deep Biological Pathway Architecture — Paper 2: Rare Coding Variants (AF &le; 0.001)</h2>
           <p class="section-desc">
-            Unbiased pathway enrichment is computed across all <strong>9,953 pre-defined ontology gene sets</strong> (GO Biological Process, GO Molecular Function, GO Cellular Component, Reactome, KEGG, WikiPathways; $5 \le M_{\text{tested}} \le 500$) strictly within the exact tested exome universe, with <strong>exact Poisson-Binomial gene-length &amp; variant-count adjustment</strong> (<em>p</em><sub>len-adj</sub>, OR<sub>len-adj</sub>) separately for <strong>All Combined (ALL)</strong>, <strong>Crohn's Disease (CD)</strong>, <strong>Ulcerative Colitis (UC)</strong>, and <strong>Combined IBD (IBD)</strong>.
+            Unbiased pathway, clinical phenotype, and functional module enrichment is computed across all <strong>21,568 pre-defined gene sets across 9 libraries</strong> (<strong>DisGeNET Disease</strong>, <strong>HPO Clinical Phenotype</strong>, <strong>9 Highlighted Functional Biological Modules</strong>, GO Biological Process, GO Molecular Function, GO Cellular Component, Reactome, KEGG, and WikiPathways) strictly within the exact tested exome universe, with <strong>exact Poisson-Binomial gene-length &amp; variant-count adjustment</strong> (<em>p</em><sub>len-adj</sub>, OR<sub>len-adj</sub>) separately for <strong>All Combined (ALL)</strong>, <strong>Crohn's Disease (CD)</strong>, <strong>Ulcerative Colitis (UC)</strong>, and <strong>Combined IBD (IBD)</strong>.
           </p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
@@ -198,7 +198,12 @@
         </h3>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <select id="select-allaa-lib" style="padding: 0.35rem 0.6rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.78rem; font-weight: 600;">
-            <option value="ALL" selected>All 6 Ontology Databases</option>
+            <option value="ALL" selected>All 9 Databases (Molecular + DisGeNET + HPO + Functional Modules)</option>
+            <option value="Functional_Biological_Modules">&#9733; Highlighted Functional Biological Modules (9 Systems)</option>
+            <option value="CLINICAL_DISGENET_HPO">Clinical Disease &amp; Phenotype Only (DisGeNET + HPO)</option>
+            <option value="DisGeNET">DisGeNET Disease Gene Network</option>
+            <option value="Human_Phenotype_Ontology">Human Phenotype Ontology (HPO Clinical)</option>
+            <option value="ALL_MOLECULAR">All 6 Molecular Ontologies (GO / Reactome / KEGG / WikiPathways)</option>
             <option value="GO_Biological_Process_2023">GO Biological Process (2023)</option>
             <option value="GO_Molecular_Function_2023">GO Molecular Function (2023)</option>
             <option value="GO_Cellular_Component_2023">GO Cellular Component (2023)</option>
@@ -378,7 +383,12 @@
               <option value="ge2000_aa">Universe: L_AA &ge; 2,000 AA Stratum Only (457 Giant Scaffold Genes)</option>
             </select>
             <select id="select-lt2000-lib" style="padding: 0.36rem 0.65rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.78rem; font-weight: 600;">
-              <option value="ALL" selected>All 6 Ontology Databases (9,953 Pathways)</option>
+              <option value="ALL" selected>All 9 Databases (21,568 Pathways, Clinical &amp; Modules)</option>
+              <option value="Functional_Biological_Modules">&#9733; Highlighted Functional Biological Modules (9 Systems)</option>
+              <option value="CLINICAL_DISGENET_HPO">Clinical Disease &amp; Phenotype Only (DisGeNET + HPO)</option>
+              <option value="DisGeNET">DisGeNET Disease Gene Network</option>
+              <option value="Human_Phenotype_Ontology">Human Phenotype Ontology (HPO Clinical)</option>
+              <option value="ALL_MOLECULAR">All 6 Molecular Ontologies (GO / Reactome / KEGG / WikiPathways)</option>
               <option value="GO_Biological_Process_2023">GO Biological Process (2023)</option>
               <option value="GO_Molecular_Function_2023">GO Molecular Function (2023)</option>
               <option value="GO_Cellular_Component_2023">GO Cellular Component (2023)</option>
@@ -426,6 +436,8 @@
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <select id="select-addback-filter" style="padding: 0.38rem 0.65rem; border-radius: 6px; border: 1px solid #2563eb; background: #ffffff; font-size: 0.78rem; font-weight: 700; color: #0f172a;">
               <option value="GAINED_ANY" selected>Filter: Pathways Gaining &ge;1 Hit from L_AA &ge; 2,000 AA (Sorted by Length-Adj p)</option>
+              <option value="FUNCTIONAL_MODULES">&#9733; Highlighted Functional Biological Modules (9 Systems: &lt;2k vs. All AA)</option>
+              <option value="CLINICAL_DISGENET_HPO">Clinical Disease &amp; Phenotype (DisGeNET + HPO: &lt;2k vs. All AA)</option>
               <option value="UNLOCKED_OR_AMPLIFIED">Regime I: Newly Unlocked / Amplified by L_AA &ge; 2,000 AA (Survives Length Control)</option>
               <option value="GIANT_SCAFFOLD_ATTENUATED">Regime II: Giant Scaffold Pathways (Strong Fisher OR, Attenuated by Length Control)</option>
               <option value="COMPACT_INVARIANT">Regime III: Compact-Core Invariant (0 Hits &ge; 2,000 AA; 100% Compact)</option>

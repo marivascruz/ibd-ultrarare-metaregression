@@ -507,7 +507,20 @@
   function renderUnbiasedTableRows(erows, libFilter, sortCol) {
     let filtered = (erows || []).slice();
     if (libFilter && libFilter !== "ALL") {
-      filtered = filtered.filter((r) => r.library === libFilter);
+      if (libFilter === "CLINICAL_DISGENET_HPO") {
+        filtered = filtered.filter(
+          (r) => r.library === "DisGeNET" || r.library === "Human_Phenotype_Ontology"
+        );
+      } else if (libFilter === "ALL_MOLECULAR") {
+        filtered = filtered.filter(
+          (r) =>
+            r.library !== "DisGeNET" &&
+            r.library !== "Human_Phenotype_Ontology" &&
+            r.library !== "Functional_Biological_Modules"
+        );
+      } else {
+        filtered = filtered.filter((r) => r.library === libFilter);
+      }
     }
     filtered.sort((a, b) => {
       const va = a[sortCol] !== undefined && a[sortCol] !== null ? Number(a[sortCol]) : 1.0;
@@ -515,13 +528,23 @@
       return va - vb;
     });
     return filtered
-      .slice(0, 22)
+      .slice(0, 25)
       .map((r) => {
         const shortLib = (r.library || "")
+          .replace("Functional_Biological_Modules", "Functional_Module")
+          .replace("Human_Phenotype_Ontology", "HPO_Clinical")
           .replace("_2023", "")
           .replace("_2022", "")
           .replace("_2021_Human", "")
           .replace("_Human", "");
+        let badgeStyle = "background:#e2e8f0;color:#0f172a;font-size:0.68rem;";
+        if (r.library === "Functional_Biological_Modules") {
+          badgeStyle = "background:#0f766e;color:#ffffff;font-size:0.68rem;";
+        } else if (r.library === "DisGeNET") {
+          badgeStyle = "background:#7c3aed;color:#ffffff;font-size:0.68rem;";
+        } else if (r.library === "Human_Phenotype_Ontology") {
+          badgeStyle = "background:#be123c;color:#ffffff;font-size:0.68rem;";
+        }
         const pLen = r.p_len_adj !== undefined ? r.p_len_adj : r.pval;
         const orLen = r.or_len_adj !== undefined ? r.or_len_adj : r.odds_ratio;
         const pFish = r.p_fisher !== undefined ? r.p_fisher : r.pval;
@@ -536,12 +559,12 @@
         const genesShow = r.genes_with_aa || r.genes || "";
         return `
         <tr>
-          <td><span class="badge" style="background:#e2e8f0;color:#0f172a;font-size:0.68rem;">${shortLib}</span></td>
+          <td><span class="badge" style="${badgeStyle}">${shortLib}</span></td>
           <td><strong>${r.term}</strong></td>
           <td style="white-space:nowrap;"><strong>${nHits} / ${nUniv}</strong> <span style="color:#64748b;font-size:0.72rem;">(${expUn} &rarr; ${expLen})</span></td>
           <td style="white-space:nowrap;"><strong style="color:#0f766e;">${Number(orLen).toFixed(1)}&times;</strong> (${formatPCell(pLen)})</td>
           <td style="white-space:nowrap;"><strong>${Number(orFish).toFixed(1)}&times;</strong> (${formatPCell(pFish)})</td>
-          <td style="white-space:nowrap;">${zComp !== null ? `<strong>+${Number(zComp).toFixed(2)}</strong> (${formatPCell(pComp)})` : "—"}</td>
+          <td style="white-space:nowrap;">${zComp !== null ? `<strong>${Number(zComp) >= 0 ? "+" : ""}${Number(zComp).toFixed(2)}</strong> (${formatPCell(pComp)})` : "—"}</td>
           <td><strong style="color:#be123c;">${medR2}</strong></td>
           <td style="font-size:0.73rem;color:#1e40af;line-height:1.35;">${genesShow}</td>
         </tr>`;
@@ -885,7 +908,27 @@
     // Left Chart: Top 12 Unbiased Ontology Enrichments (<2,000 AA) in Active Cohort: Length-Adjusted OR vs Exact-Universe Fisher OR
     const orPlotEl = document.getElementById("plot-lt2000-modules-or");
     if (orPlotEl && unbLtRows.length) {
-      const top10 = unbLtRows.slice(0, 10).slice().reverse();
+      const libSelChart = document.getElementById("select-lt2000-lib");
+      const libValChart = libSelChart ? libSelChart.value : "ALL";
+      let chartRows = unbLtRows.slice();
+      if (libValChart && libValChart !== "ALL") {
+        if (libValChart === "CLINICAL_DISGENET_HPO") {
+          chartRows = chartRows.filter(
+            (r) => r.library === "DisGeNET" || r.library === "Human_Phenotype_Ontology"
+          );
+        } else if (libValChart === "ALL_MOLECULAR") {
+          chartRows = chartRows.filter(
+            (r) =>
+              r.library !== "DisGeNET" &&
+              r.library !== "Human_Phenotype_Ontology" &&
+              r.library !== "Functional_Biological_Modules"
+          );
+        } else {
+          chartRows = chartRows.filter((r) => r.library === libValChart);
+        }
+      }
+      if (!chartRows.length) chartRows = unbLtRows.slice();
+      const top10 = chartRows.slice(0, 10).slice().reverse();
       const shortTerms = top10.map((r) => {
         const clean = r.term.replace(/\s*\(GO:\d+\)/, "").replace(/\s*R-HSA-\d+/, "").replace(/\s*WP\d+/, "");
         return clean.length > 36 ? clean.slice(0, 34) + "…" : clean;
@@ -1119,6 +1162,10 @@
 
       if (abFilter === "GAINED_ANY") {
         abRows = abRows.filter((r) => (r.n_hits_ge2000_added || 0) >= 1).sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      } else if (abFilter === "FUNCTIONAL_MODULES") {
+        abRows = abRows.filter((r) => r.library === "Functional_Biological_Modules").sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      } else if (abFilter === "CLINICAL_DISGENET_HPO") {
+        abRows = abRows.filter((r) => r.library === "DisGeNET" || r.library === "Human_Phenotype_Ontology").sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
       } else if (abFilter === "UNLOCKED_OR_AMPLIFIED") {
         abRows = abRows.filter((r) => r.addback_class === "UNLOCKED_OR_AMPLIFIED").sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
       } else if (abFilter === "GIANT_SCAFFOLD_ATTENUATED") {
