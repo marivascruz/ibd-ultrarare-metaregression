@@ -818,7 +818,15 @@
       (DATA.pathways_lt2000aa_by_af && DATA.pathways_lt2000aa_by_af[state.af]) ||
       [];
 
-    const sliceKeyLt = `${state.af}_${state.group}_lt2000_aa`;
+    const regimeSel = document.getElementById("select-lt2000-regime");
+    const activeRegime = regimeSel ? regimeSel.value : "lt2000_aa";
+    const regimeLabelMap = {
+      lt2000_aa: "L_AA < 2,000 AA Only (Compact/Standard)",
+      all_aa: "All Protein Lengths (Adding Back L_AA >= 2,000 AA)",
+      ge2000_aa: "L_AA >= 2,000 AA Stratum Only (Giant Scaffolds)"
+    };
+
+    const sliceKeyLt = `${state.af}_${state.group}_${activeRegime}`;
     const unbLtRows =
       (DATA.unbiased_enrichment && DATA.unbiased_enrichment[sliceKeyLt]) ||
       (DATA.enrichr_lt2000aa_by_af && DATA.enrichr_lt2000aa_by_af[state.af]) ||
@@ -830,13 +838,18 @@
     if (secTitle) {
       secTitle.innerHTML =
         state.af === "af0001"
-          ? `4C. Unbiased Size-Restricted Pathway Architecture (L<sub>AA</sub> &lt; 2,000 AA) — Paper 1: Ultra-Rare (AF &le; 0.0001) [${cohortLabelMap[state.group] || state.group}]`
-          : `4C. Unbiased Size-Restricted Pathway Architecture (L<sub>AA</sub> &lt; 2,000 AA) — Paper 2: Rare (AF &le; 0.001) [${cohortLabelMap[state.group] || state.group}]`;
+          ? `4C. Unbiased Size-Restricted &amp; Add-Back Pathway Architecture — Paper 1: Ultra-Rare (AF &le; 0.0001) [${cohortLabelMap[state.group] || state.group}]`
+          : `4C. Unbiased Size-Restricted &amp; Add-Back Pathway Architecture — Paper 2: Rare (AF &le; 0.001) [${cohortLabelMap[state.group] || state.group}]`;
     }
 
     const unbSub = document.getElementById("lt2000-unbiased-subtitle");
     if (unbSub) {
-      unbSub.innerHTML = `Unbiased Reference Ontology Enrichment at L<sub>AA</sub> &lt; 2,000 AA — Active Cohort: <span style="color:#0d9488;">${cohortLabelMap[state.group] || state.group}</span> (${state.af === "af0001" ? "AF &le; 0.0001" : "AF &le; 0.001"})`;
+      unbSub.innerHTML = `Unbiased Reference Ontology Enrichment (${regimeLabelMap[activeRegime]}) — Active Cohort: <span style="color:#0d9488;">${cohortLabelMap[state.group] || state.group}</span> (${state.af === "af0001" ? "AF &le; 0.0001" : "AF &le; 0.001"})`;
+    }
+
+    const enrTitleEl = document.getElementById("lt2000-enrichr-title");
+    if (enrTitleEl) {
+      enrTitleEl.innerHTML = `Unbiased Exact-Universe &amp; Length-Adjusted Ontology Enrichment (${regimeLabelMap[activeRegime]} — Cohort: <span style="color:#0d9488;">${state.group}</span>)`;
     }
 
     const kpiBg = document.getElementById("kpi-lt2000-bg");
@@ -910,13 +923,14 @@
       };
 
       const maxX = Math.max(...top10.map((r) => Math.max(Number(r.or_len_adj || 0), Number(r.or_fisher || 0))), 10);
+      const shortRegime = activeRegime === "all_aa" ? "All Lengths (w/ >=2,000 AA)" : activeRegime === "ge2000_aa" ? ">=2,000 AA Stratum" : "<2,000 AA Only";
       Plotly.react(
         orPlotEl,
         [traceFishOR, traceLenOR],
         {
           title: {
-            text: `Top Unbiased Pathways (<2,000 AA) in ${state.group}: Length-Adjusted OR vs. Fisher OR`,
-            font: { size: 12 }
+            text: `Top Unbiased Pathways (${shortRegime}) in ${state.group}: Length-Adj OR vs. Fisher OR`,
+            font: { size: 11.8 }
           },
           barmode: "group",
           margin: { t: 42, r: 95, b: 45, l: 195 },
@@ -931,12 +945,12 @@
       );
     }
 
-    // Right Chart: Cross-Disease Comparison (CD vs UC vs IBD at L_AA < 2,000 AA) for Top Unbiased Pathways
+    // Right Chart: Cross-Disease Comparison (CD vs UC vs IBD in activeRegime) for Top Unbiased Pathways
     const r2PlotEl = document.getElementById("plot-lt2000-r2-comparison");
     if (r2PlotEl && DATA.unbiased_enrichment) {
-      const cdRows = DATA.unbiased_enrichment[`${state.af}_CD_lt2000_aa`] || [];
-      const ucRows = DATA.unbiased_enrichment[`${state.af}_UC_lt2000_aa`] || [];
-      const ibdRows = DATA.unbiased_enrichment[`${state.af}_IBD_lt2000_aa`] || [];
+      const cdRows = DATA.unbiased_enrichment[`${state.af}_CD_${activeRegime}`] || [];
+      const ucRows = DATA.unbiased_enrichment[`${state.af}_UC_${activeRegime}`] || [];
+      const ibdRows = DATA.unbiased_enrichment[`${state.af}_IBD_${activeRegime}`] || [];
 
       // Collect union of top 4 pathways from CD, top 4 from UC, top 3 from IBD
       const seenTerms = new Set();
@@ -1003,13 +1017,14 @@
         hoverinfo: "text"
       };
 
+      const shortRegime2 = activeRegime === "all_aa" ? "All Lengths w/ >=2k AA" : activeRegime === "ge2000_aa" ? ">=2,000 AA Stratum" : "<2,000 AA";
       Plotly.react(
         r2PlotEl,
         [trIBD, trUC, trCD],
         {
           title: {
-            text: "Disease Specificity (<2,000 AA): CD vs. UC vs. IBD Unbiased Enrichment (-log10 p_len)",
-            font: { size: 12 }
+            text: `Disease Specificity (${shortRegime2}): CD vs. UC vs. IBD Unbiased Enrichment (-log10 p_len)`,
+            font: { size: 11.8 }
           },
           barmode: "group",
           margin: { t: 42, r: 25, b: 45, l: 190 },
@@ -1080,7 +1095,7 @@
       });
     }
 
-    // Unbiased (< 2,000 AA) Ontology Table for Active Cohort
+    // Unbiased (< 2,000 AA / All AA / >= 2,000 AA) Ontology Table for Active Cohort
     const enrTbody = document.getElementById("lt2000-enrichr-table-body");
     if (enrTbody) {
       const libSel = document.getElementById("select-lt2000-lib");
@@ -1088,6 +1103,78 @@
       const libVal = libSel ? libSel.value : "ALL";
       const sortVal = sortSel ? sortSel.value : "p_len_adj";
       enrTbody.innerHTML = renderUnbiasedTableRows(unbLtRows, libVal, sortVal);
+    }
+
+    // Head-to-Head Add-Back Comparison Table (< 2,000 AA vs All AA when adding back L_AA >= 2,000 AA)
+    const abTitleEl = document.getElementById("addback-table-title");
+    if (abTitleEl) {
+      abTitleEl.innerHTML = `Head-to-Head Comparison: What Happens When We Add Back Genes with L<sub>AA</sub> &ge; 2,000 AA in <span style="color:#0d9488;">${state.group}</span>? (${state.af === "af0001" ? "AF &le; 0.0001" : "AF &le; 0.001"})`;
+    }
+    const abTbody = document.getElementById("addback-comparison-table-body");
+    if (abTbody && DATA.addback_comparison) {
+      const abKey = `${state.af}_${state.group}`;
+      let abRows = (DATA.addback_comparison[abKey] || []).slice();
+      const abFilterEl = document.getElementById("select-addback-filter");
+      const abFilter = abFilterEl ? abFilterEl.value : "GAINED_ANY";
+
+      if (abFilter === "GAINED_ANY") {
+        abRows = abRows.filter((r) => (r.n_hits_ge2000_added || 0) >= 1).sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      } else if (abFilter === "UNLOCKED_OR_AMPLIFIED") {
+        abRows = abRows.filter((r) => r.addback_class === "UNLOCKED_OR_AMPLIFIED").sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      } else if (abFilter === "GIANT_SCAFFOLD_ATTENUATED") {
+        abRows = abRows.filter((r) => r.addback_class === "GIANT_SCAFFOLD_ATTENUATED" || ((r.n_hits_ge2000_added || 0) >= 1 && (r.exp_len_adj_all_aa || 0) > 1.5 * (r.exp_unadj_all_aa || 0.1))).sort((a, b) => (a.p_fish_all_aa || 1) - (b.p_fish_all_aa || 1));
+      } else if (abFilter === "COMPACT_INVARIANT") {
+        abRows = abRows.filter((r) => r.addback_class === "COMPACT_INVARIANT").sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      } else {
+        abRows.sort((a, b) => (a.p_len_all_aa || 1) - (b.p_len_all_aa || 1));
+      }
+
+      const badgeForClass = (cls) => {
+        if (cls === "UNLOCKED_OR_AMPLIFIED") {
+          return `<span class="badge" style="background:#0f766e;color:#fff;font-size:0.67rem;">Regime I: Unlocked / Amplified</span>`;
+        }
+        if (cls === "GIANT_SCAFFOLD_ATTENUATED") {
+          return `<span class="badge" style="background:#b45309;color:#fff;font-size:0.67rem;">Regime II: Giant Scaffold (Len-Adjusted)</span>`;
+        }
+        if (cls === "COMPACT_INVARIANT") {
+          return `<span class="badge" style="background:#1d4ed8;color:#fff;font-size:0.67rem;">Regime III: 100% Compact (&lt;2k AA)</span>`;
+        }
+        return `<span class="badge" style="background:#475569;color:#fff;font-size:0.67rem;">Shared (&lt;2k + &ge;2k)</span>`;
+      };
+
+      abTbody.innerHTML = abRows
+        .slice(0, 22)
+        .map((r) => {
+          const shortLib = (r.library || "")
+            .replace("_2023", "")
+            .replace("_2022", "")
+            .replace("_2021_Human", "")
+            .replace("_Human", "");
+          const dGe = r.n_hits_ge2000_added || 0;
+          const ltOrStr = r.n_hits_lt2000 > 0 ? `${Number(r.or_len_lt2000).toFixed(1)}&times; (${fmtP(r.p_len_lt2000)})` : "0 hits";
+          const allOrStr = `<strong style="color:#0f766e;">${Number(r.or_len_all_aa).toFixed(1)}&times;</strong> (${formatPCell(r.p_len_all_aa)})`;
+          const ltFishStr = r.n_hits_lt2000 > 0 ? `${Number(r.or_fish_lt2000).toFixed(1)}&times;` : "0 hits";
+          const allFishStr = `<strong>${Number(r.or_fish_all_aa).toFixed(1)}&times;</strong> (${formatPCell(r.p_fish_all_aa)})`;
+          const zStr = `${r.z_comp_lt2000 ? (r.z_comp_lt2000 >= 0 ? "+" : "") + Number(r.z_comp_lt2000).toFixed(2) : "—"} &rarr; <strong>${r.z_comp_all_aa >= 0 ? "+" : ""}${Number(r.z_comp_all_aa).toFixed(2)}</strong>`;
+          const geGenesHtml = r.genes_ge2000_added
+            ? `<span style="color:#be123c;font-weight:700;">[+&ge;2k AA: ${r.genes_ge2000_added}]</span> `
+            : "";
+          const ltGenesHtml = r.genes_lt2000
+            ? `<span style="color:#1e40af;">[&lt;2k AA: ${r.genes_lt2000}]</span>`
+            : "";
+          return `
+          <tr>
+            <td><span class="badge" style="background:#e2e8f0;color:#0f172a;font-size:0.68rem;">${shortLib}</span></td>
+            <td><strong>${r.term}</strong></td>
+            <td style="white-space:nowrap;">${badgeForClass(r.addback_class)}</td>
+            <td style="white-space:nowrap;"><strong>${r.n_hits_lt2000} &rarr; ${r.n_hits_all_aa}/${r.n_univ_all_aa}</strong> ${dGe > 0 ? `<span style="color:#be123c;font-weight:700;">(+${dGe} &ge;2k)</span>` : `<span style="color:#64748b;">(+0)</span>`}</td>
+            <td style="white-space:nowrap;">${ltOrStr} &rarr; ${allOrStr}</td>
+            <td style="white-space:nowrap;">${ltFishStr} &rarr; ${allFishStr} <span style="color:#64748b;font-size:0.71rem;">(Exp ${Number(r.exp_unadj_all_aa).toFixed(2)}&rarr;${Number(r.exp_len_adj_all_aa).toFixed(2)})</span></td>
+            <td style="white-space:nowrap;">${zStr}</td>
+            <td style="font-size:0.73rem;line-height:1.35;">${geGenesHtml}${ltGenesHtml}</td>
+          </tr>`;
+        })
+        .join("");
     }
 
     // Top Significant Compact (< 2,000 AA) Genes Table for Active Cohort
@@ -1417,7 +1504,7 @@
       }
     });
 
-    ["select-lt2000-lib", "select-lt2000-sort"].forEach((id) => {
+    ["select-lt2000-regime", "select-lt2000-lib", "select-lt2000-sort", "select-addback-filter"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) {
         el.addEventListener("change", () => {

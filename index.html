@@ -365,13 +365,18 @@
         <div id="plot-lt2000-r2-comparison" class="plot-box" style="height: 430px;"></div>
       </div>
 
-      <!-- UNBIASED ONTOLOGY ENRICHMENT TABLE (< 2,000 AA) + TOP SIGNIFICANT COMPACT GENES -->
+      <!-- UNBIASED ONTOLOGY ENRICHMENT TABLE (< 2,000 AA / ALL AA / >= 2,000 AA) + ADD-BACK COMPARISON -->
       <div style="margin-bottom: 1.35rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
           <h3 id="lt2000-enrichr-title" style="font-size: 0.96rem; font-weight: 700; color: #0f172a; margin: 0;">
             Unbiased Exact-Universe &amp; Length-Adjusted Ontology Enrichment (L<sub>AA</sub> &lt; 2,000 AA — Cohort: ALL)
           </h3>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <select id="select-lt2000-regime" style="padding: 0.36rem 0.65rem; border-radius: 6px; border: 2px solid #2563eb; background: #eff6ff; color: #1e3a8a; font-size: 0.78rem; font-weight: 700;">
+              <option value="lt2000_aa" selected>Universe: L_AA &lt; 2,000 AA Only (16,919 Compact/Standard Genes)</option>
+              <option value="all_aa">Universe: Add Back L_AA &ge; 2,000 AA (All 17,376 Tested Genes)</option>
+              <option value="ge2000_aa">Universe: L_AA &ge; 2,000 AA Stratum Only (457 Giant Scaffold Genes)</option>
+            </select>
             <select id="select-lt2000-lib" style="padding: 0.36rem 0.65rem; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.78rem; font-weight: 600;">
               <option value="ALL" selected>All 6 Ontology Databases (9,953 Pathways)</option>
               <option value="GO_Biological_Process_2023">GO Biological Process (2023)</option>
@@ -394,15 +399,55 @@
               <tr>
                 <th>Ontology</th>
                 <th>Pre-Defined Pathway / Ontology Term</th>
-                <th>Hits / Tested (&lt;2k AA) (Exp<sub>unadj</sub> &rarr; Exp<sub>len</sub>)</th>
+                <th>Hits / Tested (Exp<sub>unadj</sub> &rarr; Exp<sub>len</sub>)</th>
                 <th>Length-Adjusted OR (p<sub>len-adj</sub>)</th>
                 <th>Exact Fisher OR (p<sub>Fisher</sub>)</th>
                 <th>Comp. Z (p<sub>comp</sub>)</th>
                 <th>Med Hit R&sup2;</th>
-                <th>Active Significant Genes (&lt; 2,000 AA, with Length)</th>
+                <th>Active Significant Genes (with Canonical AA Length)</th>
               </tr>
             </thead>
             <tbody id="lt2000-enrichr-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- HEAD-TO-HEAD ADD-BACK COMPARISON TABLE: WHAT HAPPENS WHEN WE ADD BACK L_AA >= 2,000 AA? -->
+      <div style="margin-bottom: 1.45rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #2563eb; border-radius: 8px; padding: 0.95rem 1.1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
+          <div>
+            <h3 id="addback-table-title" style="font-size: 0.96rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0;">
+              Head-to-Head Comparison: What Happens When We Add Back Genes with L<sub>AA</sub> &ge; 2,000 AA? (&lt; 2,000 AA vs. All Protein Lengths)
+            </h3>
+            <p style="font-size: 0.79rem; color: #334155; margin: 0;">
+              Contrasts <strong>Regime I (Unlocked / Amplified by L<sub>AA</sub> &ge; 2,000 AA even after strict Poisson-Binomial length control)</strong>, <strong>Regime II (Giant Scaffold pathways where unadjusted Fisher OR explodes but length adjustment reveals the coding-target-size component)</strong>, and <strong>Regime III (Compact-Core Invariant pathways with zero &ge; 2,000 AA hits)</strong>.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <select id="select-addback-filter" style="padding: 0.38rem 0.65rem; border-radius: 6px; border: 1px solid #2563eb; background: #ffffff; font-size: 0.78rem; font-weight: 700; color: #0f172a;">
+              <option value="GAINED_ANY" selected>Filter: Pathways Gaining &ge;1 Hit from L_AA &ge; 2,000 AA (Sorted by Length-Adj p)</option>
+              <option value="UNLOCKED_OR_AMPLIFIED">Regime I: Newly Unlocked / Amplified by L_AA &ge; 2,000 AA (Survives Length Control)</option>
+              <option value="GIANT_SCAFFOLD_ATTENUATED">Regime II: Giant Scaffold Pathways (Strong Fisher OR, Attenuated by Length Control)</option>
+              <option value="COMPACT_INVARIANT">Regime III: Compact-Core Invariant (0 Hits &ge; 2,000 AA; 100% Compact)</option>
+              <option value="ALL_TOP">Show All Top Enriched Pathways Side-by-Side (&lt; 2,000 AA vs. All AA)</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper" style="max-height: 430px;">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Ontology</th>
+                <th>Pathway Term</th>
+                <th>Add-Back Regime</th>
+                <th>Hits: &lt;2k &rarr; All AA (+&ge;2k)</th>
+                <th>Length-Adj OR (p<sub>len</sub>): &lt;2k &rarr; All AA</th>
+                <th>Unadj Fisher OR (p<sub>Fish</sub>): &lt;2k &rarr; All AA</th>
+                <th>Comp. Z: &lt;2k &rarr; All</th>
+                <th>Added &ge; 2,000 AA Genes (Rose) &amp; Retained &lt; 2,000 AA Genes (Blue)</th>
+              </tr>
+            </thead>
+            <tbody id="addback-comparison-table-body"></tbody>
           </table>
         </div>
       </div>
@@ -714,7 +759,7 @@
     References: Aguilar, Rivas &amp; Rivas (2025) <code>medRxiv 10.1101/2024.06.27.24309590</code>; Lauer &amp; Rivas (2025) <code>bioRxiv 10.1101/2025.01.23.634522</code>
   </footer>
 
-  <script src="data.js?v=20261028f"></script>
-  <script src="app.js?v=20261028f"></script>
+  <script src="data.js?v=20261028g"></script>
+  <script src="app.js?v=20261028g"></script>
 </body>
 </html>
