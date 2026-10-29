@@ -14,6 +14,7 @@
     group: "ALL",
     model: "M7",
     pathway: "ALL",
+    aaLenFilter: "all",
     search: "",
     sigFilter: "all",
     sortCol: "p_M7",
@@ -714,6 +715,283 @@
     }
   }
 
+  // 6C. Render Size-Restricted (< 2,000 AA) Pathway Analysis Section
+  function renderLt2000Section() {
+    const sumMap = DATA.lt2000aa_summary_by_af || {};
+    const modMap = DATA.pathways_lt2000aa_by_af || {};
+    const enrMap = DATA.enrichr_lt2000aa_by_af || {};
+    const s = sumMap[state.af];
+    const mods = modMap[state.af] || [];
+    const erows = enrMap[state.af] || [];
+    if (!s || !mods.length) return;
+
+    const secTitle = document.getElementById("lt2000-section-title");
+    if (secTitle) {
+      secTitle.innerHTML =
+        state.af === "af0001"
+          ? "4C. Size-Restricted Pathway Architecture of Compact Proteins (L<sub>AA</sub> &lt; 2,000 Amino Acids) — Paper 1: Ultra-Rare (AF &le; 0.0001)"
+          : "4C. Size-Restricted Pathway Architecture of Compact Proteins (L<sub>AA</sub> &lt; 2,000 Amino Acids) — Paper 2: Rare (AF &le; 0.001)";
+    }
+
+    const kpiBg = document.getElementById("kpi-lt2000-bg");
+    const kpiBgSub = document.getElementById("kpi-lt2000-bg-sub");
+    const kpiSig = document.getElementById("kpi-lt2000-sig");
+    const kpiSigSub = document.getElementById("kpi-lt2000-sig-sub");
+    const kpiR2 = document.getElementById("kpi-lt2000-r2");
+    const kpiR2Sub = document.getElementById("kpi-lt2000-r2-sub");
+    const kpiMods = document.getElementById("kpi-lt2000-mods");
+    const kpiModsSub = document.getElementById("kpi-lt2000-mods-sub");
+
+    if (kpiBg) kpiBg.textContent = `${s.bg_lt2000.toLocaleString()} / ${s.bg_total.toLocaleString()} (${s.bg_lt2000_pct}%)`;
+    if (kpiBgSub) kpiBgSub.textContent = `Only ${s.bg_ge2000} genes (2.66%) in the human exome have canonical length >= 2,000 AA`;
+
+    if (state.af === "af0001") {
+      if (kpiSig) kpiSig.textContent = `${s.n_sig_strict_lt2000}/${s.n_sig_strict_total} Strict (${s.pct_strict_lt2000}%) | ${s.n_sig_sug_lt2000}/${s.n_sig_sug_total} Sug (${s.pct_sug_lt2000}%)`;
+      if (kpiSigSub) kpiSigSub.textContent = `Median length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (>=2,000 AA)`;
+    } else {
+      if (kpiSig) kpiSig.textContent = `${s.n_sig_strict_lt2000} / ${s.n_sig_strict_total} (${s.pct_strict_lt2000}%)`;
+      if (kpiSigSub) kpiSigSub.textContent = `Median protein length = ${s.med_aa_lt2000.toLocaleString()} AA (<2,000 AA) vs. ${s.med_aa_ge2000.toLocaleString()} AA (>=2,000 AA)`;
+    }
+
+    if (kpiR2) kpiR2.textContent = `${s.med_r2_lt2000.toFixed(2)}% vs. ${s.med_r2_ge2000.toFixed(2)}% (${s.r2_ratio}×)`;
+    if (kpiR2Sub) kpiR2Sub.textContent = `Compact < 2,000 AA significant genes explain ${s.r2_ratio}× more variance per gene than >= 2,000 AA genes`;
+
+    if (kpiMods) kpiMods.textContent = `${s.n_modules_enriched} / 9 Modules Enriched`;
+    if (kpiModsSub) {
+      kpiModsSub.textContent =
+        state.af === "af0001"
+          ? "Innate Immunity (NOD2, SBNO2, RUNX1, DPP9) & Immunometabolism (HPD, PFKFB3) dominate ultra-rare < 2,000 AA architecture"
+          : "Modules 2–9 remain strongly enriched (OR = 3.9×–6.1×); only M1 (Hemidesmosome/ECM) is >= 2,500 AA";
+    }
+
+    // Left Chart: 9-Module Size-Restricted (<2,000 AA) Fisher Odds Ratio & Retention %
+    const orPlotEl = document.getElementById("plot-lt2000-modules-or");
+    if (orPlotEl) {
+      const shortLabels = mods.map((m) => m.name.replace(/^\d+\.\s*/, "").split("&")[0].trim());
+      const traceOR = {
+        x: shortLabels,
+        y: mods.map((m) => m.or_lt2000),
+        name: "Size-Restricted (<2,000 AA) Fisher OR",
+        type: "bar",
+        marker: {
+          color: mods.map((m) => (m.fisher_p_lt2000_num < 0.05 && m.n_lt2000 > 0 ? "#0d9488" : "#94a3b8"))
+        },
+        text: mods.map((m) => `${m.or_lt2000.toFixed(1)}×`),
+        textposition: "outside",
+        hovertext: mods.map(
+          (m) =>
+            `<b>${m.name}</b><br>` +
+            `<2,000 AA Fisher OR = ${m.or_lt2000.toFixed(2)}× (p = ${m.fisher_p_lt2000})<br>` +
+            `Retained <2,000 AA Hits: ${m.n_lt2000} / ${m.n_total} (${m.pct_retained}%)<br>` +
+            `Retained Genes: ${m.genes_lt2000_fmt}`
+        ),
+        hoverinfo: "text"
+      };
+
+      const traceRet = {
+        x: shortLabels,
+        y: mods.map((m) => m.pct_retained),
+        name: "Significant Hits Retained <2,000 AA (%)",
+        type: "scatter",
+        mode: "lines+markers",
+        yaxis: "y2",
+        line: { color: "#e11d48", width: 2.5 },
+        marker: { size: 8, color: "#e11d48" }
+      };
+
+      const maxOR = Math.max(...mods.map((m) => m.or_lt2000), 8);
+      Plotly.react(
+        orPlotEl,
+        [traceOR, traceRet],
+        {
+          title: {
+            text: "Curated 9-Module Fisher Enrichment OR & Gene Retention (%) at L_AA < 2,000 AA",
+            font: { size: 12.5 }
+          },
+          margin: { t: 42, r: 52, b: 85, l: 52 },
+          paper_bgcolor: "transparent",
+          plot_bgcolor: "transparent",
+          xaxis: { tickangle: -28, tickfont: { size: 10.5 } },
+          yaxis: { title: "< 2,000 AA Fisher Odds Ratio (OR)", range: [0, maxOR * 1.22], gridcolor: "#e2e8f0" },
+          yaxis2: {
+            title: "Retained < 2,000 AA (%)",
+            overlaying: "y",
+            side: "right",
+            range: [0, 108],
+            showgrid: false
+          },
+          legend: { orientation: "h", y: 1.14, x: 0.5, xanchor: "center", font: { size: 10.5 } },
+          font: { family: "Inter, sans-serif", size: 11.5 }
+        },
+        { responsive: true, displayModeBar: false }
+      );
+    }
+
+    // Right Chart: Module-by-Module Median Explained Variance R^2 (<2,000 AA vs >=2,000 AA)
+    const r2PlotEl = document.getElementById("plot-lt2000-r2-comparison");
+    if (r2PlotEl) {
+      const shortLabels = mods.map((m) => m.name.replace(/^\d+\.\s*/, "").split("&")[0].trim());
+      const traceLtR2 = {
+        x: shortLabels,
+        y: mods.map((m) => m.med_r2_lt2000),
+        name: "Compact/Standard (< 2,000 AA) Median R² (%)",
+        type: "bar",
+        marker: { color: "#2563eb" },
+        text: mods.map((m) => `${m.med_r2_lt2000.toFixed(1)}%`),
+        textposition: "outside",
+        hovertext: mods.map(
+          (m) =>
+            `<b>${m.name} (< 2,000 AA)</b><br>` +
+            `Median Explained Variance R² = ${m.med_r2_lt2000.toFixed(2)}% (Median Length = ${m.med_aa_lt2000} AA)<br>` +
+            `Genes (<2,000 AA): ${m.genes_lt2000_fmt}`
+        ),
+        hoverinfo: "text"
+      };
+
+      const traceGeR2 = {
+        x: shortLabels,
+        y: mods.map((m) => m.med_r2_ge2000),
+        name: "Giant Scaffolds (>= 2,000 AA) Median R² (%)",
+        type: "bar",
+        marker: { color: "#cbd5e1", line: { color: "#475569", width: 1 } },
+        text: mods.map((m) => `${m.med_r2_ge2000.toFixed(1)}%`),
+        textposition: "outside",
+        hovertext: mods.map(
+          (m) =>
+            `<b>${m.name} (>= 2,000 AA Excluded)</b><br>` +
+            `Median Explained Variance R² = ${m.med_r2_ge2000.toFixed(2)}%<br>` +
+            `Excluded Giant Genes: ${m.genes_ge2000_fmt || "None"}`
+        ),
+        hoverinfo: "text"
+      };
+
+      const maxR2 = Math.max(...mods.map((m) => Math.max(m.med_r2_lt2000, m.med_r2_ge2000)), 15);
+      Plotly.react(
+        r2PlotEl,
+        [traceLtR2, traceGeR2],
+        {
+          title: {
+            text: "Explained Variance R² (M7) per Module: Compact (<2,000 AA) vs. Giant (>=2,000 AA) Genes",
+            font: { size: 12.5 }
+          },
+          barmode: "group",
+          margin: { t: 42, r: 20, b: 85, l: 52 },
+          paper_bgcolor: "transparent",
+          plot_bgcolor: "transparent",
+          xaxis: { tickangle: -28, tickfont: { size: 10.5 } },
+          yaxis: { title: "Median Explained Variance R² (%)", range: [0, maxR2 * 1.24], gridcolor: "#e2e8f0" },
+          legend: { orientation: "h", y: 1.14, x: 0.5, xanchor: "center", font: { size: 10.5 } },
+          font: { family: "Inter, sans-serif", size: 11.5 }
+        },
+        { responsive: true, displayModeBar: false }
+      );
+    }
+
+    // 9 Size-Restricted Module Cards
+    const cardsGrid = document.getElementById("lt2000-pathway-cards-grid");
+    if (cardsGrid) {
+      cardsGrid.innerHTML = mods
+        .map((m) => {
+          const isActive = state.pathway === m.id && state.aaLenFilter === "lt2000";
+          const isEnriched = m.fisher_p_lt2000_num < 0.05 && m.n_lt2000 > 0;
+          const borderCol = isActive ? "#e11d48" : isEnriched ? "#0d9488" : "#94a3b8";
+          const badgeBg = isEnriched ? "#0f766e" : "#64748b";
+          return `
+          <div class="method-box lt2000-card" data-pway="${m.id}" style="cursor:pointer; border-left: 4px solid ${borderCol}; background: ${isActive ? "#fff1f2" : "#f8fafc"};">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:0.35rem; margin-bottom:0.35rem;">
+              <h4 style="margin:0; font-size:0.86rem; color:#0f172a;">${m.name}</h4>
+              <span class="badge" style="background:${badgeBg}; color:#fff; font-size:0.68rem; white-space:nowrap;">
+                &lt;2k OR ${m.or_lt2000.toFixed(1)}&times; (p=${m.fisher_p_lt2000})
+              </span>
+            </div>
+            <div style="font-size:0.74rem; color:#334155; margin-bottom:0.4rem; display:flex; gap:0.65rem; flex-wrap:wrap;">
+              <span><strong>Retained:</strong> ${m.n_lt2000}/${m.n_total} (${m.pct_retained}%)</span>
+              <span><strong>Med Length:</strong> ${m.med_aa_lt2000.toLocaleString()} AA</span>
+              <span><strong>Med R&sup2;:</strong> <span style="color:#be123c;font-weight:700;">${m.med_r2_lt2000.toFixed(1)}%</span> (vs ${m.med_r2_ge2000.toFixed(1)}% &ge;2k)</span>
+            </div>
+            <div style="font-size:0.74rem; color:#0f172a; margin-bottom:0.3rem; line-height:1.4;">
+              <strong style="color:#0d9488;">&lt; 2,000 AA Retained (${m.genes_lt2000.length}):</strong>
+              <span style="color:#1d4ed8; font-weight:600;">${m.genes_lt2000_fmt || "None"}</span>
+            </div>
+            <div style="font-size:0.71rem; color:#64748b; line-height:1.35;">
+              <strong>&ge; 2,000 AA Excluded (${m.genes_ge2000.length}):</strong>
+              <span>${m.genes_ge2000_fmt || "None"}</span>
+            </div>
+          </div>`;
+        })
+        .join("");
+
+      cardsGrid.querySelectorAll(".lt2000-card").forEach((el) => {
+        el.addEventListener("click", () => {
+          const pid = el.getAttribute("data-pway");
+          if (state.pathway === pid && state.aaLenFilter === "lt2000") {
+            state.pathway = "ALL";
+            state.aaLenFilter = "all";
+          } else {
+            state.pathway = pid;
+            state.aaLenFilter = "lt2000";
+          }
+          const pSel = document.getElementById("select-pathway-filter");
+          if (pSel) pSel.value = state.pathway;
+          const aaSel = document.getElementById("select-aalen-filter");
+          if (aaSel) aaSel.value = state.aaLenFilter;
+          renderPathwayCards();
+          renderLt2000Section();
+          renderUnifiedVsBrowserChart();
+          renderGeneTable();
+        });
+      });
+    }
+
+    // Unbiased Enrichr (< 2,000 AA) Table
+    const enrTbody = document.getElementById("lt2000-enrichr-table-body");
+    if (enrTbody) {
+      enrTbody.innerHTML = erows
+        .map(
+          (r) => `
+        <tr>
+          <td><span class="badge" style="background:#e2e8f0;color:#0f172a;font-size:0.68rem;">${r.library.replace("_2023", "").replace("_2022", "").replace("_2021_Human", "")}</span></td>
+          <td><strong>${r.term}</strong></td>
+          <td><strong>${Number(r.odds_ratio).toFixed(1)}&times;</strong></td>
+          <td><span class="p-sig">${fmtP(r.pval)}</span></td>
+          <td style="font-size:0.74rem;color:#1e40af;"><strong>(${r.n_overlap})</strong> ${r.genes}</td>
+        </tr>`
+        )
+        .join("");
+    }
+
+    // Top Significant Compact (< 2,000 AA) Genes Table
+    const topGenesTbody = document.getElementById("lt2000-top-genes-table-body");
+    if (topGenesTbody && s.top_genes_lt2000) {
+      topGenesTbody.innerHTML = s.top_genes_lt2000
+        .slice(0, 25)
+        .map((g) => {
+          const key = `${g.gene}_${g.group}`;
+          return `
+          <tr data-key="${key}" style="cursor:pointer;">
+            <td><strong>${g.gene}</strong></td>
+            <td><span class="pill-group pill-${g.group}">${g.group}</span></td>
+            <td>${g.aa_len.toLocaleString()} AA</td>
+            <td>${formatPCell(g.p_M7)}</td>
+            <td><strong style="color:#be123c;">${g.r2_M7.toFixed(1)}%</strong></td>
+            <td style="font-size:0.75rem;color:#334155;">AM ${g.pr2_am.toFixed(1)}% / LoF ${g.pr2_lof.toFixed(1)}% / Con ${g.pr2_con.toFixed(1)}%</td>
+          </tr>`;
+        })
+        .join("");
+
+      topGenesTbody.querySelectorAll("tr").forEach((tr) => {
+        tr.addEventListener("click", () => {
+          const key = tr.getAttribute("data-key");
+          state.selectedGeneKey = key;
+          const inspSel = document.getElementById("select-inspector-gene");
+          if (inspSel) inspSel.value = key;
+          renderGeneInspector();
+          renderGeneTable();
+        });
+      });
+    }
+  }
+
   // 7. Render Interactive Sortable Gene Table
   function getFilteredRows() {
     const cfgKey = getConfigKey();
@@ -725,6 +1003,14 @@
 
     if (state.pathway !== "ALL") {
       rows = rows.filter((r) => r.pathway === state.pathway);
+    }
+
+    if (state.aaLenFilter === "lt2000") {
+      rows = rows.filter((r) => (r.aa_len || 0) > 0 && r.aa_len < 2000);
+    } else if (state.aaLenFilter === "ge2000") {
+      rows = rows.filter((r) => (r.aa_len || 0) >= 2000);
+    } else if (state.aaLenFilter === "lt1000") {
+      rows = rows.filter((r) => (r.aa_len || 0) > 0 && r.aa_len < 1000);
     }
 
     if (state.search.trim() !== "") {
@@ -876,6 +1162,7 @@
     renderGeneInspector();
     renderPathwayCards();
     renderGeneSizePlots();
+    renderLt2000Section();
     renderGeneTable();
   }
 
@@ -943,9 +1230,34 @@
     document.getElementById("select-pathway-filter").addEventListener("change", (e) => {
       state.pathway = e.target.value;
       renderPathwayCards();
+      renderLt2000Section();
       renderUnifiedVsBrowserChart();
       renderGeneTable();
     });
+
+    const aaLenSel = document.getElementById("select-aalen-filter");
+    if (aaLenSel) {
+      aaLenSel.addEventListener("change", (e) => {
+        state.aaLenFilter = e.target.value;
+        renderLt2000Section();
+        renderGeneTable();
+      });
+    }
+
+    const btnFilterLt2000 = document.getElementById("btn-filter-table-lt2000");
+    if (btnFilterLt2000) {
+      btnFilterLt2000.addEventListener("click", () => {
+        state.aaLenFilter = "lt2000";
+        state.sigFilter = "exome";
+        if (aaLenSel) aaLenSel.value = "lt2000";
+        const sigFilterEl = document.getElementById("select-sig-filter");
+        if (sigFilterEl) sigFilterEl.value = "exome";
+        renderLt2000Section();
+        renderGeneTable();
+        const tblSec = document.getElementById("section-gene-table");
+        if (tblSec) tblSec.scrollIntoView({ behavior: "smooth" });
+      });
+    }
 
     const gsYSelect = document.getElementById("select-genesize-yaxis");
     if (gsYSelect) {
