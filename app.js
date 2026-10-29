@@ -82,7 +82,7 @@
       if (!valEl || !subEl) return;
       if (state.group === "ALL" && sAllPairs) {
         valEl.textContent = `${sAllPairs[m.col]} (${sRow[m.col]})`;
-        subEl.textContent = `Pairs (Unique) | p<2.5e-6: ${sAllPairs[m.ucol]}`;
+        subEl.textContent = `Cohort Hits (Unique Genes) | p<2.5e-6: ${sAllPairs[m.ucol]}`;
       } else {
         valEl.textContent = `${sRow[m.col]}`;
         subEl.textContent = `p<3.4e-7 | p<2.5e-6: ${sRow[m.ucol]}`;
