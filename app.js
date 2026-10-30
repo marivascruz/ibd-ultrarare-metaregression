@@ -1309,8 +1309,10 @@
     if (state.sigFilter === "exome") {
       rows = rows.filter(
         (r) =>
-          (r[activePCol] !== null && r[activePCol] < EXOME_ALPHA) ||
+          (r[activePCol] !== null && r[activePCol] !== undefined && r[activePCol] < EXOME_ALPHA) ||
           (r.p_M7 !== null && r.p_M7 < EXOME_ALPHA) ||
+          (r.p_M8 !== null && r.p_M8 !== undefined && r.p_M8 < EXOME_ALPHA) ||
+          (r.p_M9 !== null && r.p_M9 !== undefined && r.p_M9 < EXOME_ALPHA) ||
           (r.p_M5 !== null && r.p_M5 < EXOME_ALPHA)
       );
     } else if (state.sigFilter === "sug") {
@@ -1361,6 +1363,22 @@
     return `<strong style="color:#be123c;">+${Number(bBench).toFixed(2)}</strong> <span style="color:#475569;font-size:0.75rem;">(${orVal}&times;)</span>`;
   }
 
+  function fmtM8Cell(pM8, zLoc) {
+    if (pM8 === null || pM8 === undefined || isNaN(pM8)) return "—";
+    const pHtml = formatPCell(pM8);
+    if (zLoc === null || zLoc === undefined || isNaN(zLoc)) return pHtml;
+    const zSign = zLoc >= 0 ? "+" : "";
+    const zColor = zLoc <= -2.0 ? "#0284c7" : zLoc >= 2.0 ? "#be123c" : "#64748b";
+    return `${pHtml} <span style="color:${zColor};font-size:0.74rem;font-weight:600;">(${zSign}${Number(zLoc).toFixed(1)})</span>`;
+  }
+
+  function fmtM9Cell(pM9, piPos) {
+    if (pM9 === null || pM9 === undefined || isNaN(pM9)) return "—";
+    const pHtml = formatPCell(pM9);
+    if (piPos === null || piPos === undefined || isNaN(piPos)) return pHtml;
+    return `${pHtml} <span style="color:#0f766e;font-size:0.74rem;">(${Number(piPos).toFixed(2)})</span>`;
+  }
+
   function renderGeneTable() {
     const rows = getFilteredRows();
     document.getElementById("table-count-label").textContent =
@@ -1381,6 +1399,8 @@
           <td>${r.n_lof} / ${r.n_mis}</td>
           <td>${formatPCell(r.p_M5)}</td>
           <td>${formatPCell(r.p_M7)}</td>
+          <td>${fmtM8Cell(r.p_M8, r.z_loc)}</td>
+          <td>${fmtM9Cell(r.p_M9, r.pi_pos)}</td>
           <td><strong>${fmtPct(r.r2_M7)}</strong></td>
           <td>${fmtBenchCell(r.b_bench)}</td>
           <td>${fmtBetaCell(r.eb_am, r.b_am, r.lcb_am)}</td>
@@ -1411,7 +1431,7 @@
     const headers = [
       "gene_id", "gene", "group", "pathway", "aa_len", "n_var", "n_lof", "n_mis", "n_firth", "max_vif",
       "p_M1_LoF_only", "p_M2_AM_only", "p_M3_Constraint_only", "p_M4_LoF_Constraint",
-      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "r2_M7", "delta_log_or_bench",
+      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "p_M8_Joint4df", "z_loc", "p_M9_EM_Mixture", "pi_pos_M9", "r2_M7", "delta_log_or_bench",
       "beta_am_raw", "beta_am_eb", "beta_am_lcb95", "p_pathogenicity", "partial_r2_am",
       "beta_lof_raw", "beta_lof_eb", "beta_lof_lcb95", "p_pLoF", "partial_r2_lof",
       "beta_con_raw", "beta_con_eb", "beta_con_lcb95", "p_constraint", "partial_r2_con",
@@ -1422,7 +1442,7 @@
       lines.push(
         [
           r.gene_id, r.gene, r.group, r.pathway, r.aa_len, r.n_var, r.n_lof, r.n_mis, r.n_firth, r.vif,
-          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.r2_M7, r.b_bench,
+          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.p_M8, r.z_loc, r.p_M9, r.pi_pos, r.r2_M7, r.b_bench,
           r.b_am, r.eb_am, r.lcb_am, r.p_am, r.pr2_am,
           r.b_lof, r.eb_lof, r.lcb_lof, r.p_lof, r.pr2_lof,
           r.b_con, r.eb_con, r.lcb_con, r.p_con, r.pr2_con,
@@ -1498,7 +1518,7 @@
         const parts = e.target.value.split(":");
         state.sortCol = parts[0];
         state.sortAsc = parts[1] === "asc";
-        if (state.sortCol !== "p_M7" && state.sortCol !== "p_M5" && state.sigFilter === "all") {
+        if (state.sortCol !== "p_M7" && state.sortCol !== "p_M8" && state.sortCol !== "p_M9" && state.sortCol !== "p_M5" && state.sigFilter === "all") {
           state.sigFilter = "exome";
           const sigFilterEl = document.getElementById("select-sig-filter");
           if (sigFilterEl) sigFilterEl.value = "exome";
