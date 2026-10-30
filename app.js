@@ -1459,6 +1459,148 @@
     URL.revokeObjectURL(url);
   }
 
+  function renderBidirectionalMixtureCharts() {
+    const mixEl = document.getElementById("plot-m9-mixture-proportions");
+    const slopeEl = document.getElementById("plot-m9-butterfly-slopes");
+    if (!mixEl || !slopeEl) return;
+
+    const allGenes = getActiveGenes();
+    const candidates = allGenes.filter(
+      (g) =>
+        g.p_M9 != null &&
+        g.p_M9 < 1e-4 &&
+        g.pi_pos != null &&
+        g.pi_pos >= 0.12 &&
+        g.pi_pos <= 0.88 &&
+        ((g.g_pos_am || 0) > 0.02 || (g.g_neg_am || 0) > 0.02) &&
+        !["TTN", "MUC16", "OBSCN"].includes(g.gene_name)
+    );
+    candidates.sort((a, b) => (a.p_M9 || 1) - (b.p_M9 || 1));
+    const top = candidates.slice(0, 15).sort((a, b) => (a.pi_pos || 0.5) - (b.pi_pos || 0.5));
+    if (!top.length) return;
+
+    const labels = top.map((g) => `${g.gene_name} (${g.group})`);
+    const piPosPct = top.map((g) => Number(((g.pi_pos || 0.5) * 100).toFixed(1)));
+    const piNegPct = top.map((g) => Number(((1 - (g.pi_pos || 0.5)) * 100).toFixed(1)));
+
+    const traceRiskMix = {
+      y: labels,
+      x: piPosPct,
+      name: "Risk Component π̂+ (%)",
+      type: "bar",
+      orientation: "h",
+      marker: { color: "#e11d48" },
+      text: piPosPct.map((v) => `${v}% Risk`),
+      textposition: "inside",
+      insidetextanchor: "middle",
+      textfont: { color: "#ffffff", size: 10 },
+      hovertext: top.map(
+        (g) =>
+          `<b>${g.gene_name} (${g.group})</b><br>` +
+          `Risk Component π̂+ = <b>${((g.pi_pos || 0.5) * 100).toFixed(1)}%</b><br>` +
+          `Protective Component π̂- = <b>${((1 - (g.pi_pos || 0.5)) * 100).toFixed(1)}%</b><br>` +
+          `M9 2-Comp p = <b>${fmtP(g.p_M9)}</b> (Dispersion p_mag = ${fmtP(g.p_mag)})<br>` +
+          `M7 1-Comp p = ${fmtP(g.p_M7)}`
+      ),
+      hoverinfo: "text"
+    };
+
+    const traceProtMix = {
+      y: labels,
+      x: piNegPct,
+      name: "Protective Component π̂- (%)",
+      type: "bar",
+      orientation: "h",
+      marker: { color: "#2563eb" },
+      text: piNegPct.map((v) => `${v}% Prot`),
+      textposition: "inside",
+      insidetextanchor: "middle",
+      textfont: { color: "#ffffff", size: 10 },
+      hoverinfo: "skip"
+    };
+
+    Plotly.react(
+      mixEl,
+      [traceRiskMix, traceProtMix],
+      {
+        title: {
+          text: `EM 2-Component Mixture Proportions (π̂+ Risk vs. π̂- Prot) in ${state.group}`,
+          font: { size: 12.2 }
+        },
+        barmode: "stack",
+        margin: { t: 42, r: 22, b: 45, l: 118 },
+        paper_bgcolor: "transparent",
+        plot_bgcolor: "transparent",
+        xaxis: { title: "Mixture Proportion (% Coding Variants)", range: [0, 100], ticksuffix: "%", gridcolor: "#e2e8f0" },
+        yaxis: { tickfont: { size: 10.5 } },
+        shapes: [
+          {
+            type: "line",
+            x0: 50,
+            x1: 50,
+            y0: -0.5,
+            y1: labels.length - 0.5,
+            line: { color: "#0f172a", width: 1.5, dash: "dash" }
+          }
+        ],
+        legend: { orientation: "h", y: 1.12, x: 0.5, xanchor: "center", font: { size: 10.5 } },
+        font: { family: "Inter, sans-serif", size: 11 }
+      },
+      { responsive: true, displayModeBar: false }
+    );
+
+    const gPos = top.map((g) => Number((g.g_pos_am || 0).toFixed(3)));
+    const gNeg = top.map((g) => -Number((g.g_neg_am || 0).toFixed(3)));
+    const netSlope = top.map((g) =>
+      Number(((g.pi_pos || 0.5) * (g.g_pos_am || 0) - (1 - (g.pi_pos || 0.5)) * (g.g_neg_am || 0)).toFixed(3))
+    );
+
+    Plotly.react(
+      slopeEl,
+      [
+        {
+          y: labels,
+          x: gPos,
+          name: "Risk Component Slope +γ̂_AM(+)",
+          type: "bar",
+          orientation: "h",
+          marker: { color: "#be123c" }
+        },
+        {
+          y: labels,
+          x: gNeg,
+          name: "Protective Component Slope -γ̂_AM(-)",
+          type: "bar",
+          orientation: "h",
+          marker: { color: "#1d4ed8" }
+        },
+        {
+          y: labels,
+          x: netSlope,
+          name: "Net Cancelled 1-Comp Slope",
+          type: "scatter",
+          mode: "markers",
+          marker: { color: "#0f172a", symbol: "diamond", size: 8 }
+        }
+      ],
+      {
+        title: {
+          text: `Opposing Risk (+γ̂+) vs. Protective (-γ̂-) Component Slopes in ${state.group}`,
+          font: { size: 12.2 }
+        },
+        barmode: "relative",
+        margin: { t: 42, r: 22, b: 45, l: 118 },
+        paper_bgcolor: "transparent",
+        plot_bgcolor: "transparent",
+        xaxis: { title: "← Protective Component Slope (-γ̂-)  |  Risk Component Slope (+γ̂+) →", zeroline: true, zerolinecolor: "#0f172a", zerolinewidth: 1.5, gridcolor: "#e2e8f0" },
+        yaxis: { tickfont: { size: 10.5 } },
+        legend: { orientation: "h", y: 1.12, x: 0.5, xanchor: "center", font: { size: 10 } },
+        font: { family: "Inter, sans-serif", size: 11 }
+      },
+      { responsive: true, displayModeBar: false }
+    );
+  }
+
   function refreshAll() {
     updateKPIs();
     renderProgressionChart();
@@ -1468,6 +1610,7 @@
     renderPathwayCards();
     renderGeneSizePlots();
     renderLt2000Section();
+    renderBidirectionalMixtureCharts();
     renderGeneTable();
   }
 

@@ -594,14 +594,43 @@
         </div>
       </div>
 
-      <!-- EMBEDDED HIGH-IMPACT FIGURE 13 -->
-      <div class="fig-card" style="margin-bottom: 1.25rem;">
-        <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" target="_blank">
-          <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
-        </a>
-        <div class="fig-caption">
-          <span><strong>Figure 13 (High-Impact New Methods Figure). Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Folded-Normal Dispersion) Across IBD, CD, and UC Exomes.</strong> (A) Mathematical &amp; conceptual comparison of M7 vs. M8 vs. M9. (B) Exome-wide gene discovery gain across IBD cohorts (expanding unique significant genes from 162 in M7 to 294 across M7 &cup; M8 &cup; M9 at AF &le; 0.001, and from 9 to 20 at AF &le; 0.0001). (C) M8 Joint Location&ndash;Slope Phase Diagram rescuing net protective-shift (<em>ACVR2A, SMURF1, SMARCA2, RUNX1, SCNN1B, SENP8, DNMT3A</em>) and net risk-shift (<em>TNFRSF6B, SBNO2, CSF2RB, RPS6KA1</em>) genes. (D) M9 2-Component EM Risk &amp; Protective bifurcation on <em>CSF2RB</em> and discovery gain on bidirectional IBD loci.</span>
-          <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" target="_blank">&#128269; Open 300-DPI PNG</a>
+      <!-- INTERACTIVE 2-COMPONENT EM MIXTURE PROPORTIONS & MIRRORED SLOPES CHARTS -->
+      <div style="margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #e11d48; border-radius: 8px; padding: 0.95rem 1.1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
+          <div>
+            <h3 style="font-size: 0.96rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0;">
+              Interactive EM Two-Component Sign-Mixture Proportions (&pi;&#770;<sub>+,<em>g</em></sub> Risk vs. &pi;&#770;<sub>&minus;,<em>g</em></sub> Protective) &amp; Opposing Slopes for Significant 2-Component Loci
+            </h3>
+            <p style="font-size: 0.79rem; color: #334155; margin: 0;">
+              Visualizes genes in the active cohort where the <strong>2-Component EM Sign-Mixture &amp; Dispersion model (<code>M9</code>)</strong> is statistically significant in the existence of two opposing allelic components (&gamma;&#770;<sub>AM</sub><sup>(+)</sup> &gt; 0 and &gamma;&#770;<sub>AM</sub><sup>(&minus;)</sup> &gt; 0, interior mixture proportion 0.15 &le; &pi;&#770;<sub>+</sub> &le; 0.85, and <em>p</em><sub>mag</sub> &lt; <em>p</em><sub>M7</sub>).
+            </p>
+          </div>
+        </div>
+        <div class="chart-row-2col">
+          <div id="plot-m9-mixture-proportions" class="plot-box" style="height: 440px;"></div>
+          <div id="plot-m9-butterfly-slopes" class="plot-box" style="height: 440px;"></div>
+        </div>
+      </div>
+
+      <!-- EMBEDDED HIGH-IMPACT FIGURE 13 & FIGURE 14 -->
+      <div class="chart-row-2col" style="margin-bottom: 1.25rem;">
+        <div class="fig-card">
+          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" target="_blank">
+            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Dispersion) Across IBD, CD, and UC Exomes.</strong></span>
+            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" target="_blank">
+            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci.</strong></span>
+            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
         </div>
       </div>
     </section>
