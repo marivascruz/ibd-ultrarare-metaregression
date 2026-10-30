@@ -26,13 +26,13 @@
         <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305
       </p>
       <p class="hero-subtitle">
-        A unified statistical genetics framework integrating Firth 2&times;2 penalized likelihood, orthogonal 3-axis functional severity (AlphaMissense, pLoF, base-pair WES HMM constraint), gene-length-calibrated pathway architecture, and bidirectional risk/protective mixture modeling across Crohn's Disease, Ulcerative Colitis, and Combined IBD.
+        A unified statistical genetics framework integrating Firth 2&times;2 penalized likelihood, orthogonal 3-axis functional severity (AlphaMissense, pLoF, base-pair WES HMM constraint), gene-length-calibrated pathway architecture, and location-slope (<code>M8</code>) &amp; folded-normal magnitude-dispersion (<code>M9</code>) meta-regression across Crohn's Disease, Ulcerative Colitis, and Combined IBD.
       </p>
       <div class="hero-actions">
-        <a href="ibd_unified_metaregression_report.pdf?v=20261029c" target="_blank" class="btn btn-primary" style="background:#0d9488;border-color:#0d9488;">
+        <a href="ibd_unified_metaregression_report.pdf?v=20261030a" target="_blank" class="btn btn-primary" style="background:#0d9488;border-color:#0d9488;">
           &#128196; Download Rare (AF &le; 0.001) Manuscript (PDF)
         </a>
-        <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261029c" target="_blank" class="btn btn-primary">
+        <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261030a" target="_blank" class="btn btn-primary">
           &#128196; Download Ultra-Rare (AF &le; 0.0001) Manuscript (PDF)
         </a>
         <a href="#section-pathways" class="btn btn-outline">
@@ -48,7 +48,7 @@
           &#128269; 6. Gene Prioritization Table
         </a>
         <a href="#section-figures" class="btn btn-outline">
-          &#128444; 7. All 14 Figures (300 DPI)
+          &#128444; 7. All 13 Figures (300 DPI)
         </a>
       </div>
     </div>
@@ -87,7 +87,7 @@
           <select id="ctrl-model">
             <option value="M7" selected>M7: AM + LoF + Constraint (3 d.f. Full Unified)</option>
             <option value="M8">M8 (Model 2): 4-d.f. Joint Location + Slope (Risk &amp; Protective Shift)</option>
-            <option value="M9">M9 (Model 3): 2-Comp EM Sign-Mixture &amp; Bidirectional Dispersion</option>
+            <option value="M9">M9 (Model 3): 3-d.f. Folded-Normal Magnitude Dispersion &amp; Bidirectional Omnibus</option>
             <option value="M5">M5: AM + LoF (2 d.f. Pathogenicity + LoF)</option>
             <option value="M2">M2: AlphaMissense Only (1 d.f.)</option>
             <option value="M4">M4: LoF + Constraint (2 d.f.)</option>
@@ -140,7 +140,7 @@
     <section class="section-card" style="background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 100%); border: 1px solid #cbd5e1; border-left: 5px solid #0d9488; padding: 1.1rem 1.3rem; margin-bottom: 1.5rem;">
       <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
         <h2 style="font-size: 1.02rem; font-weight: 800; color: #0f172a; margin: 0;">
-          &#129517; Coherent Study Narrative: From Orthogonal Functional Slopes to Bidirectional Allelic Mixtures &amp; Pathway Architecture
+          &#129517; Coherent Study Narrative: From Orthogonal Functional Slopes to Location-Slope &amp; Magnitude Dispersion Architecture
         </h2>
         <span style="font-size: 0.76rem; font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 0.2rem 0.6rem; border-radius: 999px;">
           Interactive 4-Stage Analytical Framework
@@ -160,8 +160,8 @@
           Deconvolves variant sample size (<em>M<sub>g</sub></em> &propto; <em>L</em><sub>AA</sub>, <em>r</em> = +0.905) from length-invariant explained variance <em>R</em>&sup2;, showing that compact proteins (&lt;2,000 AA, 97.4% of exome) explain <strong>3.2&times; higher variance per gene</strong> (8.60% vs. 2.68%) and drive core signaling &amp; enzymatic modules.
         </div>
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #e11d48; border-radius: 6px; padding: 0.75rem 0.9rem;">
-          <div style="font-weight: 800; color: #9f1239; margin-bottom: 0.25rem;">IV. Protective Shifts (M8) &amp; Bidirectional EM (M9) (<a href="#section-bidirectional" style="color:#e11d48;">&sect;4D</a> &amp; <a href="#section-gene-table" style="color:#e11d48;">&sect;6</a>)</div>
-          Incorporates net coding location shifts (<code>M8</code>: e.g., protective <em>ACVR2A</em>, <em>SMURF1</em>, <em>SENP8</em>, <em>DNMT3A</em>; risk <em>TNFRSF6B</em>) and 2-component EM sign-mixtures (<code>M9</code>: e.g., <em>CTSA</em>, <em>CSF2RB</em>, <em>ZNF341</em>, <em>LPIN1</em>), expanding total discovery to <strong>294 unique IBD genes</strong>.
+          <div style="font-weight: 800; color: #9f1239; margin-bottom: 0.25rem;">IV. Protective Shifts (M8) &amp; Magnitude Dispersion (M9) (<a href="#section-bidirectional" style="color:#e11d48;">&sect;4D</a> &amp; <a href="#section-gene-table" style="color:#e11d48;">&sect;6</a>)</div>
+          Incorporates net coding location shifts (<code>M8</code>: e.g., protective <em>ACVR2A</em>, <em>SMURF1</em>, <em>SENP8</em>, <em>DNMT3A</em>; risk <em>TNFRSF6B</em>) and 3-d.f. folded-normal magnitude dispersion WLS (<code>M9</code>: e.g., <em>CTSA</em>, <em>CSF2RB</em>, <em>ZNF341</em>, <em>LPIN1</em>), expanding total discovery to <strong>294 unique IBD genes</strong>.
         </div>
       </div>
     </section>
@@ -578,10 +578,10 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">
-            4D. Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: 4-d.f. Joint Location + Slope) &amp; Model 3 (M9: 2-Component EM Sign-Mixture &amp; Dispersion)
+            4D. Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: 4-d.f. Joint Location + Slope) &amp; Model 3 (M9: 3-d.f. Folded-Normal Magnitude Dispersion &amp; Bidirectional Omnibus)
           </h2>
           <p class="section-desc">
-            Standard 3-d.f. functional slope meta-regression (<code>M7</code>) tests only whether variant log-odds ratios covary monotonically with functional severity (<em>H</em><sub>0</sub>: &gamma;<sub>AM</sub> = &gamma;<sub>LoF</sub> = &gamma;<sub>Con</sub> = 0) after centering out the gene-level intercept &beta;<sub>0<em>g</em></sub>. Consequently, <code>M7</code> can miss two critical classes of disease genes: <strong>(1) Uniform Net Protective or Risk Coding Shifts</strong> (e.g., <em>ACVR2A</em>, <em>SENP8</em>, <em>DNMT3A</em>, <em>TNFRSF6B</em>), where damaging coding variants shift the entire gene baseline relative to neutral synonymous variants (&Delta;&beta;<sub>0<em>g</em></sub> &ne; 0, <em>Z</em><sub>loc,<em>g</em></sub> &ne; 0); and <strong>(2) Within-Gene Bidirectional Allelic Series</strong> (e.g., <em>CSF2RB</em>, <em>CTSA</em>, <em>ZNF341</em>, <em>LPIN1</em>, <em>HECTD1</em>), where a fraction &pi;<sub><em>g</em></sub> of damaging variants confer risk (+&beta;<sub><em>gv</em></sub> &gt; 0) while a fraction (1 &minus; &pi;<sub><em>g</em></sub>) confer protection (&minus;&beta;<sub><em>gv</em></sub> &lt; 0), causing signed slopes to cancel out.
+            Standard 3-d.f. functional slope meta-regression (<code>M7</code>) tests only whether variant log-odds ratios covary monotonically with functional severity (<em>H</em><sub>0</sub>: &gamma;<sub>AM</sub> = &gamma;<sub>LoF</sub> = &gamma;<sub>Con</sub> = 0) after centering out the gene-level intercept &beta;<sub>0<em>g</em></sub>. Consequently, <code>M7</code> can miss two critical classes of disease genes: <strong>(1) Uniform Net Protective or Risk Coding Shifts</strong> (e.g., <em>ACVR2A</em>, <em>SENP8</em>, <em>DNMT3A</em>, <em>TNFRSF6B</em>), where damaging coding variants shift the entire gene baseline relative to neutral synonymous variants (&Delta;&beta;<sub>0<em>g</em></sub> &ne; 0, <em>Z</em><sub>loc,<em>g</em></sub> &ne; 0); and <strong>(2) Within-Gene Bidirectional Allelic Series</strong> (e.g., <em>CSF2RB</em>, <em>CTSA</em>, <em>ZNF341</em>, <em>LPIN1</em>, <em>HECTD1</em>), where some damaging variants confer risk (+&beta;<sub><em>gv</em></sub> &gt; 0) while others confer protection (&minus;&beta;<sub><em>gv</em></sub> &lt; 0), causing signed slopes to cancel out.
           </p>
         </div>
       </div>
@@ -607,17 +607,17 @@
 
         <div style="background: #f0fdfa; border: 1px solid #99f6e4; border-left: 4px solid #0d9488; border-radius: 8px; padding: 1.0rem 1.15rem;">
           <h3 style="margin: 0 0 0.45rem 0; font-size: 0.96rem; font-weight: 700; color: #115e59;">
-            Model 3 (<code>M9</code>): 2-Component Latent Sign-Mixture (EM) &amp; Bidirectional Dispersion
+            Model 3 (<code>M9</code>): 3-d.f. Folded-Normal Magnitude Dispersion &amp; Bidirectional Omnibus
           </h3>
           <p style="font-size: 0.81rem; color: #1e293b; line-height: 1.55; margin: 0 0 0.5rem 0;">
-            Models each coding variant <em>v</em> as arising from a latent binary mixture of a <strong>Risk trajectory</strong> (<em>z<sub>gv</sub></em> = +1, prior &pi;<sub><em>g</em></sub>, non-negative slopes &gamma;<sub><em>g</em></sub><sup>(+)</sup> &ge; 0) and an opposing <strong>Protective trajectory</strong> (<em>z<sub>gv</sub></em> = &minus;1, prior 1 &minus; &pi;<sub><em>g</em></sub>, slopes &minus;&gamma;<sub><em>g</em></sub><sup>(&minus;)</sup> &le; 0) via 6-step Expectation&ndash;Maximization (EM), paired with the 3-d.f. Folded-Normal Magnitude Dispersion WLS test on |&beta;&#770;<sub><em>gv</em></sub> &minus; &beta;&#772;<sub><em>w,g</em></sub>| (<em>F</em><sub>mag,<em>g</em></sub>, <em>p</em><sub>mag,<em>g</em></sub>) via equal-weight Cauchy combination:
+            Instead of estimating noisy latent 2-component EM mixture proportions (&pi;<sub><em>g</em></sub>), Model 3 (<code>M9</code>) directly regresses centered absolute variant effect magnitudes <em>u<sub>gv</sub></em> = |&beta;&#770;<sub><em>gv</em></sub> &minus; &beta;&#772;<sub><em>w,g</em></sub>| onto the 3 orthogonal functional moderators (AlphaMissense, pLoF, WES HMM constraint) via 3-d.f. Folded-Normal Weighted Least Squares (<em>F</em><sub>mag,<em>g</em></sub>, <em>p</em><sub>mag,<em>g</em></sub>), unified with <em>p</em><sub>M7,<em>g</em></sub> via the equal-weight Cauchy combination test:
           </p>
           <div style="background: #ffffff; border: 1px solid #ccfbf1; border-radius: 6px; padding: 0.55rem 0.8rem; font-family: 'Courier New', monospace; font-size: 0.82rem; font-weight: 700; color: #0f766e; margin-bottom: 0.5rem; text-align: center;">
-            &beta;&#770;<sub>gv</sub> | X<sub>gv</sub> &sim; &pi;<sub>g</sub> N(&beta;<sub>0g</sub> + X&#771;<sub>gv</sub><sup>&#8868;</sup>&gamma;<sub>g</sub><sup>(+)</sup>, s<sub>gv</sub>&sup2;) + (1&minus;&pi;<sub>g</sub>) N(&beta;<sub>0g</sub> &minus; X&#771;<sub>gv</sub><sup>&#8868;</sup>&gamma;<sub>g</sub><sup>(&minus;)</sup>, s<sub>gv</sub>&sup2;)
+            E[ |&beta;&#770;<sub>gv</sub> &minus; &beta;&#772;<sub>w,g</sub>| | X<sub>gv</sub> ] = &alpha;<sub>0g</sub> + &alpha;<sub>AM,g</sub> X<sub>AM</sub> + &alpha;<sub>LoF,g</sub> X<sub>LoF</sub> + &alpha;<sub>Con,g</sub> X<sub>Con</sub> &nbsp;&rArr;&nbsp; p<sub>M9,g</sub> = ACAT(p<sub>M7,g</sub>, p<sub>mag,g</sub>)
           </div>
           <div style="font-size: 0.78rem; color: #334155; line-height: 1.5;">
             <strong>Newly Rescued Bidirectional Loci in IBD (<em>p</em><sub>M9</sub> &lt; 3.4&times;10<sup>&minus;7</sup>, Missed by M7 Alone):</strong><br>
-            &bull; <strong>Crohn's Disease (<code>CD</code>: 73 &rarr; 122 genes, +59 newly rescued):</strong> <em>CTSA</em> (Cathepsin A lysosomal chaperone, &pi;<sub>+</sub> = 0.52, <em>p</em><sub>M7</sub> = 2.45&times;10<sup>&minus;4</sup> &rarr; <em>p</em><sub>M9</sub> = <strong>1.76&times;10<sup>&minus;12</sup></strong>), <em>CSF2RB</em> (GM-CSF/IL-3/IL-5 receptor &beta;-common chain, &pi;<sub>+</sub> = 0.56, &gamma;<sub>AM</sub><sup>(+)</sup> = +0.14 vs. &gamma;<sub>AM</sub><sup>(&minus;)</sup> = &minus;0.15, <em>p</em><sub>M7</sub> = 8.21&times;10<sup>&minus;4</sup> &rarr; <em>p</em><sub>M9</sub> = <strong>2.80&times;10<sup>&minus;10</sup></strong>), <em>ZNF341</em> (STAT3 auto-induction regulator, <em>p</em><sub>M9</sub> = <strong>3.00&times;10<sup>&minus;10</sup></strong>), <em>HECTD1</em> (<em>p</em><sub>M9</sub> = <strong>3.27&times;10<sup>&minus;9</sup></strong>), <em>LPIN1</em> (macrophage inflammasome phosphatidate phosphatase, <em>p</em><sub>M7</sub> = 0.453 &rarr; <em>p</em><sub>M9</sub> = <strong>3.38&times;10<sup>&minus;9</sup></strong>), <em>ANKLE1</em> (<em>p</em><sub>M9</sub> = <strong>6.36&times;10<sup>&minus;9</sup></strong>), <em>HLA-DPB1</em>, <em>SIRT4</em>, <em>SOS2</em>.<br>
+            &bull; <strong>Crohn's Disease (<code>CD</code>: 73 &rarr; 122 genes, +59 newly rescued):</strong> <em>CTSA</em> (Cathepsin A lysosomal chaperone, <em>p</em><sub>M7</sub> = 2.45&times;10<sup>&minus;4</sup> &rarr; <em>p</em><sub>mag</sub> = 8.01&times;10<sup>&minus;12</sup>, <em>p</em><sub>M9</sub> = <strong>1.76&times;10<sup>&minus;12</sup></strong>), <em>CSF2RB</em> (GM-CSF/IL-3/IL-5 receptor &beta;-common chain, <em>p</em><sub>M7</sub> = 8.21&times;10<sup>&minus;4</sup> &rarr; <em>p</em><sub>mag</sub> = 1.42&times;10<sup>&minus;10</sup>, <em>p</em><sub>M9</sub> = <strong>2.80&times;10<sup>&minus;10</sup></strong>), <em>ZNF341</em> (STAT3 auto-induction regulator, <em>p</em><sub>M9</sub> = <strong>3.00&times;10<sup>&minus;10</sup></strong>), <em>HECTD1</em> (<em>p</em><sub>M9</sub> = <strong>3.27&times;10<sup>&minus;9</sup></strong>), <em>LPIN1</em> (macrophage inflammasome phosphatidate phosphatase, <em>p</em><sub>M7</sub> = 0.453 &rarr; <em>p</em><sub>M9</sub> = <strong>3.38&times;10<sup>&minus;9</sup></strong>), <em>ANKLE1</em> (<em>p</em><sub>M9</sub> = <strong>6.36&times;10<sup>&minus;9</sup></strong>), <em>HLA-DPB1</em>, <em>SIRT4</em>, <em>SOS2</em>.<br>
             &bull; <strong>Ulcerative Colitis (<code>UC</code>: 114 &rarr; 115 genes, +19 newly rescued; Union = 142):</strong> Rescues <em>CSF2RB</em> (<em>p</em><sub>M9</sub> = <strong>1.12&times;10<sup>&minus;9</sup></strong>), <em>DNMT1</em>, <em>PIEZO1</em>, <em>PKHD1</em>, <em>SLC5A1</em>, and <em>TIAM2</em>.
           </div>
         </div>
@@ -628,45 +628,65 @@
         <div style="font-weight: 800; color: #92400e; margin-bottom: 0.25rem; font-size: 0.86rem;">
           &#9432; Why Are Canonical Low-Frequency/Common Protective IBD Loci (<em>CARD9</em> &amp; <em>IL23R</em>) Not Significant in the AF &le; 0.001 Rare-Variant Scan?
         </div>
-        In classical GWAS and unstratified sequencing studies, the best-known protective IBD alleles are the <strong><em>CARD9</em> C-terminal splice-site variant (<code>c.1434+1G&gt;C</code> / <code>rs141992399</code>, minor allele frequency AF &approx; 0.0045 = 0.45%)</strong> and the <strong><em>IL23R</em> coding variant (<code>p.R381Q</code> / <code>rs11209026</code>, AF &approx; 0.060 = 6.0%)</strong>. Because both canonical protective alleles have minor allele frequencies well above the strict <strong>AF &le; 0.001 (0.1%)</strong> and <strong>AF &le; 0.0001 (0.01%)</strong> rare-variant thresholds, they are excluded from the rare-variant set. Across the remaining <em>M<sub>g</sub></em> = 307 rare non-synonymous variants (AF &le; 0.001) within <em>CARD9</em> in Crohn's disease, <strong><em>CARD9</em> is not significant in any rare-variant model</strong>: <em>p</em><sub>M7</sub> = 0.384 (<code>CD</code>), 0.759 (<code>UC</code>), 0.559 (<code>IBD</code>); <em>p</em><sub>M8</sub> = 0.518 (<code>CD</code>, net rare coding location shift <em>Z</em><sub>loc</sub> = &minus;0.36); and <em>p</em><sub>M9</sub> = 0.171 (<code>CD</code>, <em>p</em><sub>mag</sub> = 0.103). Likewise, rare coding variants in <em>IL23R</em> (AF &le; 0.001) show a single-component risk slope (<em>p</em><sub>M7</sub> = 1.63&times;10<sup>&minus;5</sup>, <em>p</em><sub>M9</sub> = 4.62&times;10<sup>&minus;5</sup>) below the exome-wide threshold (<em>p</em> &lt; 3.4&times;10<sup>&minus;7</sup>). Instead, at <strong>AF &le; 0.001</strong>, Model 2 (<code>M8</code>) and Model 3 (<code>M9</code>) discover genuinely exome-wide significant rare protective shifts in <strong><em>ACVR2A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;6.11, <em>p</em><sub>M8</sub> = 1.09&times;10<sup>&minus;8</sup>), <strong><em>SMURF1</em></strong> (<em>Z</em><sub>loc</sub> = &minus;4.50, <em>p</em><sub>M8</sub> = 6.53&times;10<sup>&minus;9</sup>), <strong><em>SENP8</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.57, <em>p</em><sub>M8</sub> = 1.24&times;10<sup>&minus;7</sup>), and <strong><em>DNMT3A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.81, <em>p</em><sub>M8</sub> = 2.31&times;10<sup>&minus;7</sup>), and 2-component bidirectional allelic series in <strong><em>CTSA</em></strong> (<em>p</em><sub>M9</sub> = 1.76&times;10<sup>&minus;12</sup>, &pi;&#770;<sub>+</sub> = 45.8%), <strong><em>CSF2RB</em></strong> (<em>p</em><sub>M9</sub> = 2.80&times;10<sup>&minus;10</sup>, &pi;&#770;<sub>+</sub> = 45.6%), <strong><em>ZNF341</em></strong> (<em>p</em><sub>M9</sub> = 3.00&times;10<sup>&minus;10</sup>), <strong><em>HECTD1</em></strong> (<em>p</em><sub>M9</sub> = 3.27&times;10<sup>&minus;9</sup>), and <strong><em>LPIN1</em></strong> (<em>p</em><sub>M9</sub> = 3.38&times;10<sup>&minus;9</sup>).
+        In classical GWAS and unstratified sequencing studies, the best-known protective IBD alleles are the <strong><em>CARD9</em> C-terminal splice-site variant (<code>c.1434+1G&gt;C</code> / <code>rs141992399</code>, minor allele frequency AF &approx; 0.0045 = 0.45%)</strong> and the <strong><em>IL23R</em> coding variant (<code>p.R381Q</code> / <code>rs11209026</code>, AF &approx; 0.060 = 6.0%)</strong>. Because both canonical protective alleles have minor allele frequencies well above the strict <strong>AF &le; 0.001 (0.1%)</strong> and <strong>AF &le; 0.0001 (0.01%)</strong> rare-variant thresholds, they are excluded from the rare-variant set. Across the remaining <em>M<sub>g</sub></em> = 307 rare non-synonymous variants (AF &le; 0.001) within <em>CARD9</em> in Crohn's disease, <strong><em>CARD9</em> is not significant in any rare-variant model</strong>: <em>p</em><sub>M7</sub> = 0.384 (<code>CD</code>), 0.759 (<code>UC</code>), 0.559 (<code>IBD</code>); <em>p</em><sub>M8</sub> = 0.518 (<code>CD</code>, net rare coding location shift <em>Z</em><sub>loc</sub> = &minus;0.36); and <em>p</em><sub>M9</sub> = 0.171 (<code>CD</code>, <em>p</em><sub>mag</sub> = 0.103). Likewise, rare coding variants in <em>IL23R</em> (AF &le; 0.001) show a single-component risk slope (<em>p</em><sub>M7</sub> = 1.63&times;10<sup>&minus;5</sup>, <em>p</em><sub>M9</sub> = 4.62&times;10<sup>&minus;5</sup>) below the exome-wide threshold (<em>p</em> &lt; 3.4&times;10<sup>&minus;7</sup>). Instead, at <strong>AF &le; 0.001</strong>, Model 2 (<code>M8</code>) and Model 3 (<code>M9</code>) discover genuinely exome-wide significant rare protective shifts in <strong><em>ACVR2A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;6.11, <em>p</em><sub>M8</sub> = 1.09&times;10<sup>&minus;8</sup>), <strong><em>SMURF1</em></strong> (<em>Z</em><sub>loc</sub> = &minus;4.50, <em>p</em><sub>M8</sub> = 6.53&times;10<sup>&minus;9</sup>), <strong><em>SENP8</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.57, <em>p</em><sub>M8</sub> = 1.24&times;10<sup>&minus;7</sup>), and <strong><em>DNMT3A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.81, <em>p</em><sub>M8</sub> = 2.31&times;10<sup>&minus;7</sup>), and magnitude-dispersion allelic series in <strong><em>CTSA</em></strong> (<em>p</em><sub>M9</sub> = 1.76&times;10<sup>&minus;12</sup>), <strong><em>CSF2RB</em></strong> (<em>p</em><sub>M9</sub> = 2.80&times;10<sup>&minus;10</sup>), <strong><em>ZNF341</em></strong> (<em>p</em><sub>M9</sub> = 3.00&times;10<sup>&minus;10</sup>), <strong><em>HECTD1</em></strong> (<em>p</em><sub>M9</sub> = 3.27&times;10<sup>&minus;9</sup>), and <strong><em>LPIN1</em></strong> (<em>p</em><sub>M9</sub> = 3.38&times;10<sup>&minus;9</sup>).
       </div>
 
-      <!-- INTERACTIVE 2-COMPONENT EM MIXTURE PROPORTIONS & MIRRORED SLOPES CHARTS -->
-      <div style="margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #e11d48; border-radius: 8px; padding: 0.95rem 1.1rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
-          <div>
-            <h3 style="font-size: 0.96rem; font-weight: 700; color: #0f172a; margin: 0 0 0.2rem 0;">
-              Interactive EM Two-Component Sign-Mixture Proportions (&pi;&#770;<sub>+,<em>g</em></sub> Risk vs. &pi;&#770;<sub>&minus;,<em>g</em></sub> Protective) &amp; Opposing Slopes for Significant 2-Component Loci
-            </h3>
-            <p style="font-size: 0.79rem; color: #334155; margin: 0;">
-              Visualizes genes in the active cohort where the <strong>2-Component EM Sign-Mixture &amp; Dispersion model (<code>M9</code>)</strong> is statistically significant in the existence of two opposing allelic components (&gamma;&#770;<sub>AM</sub><sup>(+)</sup> &gt; 0 and &gamma;&#770;<sub>AM</sub><sup>(&minus;)</sup> &gt; 0, interior mixture proportion 0.15 &le; &pi;&#770;<sub>+</sub> &le; 0.85, and <em>p</em><sub>mag</sub> &lt; <em>p</em><sub>M7</sub>).
-            </p>
-          </div>
+      <!-- STATISTICAL DIAGNOSTIC: WHY 2-COMPONENT EM MIXTURE PROPORTIONS (PI_G) ARE OMITTED (95% CIs) -->
+      <div style="margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #64748b; border-radius: 8px; padding: 0.95rem 1.15rem; font-size: 0.8rem; color: #1e293b; line-height: 1.55;">
+        <div style="font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; font-size: 0.88rem;">
+          &#9888; Statistical Diagnostic: Why 2-Component EM Mixture Proportions (&pi;<sub><em>g</em></sub>) Have Excessive Uncertainty &amp; Low Power in Rare-Variant Summary Meta-Regression (95% Confidence Intervals for &pi;<sub><em>g</em></sub>)
         </div>
-        <div class="chart-row-2col">
-          <div id="plot-m9-mixture-proportions" class="plot-box" style="height: 440px;"></div>
-          <div id="plot-m9-butterfly-slopes" class="plot-box" style="height: 440px;"></div>
+        <p style="margin: 0 0 0.55rem 0;">
+          A natural question is whether one can estimate a gene-level <strong>2-component Expectation&ndash;Maximization (EM) mixture proportion &pi;<sub><em>g</em></sub> &isin; (0, 1)</strong> (representing the prior fraction of risk vs. protective alleles) alongside separate component slope vectors (&gamma;<sub><em>g</em></sub><sup>(+)</sup>, &gamma;<sub><em>g</em></sub><sup>(&minus;)</sup>). Rigorous quantification via <strong>Louis (1982) Observed Fisher Information</strong>, <strong>Profile Likelihood</strong>, and <strong>Nonparametric/Parametric Bootstrap (<em>B</em> = 400)</strong> demonstrates that <strong>&pi;&#770;<sub><em>g</em></sub> is statistically weakly identified, has wide 95% confidence intervals spanning 30&ndash;90 percentage points of [0.05, 0.95], and lacks statistical power</strong>:
+        </p>
+        <ul style="margin: 0 0 0.65rem 1.2rem; padding: 0;">
+          <li><strong>Large Per-Variant Sampling Noise &amp; Small Effective Sample Size (Kish ESS):</strong> At AF &le; 0.001, ~60% of coding variants are singletons/doubletons with median log-OR standard error <code>median(SE<sub>gv</sub>) = 1.633</code>. Consequently, even genes with <em>M<sub>g</sub></em> = 200&ndash;500 rare coding variants have an inverse-variance Kish Effective Sample Size <code>ESS = (&Sigma; w<sub>v</sub>)<sup>2</sup> / &Sigma; w<sub>v</sub><sup>2</sup></code> of only <strong>10 to 57 effective variants</strong> (e.g., <em>CSF2RB</em> <code>ESS = 13.6</code>; <em>CTSA</em> <code>ESS = 16.9</code>; <em>AGER</em> <code>ESS = 10.1</code>).</li>
+          <li><strong>Missing-Data Fisher Information Collapse (Louis 1982):</strong> For the vast majority of rare variants with low-to-moderate moderator scores, the risk and protective branches overlap within 1&times;SE<sub><em>gv</em></sub>, yielding ambiguous posterior responsibilities &tau;<sub><em>gv</em></sub> &approx; &pi;&#770;<sub><em>g</em></sub> (up to 86%&ndash;97% of variants in <em>NOD2</em>, <em>PIEZO1</em>, <em>CARD9</em>, and <em>SYNE1</em> fall in &tau;<sub><em>gv</em></sub> &isin; [0.25, 0.75]). By Louis's identity, <em>I</em><sub>obs</sub>(&pi;<sub><em>g</em></sub>) = <em>I</em><sub>comp</sub>(&pi;<sub><em>g</em></sub>) &minus; <em>I</em><sub>miss</sub>(&pi;<sub><em>g</em></sub>) = ESS &middot; &Sigma; w&#771;<sub><em>v</em></sub> (&tau;<sub><em>gv</em></sub> &minus; &pi;&#770;<sub><em>g</em></sub>)<sup>2</sup> / [&pi;&#770;<sub><em>g</em></sub><sup>2</sup>(1 &minus; &pi;&#770;<sub><em>g</em></sub>)<sup>2</sup>], so missing-data uncertainty cancels nearly all complete-data information.</li>
+          <li><strong>Parameter-Free Folded-Normal Magnitude Dispersion (<code>M9</code>) Achieves High Power Without &pi;<sub><em>g</em></sub>:</strong> Whereas the 2-component vs. 1-component EM Likelihood Ratio Test (LRT) fails to reach exome-wide significance on any gene (<em>p</em><sub>LRT</sub> &ge; 0.0025), the 3-d.f. Folded-Normal Magnitude Dispersion WLS test on |&beta;&#770;<sub><em>gv</em></sub> &minus; &beta;&#772;<sub><em>w,g</em></sub>| estimates <strong>zero mixture proportions</strong> and achieves <em>p</em><sub>mag</sub> = 8.01&times;10<sup>&minus;12</sup> on <em>CTSA</em>, 1.42&times;10<sup>&minus;10</sup> on <em>CSF2RB</em>, and 6.26&times;10<sup>&minus;12</sup> on <em>ZNF341</em>.</li>
+        </ul>
+        <div class="table-wrapper" style="max-height: 290px;">
+          <table class="results-table" style="font-size: 0.75rem;">
+            <thead>
+              <tr>
+                <th>Cohort</th>
+                <th>Gene</th>
+                <th>M<sub>g</sub> (ESS)</th>
+                <th>Med SE<sub>gv</sub></th>
+                <th>Ambig. &tau;<sub>gv</sub> &isin; [0.25, 0.75]</th>
+                <th>Louis Info SE(&pi;&#770;<sub>g</sub>)</th>
+                <th>Louis 95% CI for &pi;<sub>g</sub></th>
+                <th>Profile-LL 95% CI for &pi;<sub>g</sub></th>
+                <th>Param. Boot 95% CI</th>
+                <th>Variant Boot 95% CI</th>
+                <th>2-Comp EM LRT p</th>
+                <th>3-d.f. Mag WLS p<sub>mag</sub></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><code>IBD</code></td><td><strong>CTSA</strong></td><td>348 (16.9)</td><td>1.633</td><td>0.0% (boundary)</td><td>0.461</td><td><code>[0.05, 0.95]</code></td><td><code>[0.05, 0.81]</code></td><td><code>[0.12, 0.95]</code></td><td><code>[0.34, 0.94]</code></td><td>1.000</td><td><strong>8.01&times;10<sup>&minus;12</sup></strong></td></tr>
+              <tr><td><code>CD</code></td><td><strong>CSF2RB</strong></td><td>391 (13.6)</td><td>1.633</td><td>5.6% (boundary)</td><td>0.136</td><td><code>[0.68, 0.95]</code></td><td><code>[0.69, 0.92]</code></td><td><code>[0.95, 0.95]</code></td><td><code>[0.35, 0.95]</code></td><td>0.0025</td><td><strong>1.42&times;10<sup>&minus;10</sup></strong></td></tr>
+              <tr><td><code>IBD</code></td><td><strong>ZNF341</strong></td><td>412 (29.3)</td><td>1.633</td><td>2.9% (boundary)</td><td>0.156</td><td><code>[0.05, 0.39]</code></td><td><code>[0.05, 0.24]</code></td><td><code>[0.11, 0.74]</code></td><td><code>[0.07, 0.61]</code></td><td>0.0025</td><td><strong>6.26&times;10<sup>&minus;12</sup></strong></td></tr>
+              <tr><td><code>CD</code></td><td><strong>PLEKHG4</strong></td><td>522 (57.0)</td><td>1.633</td><td>1.5%</td><td>0.105</td><td><code>[0.69, 0.95]</code></td><td><code>[0.41, 0.95]</code></td><td><code>[0.58, 0.84]</code></td><td><code>[0.60, 0.92]</code></td><td>0.0025</td><td><strong>1.28&times;10<sup>&minus;11</sup></strong></td></tr>
+              <tr><td><code>UC</code></td><td><strong>HECTD1</strong></td><td>690 (100.8)</td><td>1.633</td><td>4.2%</td><td>0.052</td><td><code>[0.81, 0.95]</code></td><td><code>[0.21, 0.81]</code></td><td><code>[0.64, 0.85]</code></td><td><code>[0.65, 0.92]</code></td><td>0.0025</td><td><strong>1.73&times;10<sup>&minus;7</sup></strong></td></tr>
+              <tr><td><code>UC</code></td><td><strong>LPIN1</strong></td><td>351 (28.1)</td><td>1.633</td><td>0.6%</td><td>0.099</td><td><code>[0.76, 0.95]</code></td><td><code>[0.28, 0.86]</code></td><td><code>[0.69, 0.91]</code></td><td><code>[0.65, 0.95]</code></td><td>0.0100</td><td><strong>6.95&times;10<sup>&minus;6</sup></strong></td></tr>
+              <tr><td><code>CD</code></td><td><strong>NOD2</strong></td><td>551 (51.6)</td><td>1.633</td><td><strong>86.2%</strong></td><td>0.114</td><td><code>[0.42, 0.87]</code></td><td><code>[0.44, 0.84]</code></td><td><code>[0.33, 0.73]</code></td><td><code>[0.33, 0.91]</code></td><td>0.0025</td><td><strong>1.17&times;10<sup>&minus;8</sup></strong></td></tr>
+              <tr><td><code>CD</code></td><td><strong>PIEZO1</strong></td><td>1,536 (153.7)</td><td>1.633</td><td><strong>97.0%</strong></td><td>0.126</td><td><code>[0.31, 0.81]</code></td><td><code>[0.10, 0.94]</code></td><td><code>[0.41, 0.64]</code></td><td><code>[0.34, 0.66]</code></td><td>0.0025</td><td>6.36&times;10<sup>&minus;5</sup></td></tr>
+              <tr><td><code>CD</code></td><td><strong>CARD9</strong></td><td>307 (29.9)</td><td>1.633</td><td><strong>94.8%</strong></td><td>0.206</td><td><code>[0.14, 0.95]</code></td><td><code>[0.83, 0.95]</code></td><td><code>[0.38, 0.69]</code></td><td><code>[0.26, 0.71]</code></td><td>0.0175</td><td>0.103 (NS)</td></tr>
+              <tr><td><code>IBD</code></td><td><strong>IL23R</strong></td><td>194 (13.9)</td><td>1.633</td><td>28.4%</td><td>0.335</td><td><code>[0.13, 0.95]</code></td><td><code>[0.05, 0.49]</code></td><td><code>[0.12, 0.85]</code></td><td><code>[0.21, 0.88]</code></td><td>1.000</td><td>1.69&times;10<sup>&minus;4</sup></td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <!-- EMBEDDED HIGH-IMPACT FIGURE 13 & FIGURE 14 -->
-      <div class="chart-row-2col" style="margin-bottom: 1.25rem;">
+      <!-- EMBEDDED HIGH-IMPACT FIGURE 13 -->
+      <div style="margin-bottom: 1.25rem;">
         <div class="fig-card">
-          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">
-            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
+          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" target="_blank">
+            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Dispersion) Across IBD, CD, and UC Exomes.</strong></span>
-            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
-          </div>
-        </div>
-        <div class="fig-card">
-          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">
-            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
-          </a>
-          <div class="fig-caption">
-            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci (<em>CTSA, CSF2RB, ZNF341, LPIN1</em>).</strong></span>
-            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 3-d.f. Folded-Normal Magnitude Dispersion &amp; Bidirectional Omnibus) Across IBD, CD, and UC Exomes.</strong></span>
+            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
       </div>
@@ -726,7 +746,7 @@
         <select id="select-ranking-preset" style="border-color: #0d9488; font-weight: 700; color: #0f172a; background: #f0fdfa;">
           <option value="p_M7:asc" selected>Rank by: Unified M7 Omnibus p-value (Default)</option>
           <option value="p_M8:asc">Rank by: Model 2 (M8: 4-d.f. Joint Location + Slope p-value)</option>
-          <option value="p_M9:asc">Rank by: Model 3 (M9: 2-Comp EM Sign-Mixture p-value)</option>
+          <option value="p_M9:asc">Rank by: Model 3 (M9: 3-d.f. Magnitude Dispersion Omnibus p-value)</option>
           <option value="r2_M7:desc">Rank by: Total Explained Variance R&sup2; (M7, Length-Invariant)</option>
           <option value="b_bench:desc">Rank by: Benchmark Variant Effect &Delta;log-OR (EB Composite)</option>
           <option value="eb_am:desc">Rank by: AlphaMissense Slope &beta;_AM (EB Shrunk)</option>
@@ -780,7 +800,7 @@
               <th data-sort="p_M5">M5: AM+LoF &#8597;</th>
               <th data-sort="p_M7">M7: AM+LoF+Con &#8597;</th>
               <th data-sort="p_M8" title="Model 2 (M8): 4-d.f. Joint Location + Slope Omnibus p-value and net coding location shift Z_loc">M8: Loc+Slope (Z<sub>loc</sub>) &#8597;</th>
-              <th data-sort="p_M9" title="Model 3 (M9): 2-Component EM Sign-Mixture & Folded-Normal Dispersion p-value and risk branch weight pi_+">M9: EM Mixture (&pi;<sub>+</sub>) &#8597;</th>
+              <th data-sort="p_M9" title="Model 3 (M9): 3-d.f. Folded-Normal Magnitude Dispersion & Bidirectional Omnibus p-value and magnitude WLS p_mag">M9: Mag Dispersion (p<sub>mag</sub>) &#8597;</th>
               <th data-sort="r2_M7">R&sup2; (M7) &#8597;</th>
               <th data-sort="b_bench" title="Predicted disease log-OR (and OR) of a benchmark high-impact coding variant using Empirical Bayes shrunk slopes">&Delta;log-OR<sub>bench</sub> (OR) &#8597;</th>
               <th data-sort="eb_am" title="Empirical Bayes shrunk AlphaMissense slope (raw WLS slope in parentheses)">&beta;&#770;<sub>AM</sub><sup>EB</sup> (Raw) &#8597;</th>
@@ -802,7 +822,7 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">7. Publication-Quality Figures (300 DPI — Click Any Figure to Open Full-Resolution PNG)</h2>
-          <p class="section-desc">All 14 publication-grade figures (300 DPI) from the collinearity-free unified meta-regression, biological pathway architecture, and bidirectional EM mixture analysis are embedded in the PDF manuscripts and displayed below.</p>
+          <p class="section-desc">All 13 publication-grade figures (300 DPI) from the collinearity-free unified meta-regression, biological pathway architecture, and location-slope (<code>M8</code>) &amp; magnitude-dispersion (<code>M9</code>) analysis are embedded in the PDF manuscripts and displayed below.</p>
         </div>
       </div>
 
@@ -916,21 +936,12 @@
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">
-            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9)" />
+          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" target="_blank">
+            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9)" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Folded-Normal Dispersion).</strong></span>
-            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
-          </div>
-        </div>
-        <div class="fig-card">
-          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">
-            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
-          </a>
-          <div class="fig-caption">
-            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci.</strong></span>
-            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 3-d.f. Folded-Normal Magnitude Dispersion &amp; Bidirectional Omnibus).</strong></span>
+            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261030a" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
       </div>

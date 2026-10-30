@@ -1372,11 +1372,11 @@
     return `${pHtml} <span style="color:${zColor};font-size:0.74rem;font-weight:600;">(${zSign}${Number(zLoc).toFixed(1)})</span>`;
   }
 
-  function fmtM9Cell(pM9, piPos) {
+  function fmtM9Cell(pM9, pMag) {
     if (pM9 === null || pM9 === undefined || isNaN(pM9)) return "—";
     const pHtml = formatPCell(pM9);
-    if (piPos === null || piPos === undefined || isNaN(piPos)) return pHtml;
-    return `${pHtml} <span style="color:#0f766e;font-size:0.74rem;">(${Number(piPos).toFixed(2)})</span>`;
+    if (pMag === null || pMag === undefined || isNaN(pMag)) return pHtml;
+    return `${pHtml} <span style="color:#0f766e;font-size:0.74rem;">(${fmtP(pMag)})</span>`;
   }
 
   function renderGeneTable() {
@@ -1400,7 +1400,7 @@
           <td>${formatPCell(r.p_M5)}</td>
           <td>${formatPCell(r.p_M7)}</td>
           <td>${fmtM8Cell(r.p_M8, r.z_loc)}</td>
-          <td>${fmtM9Cell(r.p_M9, r.pi_pos)}</td>
+          <td>${fmtM9Cell(r.p_M9, r.p_mag)}</td>
           <td><strong>${fmtPct(r.r2_M7)}</strong></td>
           <td>${fmtBenchCell(r.b_bench)}</td>
           <td>${fmtBetaCell(r.eb_am, r.b_am, r.lcb_am)}</td>
@@ -1431,7 +1431,7 @@
     const headers = [
       "gene_id", "gene", "group", "pathway", "aa_len", "n_var", "n_lof", "n_mis", "n_firth", "max_vif",
       "p_M1_LoF_only", "p_M2_AM_only", "p_M3_Constraint_only", "p_M4_LoF_Constraint",
-      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "p_M8_Joint4df", "z_loc", "p_M9_EM_Mixture", "pi_pos_M9", "r2_M7", "delta_log_or_bench",
+      "p_M5_AM_LoF", "p_M7_AM_LoF_Constraint", "p_M8_Joint4df", "z_loc", "p_M9_Magnitude_Omnibus", "r2_M7", "delta_log_or_bench",
       "beta_am_raw", "beta_am_eb", "beta_am_lcb95", "p_pathogenicity", "partial_r2_am",
       "beta_lof_raw", "beta_lof_eb", "beta_lof_lcb95", "p_pLoF", "partial_r2_lof",
       "beta_con_raw", "beta_con_eb", "beta_con_lcb95", "p_constraint", "partial_r2_con",
@@ -1442,7 +1442,7 @@
       lines.push(
         [
           r.gene_id, r.gene, r.group, r.pathway, r.aa_len, r.n_var, r.n_lof, r.n_mis, r.n_firth, r.vif,
-          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.p_M8, r.z_loc, r.p_M9, r.pi_pos, r.r2_M7, r.b_bench,
+          r.p_M1, r.p_M2, r.p_M3, r.p_M4, r.p_M5, r.p_M7, r.p_M8, r.z_loc, r.p_M9, r.r2_M7, r.b_bench,
           r.b_am, r.eb_am, r.lcb_am, r.p_am, r.pr2_am,
           r.b_lof, r.eb_lof, r.lcb_lof, r.p_lof, r.pr2_lof,
           r.b_con, r.eb_con, r.lcb_con, r.p_con, r.pr2_con,
@@ -1459,148 +1459,6 @@
     URL.revokeObjectURL(url);
   }
 
-  function renderBidirectionalMixtureCharts() {
-    const mixEl = document.getElementById("plot-m9-mixture-proportions");
-    const slopeEl = document.getElementById("plot-m9-butterfly-slopes");
-    if (!mixEl || !slopeEl) return;
-
-    const allGenes = getActiveGenes();
-    const candidates = allGenes.filter(
-      (g) =>
-        g.p_M9 != null &&
-        g.p_M9 < 1e-4 &&
-        g.pi_pos != null &&
-        g.pi_pos >= 0.12 &&
-        g.pi_pos <= 0.88 &&
-        ((g.g_pos_am || 0) > 0.02 || (g.g_neg_am || 0) > 0.02) &&
-        !["TTN", "MUC16", "OBSCN"].includes(g.gene_name)
-    );
-    candidates.sort((a, b) => (a.p_M9 || 1) - (b.p_M9 || 1));
-    const top = candidates.slice(0, 15).sort((a, b) => (a.pi_pos || 0.5) - (b.pi_pos || 0.5));
-    if (!top.length) return;
-
-    const labels = top.map((g) => `${g.gene_name} (${g.group})`);
-    const piPosPct = top.map((g) => Number(((g.pi_pos || 0.5) * 100).toFixed(1)));
-    const piNegPct = top.map((g) => Number(((1 - (g.pi_pos || 0.5)) * 100).toFixed(1)));
-
-    const traceRiskMix = {
-      y: labels,
-      x: piPosPct,
-      name: "Risk Component π̂+ (%)",
-      type: "bar",
-      orientation: "h",
-      marker: { color: "#e11d48" },
-      text: piPosPct.map((v) => `${v}% Risk`),
-      textposition: "inside",
-      insidetextanchor: "middle",
-      textfont: { color: "#ffffff", size: 10 },
-      hovertext: top.map(
-        (g) =>
-          `<b>${g.gene_name} (${g.group})</b><br>` +
-          `Risk Component π̂+ = <b>${((g.pi_pos || 0.5) * 100).toFixed(1)}%</b><br>` +
-          `Protective Component π̂- = <b>${((1 - (g.pi_pos || 0.5)) * 100).toFixed(1)}%</b><br>` +
-          `M9 2-Comp p = <b>${fmtP(g.p_M9)}</b> (Dispersion p_mag = ${fmtP(g.p_mag)})<br>` +
-          `M7 1-Comp p = ${fmtP(g.p_M7)}`
-      ),
-      hoverinfo: "text"
-    };
-
-    const traceProtMix = {
-      y: labels,
-      x: piNegPct,
-      name: "Protective Component π̂- (%)",
-      type: "bar",
-      orientation: "h",
-      marker: { color: "#2563eb" },
-      text: piNegPct.map((v) => `${v}% Prot`),
-      textposition: "inside",
-      insidetextanchor: "middle",
-      textfont: { color: "#ffffff", size: 10 },
-      hoverinfo: "skip"
-    };
-
-    Plotly.react(
-      mixEl,
-      [traceRiskMix, traceProtMix],
-      {
-        title: {
-          text: `EM 2-Component Mixture Proportions (π̂+ Risk vs. π̂- Prot) in ${state.group}`,
-          font: { size: 12.2 }
-        },
-        barmode: "stack",
-        margin: { t: 42, r: 22, b: 45, l: 118 },
-        paper_bgcolor: "transparent",
-        plot_bgcolor: "transparent",
-        xaxis: { title: "Mixture Proportion (% Coding Variants)", range: [0, 100], ticksuffix: "%", gridcolor: "#e2e8f0" },
-        yaxis: { tickfont: { size: 10.5 } },
-        shapes: [
-          {
-            type: "line",
-            x0: 50,
-            x1: 50,
-            y0: -0.5,
-            y1: labels.length - 0.5,
-            line: { color: "#0f172a", width: 1.5, dash: "dash" }
-          }
-        ],
-        legend: { orientation: "h", y: 1.12, x: 0.5, xanchor: "center", font: { size: 10.5 } },
-        font: { family: "Inter, sans-serif", size: 11 }
-      },
-      { responsive: true, displayModeBar: false }
-    );
-
-    const gPos = top.map((g) => Number((g.g_pos_am || 0).toFixed(3)));
-    const gNeg = top.map((g) => -Number((g.g_neg_am || 0).toFixed(3)));
-    const netSlope = top.map((g) =>
-      Number(((g.pi_pos || 0.5) * (g.g_pos_am || 0) - (1 - (g.pi_pos || 0.5)) * (g.g_neg_am || 0)).toFixed(3))
-    );
-
-    Plotly.react(
-      slopeEl,
-      [
-        {
-          y: labels,
-          x: gPos,
-          name: "Risk Component Slope +γ̂_AM(+)",
-          type: "bar",
-          orientation: "h",
-          marker: { color: "#be123c" }
-        },
-        {
-          y: labels,
-          x: gNeg,
-          name: "Protective Component Slope -γ̂_AM(-)",
-          type: "bar",
-          orientation: "h",
-          marker: { color: "#1d4ed8" }
-        },
-        {
-          y: labels,
-          x: netSlope,
-          name: "Net Cancelled 1-Comp Slope",
-          type: "scatter",
-          mode: "markers",
-          marker: { color: "#0f172a", symbol: "diamond", size: 8 }
-        }
-      ],
-      {
-        title: {
-          text: `Opposing Risk (+γ̂+) vs. Protective (-γ̂-) Component Slopes in ${state.group}`,
-          font: { size: 12.2 }
-        },
-        barmode: "relative",
-        margin: { t: 42, r: 22, b: 45, l: 118 },
-        paper_bgcolor: "transparent",
-        plot_bgcolor: "transparent",
-        xaxis: { title: "← Protective Component Slope (-γ̂-)  |  Risk Component Slope (+γ̂+) →", zeroline: true, zerolinecolor: "#0f172a", zerolinewidth: 1.5, gridcolor: "#e2e8f0" },
-        yaxis: { tickfont: { size: 10.5 } },
-        legend: { orientation: "h", y: 1.12, x: 0.5, xanchor: "center", font: { size: 10 } },
-        font: { family: "Inter, sans-serif", size: 11 }
-      },
-      { responsive: true, displayModeBar: false }
-    );
-  }
-
   function refreshAll() {
     updateKPIs();
     renderProgressionChart();
@@ -1610,7 +1468,6 @@
     renderPathwayCards();
     renderGeneSizePlots();
     renderLt2000Section();
-    renderBidirectionalMixtureCharts();
     renderGeneTable();
   }
 
