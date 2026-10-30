@@ -13,12 +13,11 @@
   <header class="hero-header">
     <div class="container">
       <div class="badge-row">
-        <span class="badge highlight">Collinearity-Free Rerun (Median VIF = 1.022)</span>
-        <span class="badge">missense_ind &amp; GERP Removed</span>
+        <span class="badge highlight">Collinearity-Free WLS (Median VIF = 1.022)</span>
         <span class="badge">16,820,350 Coding Variants Merged</span>
         <span class="badge">AF &le; 0.001 &amp; AF &le; 0.0001</span>
-        <span class="badge">Firth 2&times;2 Fallback (59.68%)</span>
-        <span class="badge">208 Exome-Wide Significant Genes</span>
+        <span class="badge">Firth 2&times;2 Penalized Likelihood (59.7% &ndash; 64.1%)</span>
+        <span class="badge">162 (M7) &rarr; 294 (M7 &cup; M8 &cup; M9) Unique IBD Genes</span>
       </div>
       <h1 class="hero-title">
         Unified Rare-Variant Meta-Regression &amp; Pathway Architecture of IBD
@@ -27,29 +26,29 @@
         <strong>Manuel A. Rivas</strong> &bull; Department of Biomedical Data Science, Stanford University, Stanford, CA, USA 94305
       </p>
       <p class="hero-subtitle">
-        Explore all 208 exome-wide significant genes and their 9 core biological pathways below.
+        A unified statistical genetics framework integrating Firth 2&times;2 penalized likelihood, orthogonal 3-axis functional severity (AlphaMissense, pLoF, base-pair WES HMM constraint), gene-length-calibrated pathway architecture, and bidirectional risk/protective mixture modeling across Crohn's Disease, Ulcerative Colitis, and Combined IBD.
       </p>
       <div class="hero-actions">
-        <a href="ibd_unified_metaregression_report.pdf?v=20261028f" target="_blank" class="btn btn-primary" style="background:#0d9488;border-color:#0d9488;">
+        <a href="ibd_unified_metaregression_report.pdf?v=20261029c" target="_blank" class="btn btn-primary" style="background:#0d9488;border-color:#0d9488;">
           &#128196; Download Rare (AF &le; 0.001) Manuscript (PDF)
         </a>
-        <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261028f" target="_blank" class="btn btn-primary">
-          &#128196; Ultra-Rare (AF &le; 0.0001) Manuscript (PDF)
+        <a href="ibd_af0001_ultrarare_metaregression_report.pdf?v=20261029c" target="_blank" class="btn btn-primary">
+          &#128196; Download Ultra-Rare (AF &le; 0.0001) Manuscript (PDF)
         </a>
         <a href="#section-pathways" class="btn btn-outline">
-          &#129516; Pathway Architecture (AF &le; 0.001 &amp; AF &le; 0.0001)
+          &#129516; 4A. Pathway Architecture
         </a>
         <a href="#section-lt2000aa" class="btn btn-outline" style="border-color:#38bdf8; color:#bae6fd;">
-          &#9889; &lt; 2,000 AA Pathway Analysis
+          &#9889; 4B&ndash;4C. Gene Length &amp; &lt;2,000 AA
         </a>
         <a href="#section-bidirectional" class="btn btn-outline" style="border-color:#f43f5e; color:#fecdd3;">
-          &#9878; Risk &amp; Protective Models (M8 &amp; M9)
-        </a>
-        <a href="#section-figures" class="btn btn-outline">
-          &#128444; Publication Figures (300 DPI)
+          &#9878; 4D. Risk &amp; Protective (M8 &amp; M9)
         </a>
         <a href="#section-gene-table" class="btn btn-outline">
-          &#128269; Gene-Level Results Table
+          &#128269; 6. Gene Prioritization Table
+        </a>
+        <a href="#section-figures" class="btn btn-outline">
+          &#128444; 7. All 14 Figures (300 DPI)
         </a>
       </div>
     </div>
@@ -137,6 +136,36 @@
       </div>
     </section>
 
+    <!-- COHERENT 4-PILLAR NARRATIVE STORYBOARD -->
+    <section class="section-card" style="background: linear-gradient(135deg, #f8fafc 0%, #f0fdfa 100%); border: 1px solid #cbd5e1; border-left: 5px solid #0d9488; padding: 1.1rem 1.3rem; margin-bottom: 1.5rem;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <h2 style="font-size: 1.02rem; font-weight: 800; color: #0f172a; margin: 0;">
+          &#129517; Coherent Study Narrative: From Orthogonal Functional Slopes to Bidirectional Allelic Mixtures &amp; Pathway Architecture
+        </h2>
+        <span style="font-size: 0.76rem; font-weight: 700; color: #0f766e; background: #ccfbf1; padding: 0.2rem 0.6rem; border-radius: 999px;">
+          Interactive 4-Stage Analytical Framework
+        </span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.85rem; font-size: 0.8rem; line-height: 1.5; color: #334155;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #2563eb; border-radius: 6px; padding: 0.75rem 0.9rem;">
+          <div style="font-weight: 800; color: #1e3a8a; margin-bottom: 0.25rem;">I. Orthogonal 3-Moderator WLS &amp; Firth Rescue (<a href="#plot-progression" style="color:#2563eb;">&sect;1&ndash;3</a>)</div>
+          Removing collinear indicators (<code>missense_ind</code>, <code>GERP</code>; median VIF = 1.022) and rescuing 59.7%&ndash;64.1% zero-count variants via Firth 2&times;2 penalized likelihood expands discovery from 5 Browser burden genes to <strong>162 unique genes (208 gene-cohort hits)</strong> in <code>M7</code> at AF &le; 0.001 (121 unique genes at AF &le; 0.0001).
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #0d9488; border-radius: 6px; padding: 0.75rem 0.9rem;">
+          <div style="font-weight: 800; color: #115e59; margin-bottom: 0.25rem;">II. Unbiased Length-Adjusted Pathways (<a href="#section-pathways" style="color:#0d9488;">&sect;4A</a>)</div>
+          Exact Poisson-Binomial gene-length &amp; variant-count adjusted enrichment across 21,568 gene sets (DisGeNET, HPO, GO, Reactome, KEGG, WikiPathways) resolves <strong>9 core mucosal &amp; immune systems</strong>, from the Type I Hemidesmosome&ndash;Laminin-511 complex to WIPI2&ndash;ATG16L1 xenophagy and DPP9&ndash;NLRP1 restraint.
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #7c3aed; border-radius: 6px; padding: 0.75rem 0.9rem;">
+          <div style="font-weight: 800; color: #5b21b6; margin-bottom: 0.25rem;">III. Protein Size Calibration &amp; &lt;2,000 AA Core (<a href="#section-gene-size" style="color:#7c3aed;">&sect;4B&ndash;4C</a>)</div>
+          Deconvolves variant sample size (<em>M<sub>g</sub></em> &propto; <em>L</em><sub>AA</sub>, <em>r</em> = +0.905) from length-invariant explained variance <em>R</em>&sup2;, showing that compact proteins (&lt;2,000 AA, 97.4% of exome) explain <strong>3.2&times; higher variance per gene</strong> (8.60% vs. 2.68%) and drive core signaling &amp; enzymatic modules.
+        </div>
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 3px solid #e11d48; border-radius: 6px; padding: 0.75rem 0.9rem;">
+          <div style="font-weight: 800; color: #9f1239; margin-bottom: 0.25rem;">IV. Protective Shifts (M8) &amp; Bidirectional EM (M9) (<a href="#section-bidirectional" style="color:#e11d48;">&sect;4D</a> &amp; <a href="#section-gene-table" style="color:#e11d48;">&sect;6</a>)</div>
+          Incorporates net coding location shifts (<code>M8</code>: e.g., protective <em>ACVR2A</em>, <em>SMURF1</em>, <em>SENP8</em>, <em>DNMT3A</em>; risk <em>TNFRSF6B</em>) and 2-component EM sign-mixtures (<code>M9</code>: e.g., <em>CTSA</em>, <em>CSF2RB</em>, <em>ZNF341</em>, <em>LPIN1</em>), expanding total discovery to <strong>294 unique IBD genes</strong>.
+        </div>
+      </div>
+    </section>
+
     <!-- ROW 1: PROGRESSION CHART & UNIFIED VS BROWSER SCATTER -->
     <div class="chart-row-2col">
       <div class="section-card" style="margin-bottom: 0;">
@@ -181,7 +210,7 @@
     <section class="section-card" id="section-pathways">
       <div class="section-header">
         <div>
-          <h2 class="section-title" id="pathway-section-title">4. Deep Biological Pathway Architecture — Paper 2: Rare Coding Variants (AF &le; 0.001)</h2>
+          <h2 class="section-title" id="pathway-section-title">4A. Unbiased Biological &amp; Clinical Pathway Architecture (All Protein Lengths)</h2>
           <p class="section-desc">
             Unbiased pathway, clinical phenotype, and functional module enrichment is computed across all <strong>21,568 pre-defined gene sets across 9 libraries</strong> (<strong>DisGeNET Disease</strong>, <strong>HPO Clinical Phenotype</strong>, <strong>9 Highlighted Functional Biological Modules</strong>, GO Biological Process, GO Molecular Function, GO Cellular Component, Reactome, KEGG, and WikiPathways) strictly within the exact tested exome universe, with <strong>exact Poisson-Binomial gene-length &amp; variant-count adjustment</strong> (<em>p</em><sub>len-adj</sub>, OR<sub>len-adj</sub>) separately for <strong>All Combined (ALL)</strong>, <strong>Crohn's Disease (CD)</strong>, <strong>Ulcerative Colitis (UC)</strong>, and <strong>Combined IBD (IBD)</strong>.
           </p>
@@ -238,7 +267,7 @@
             <strong>M7 Epithelial Ca<sup>2+</sup> Channels</strong> (10/116, OR<sub>len</sub> = <strong>2.8&times;</strong>; <code>UC</code> <strong>3.8&times;</strong>),
             <strong>M6 Mucin O-Glycan &amp; Bile Transport</strong> (&lt;2,000 AA: 5/76, OR<sub>len</sub> = <strong>7.8&times;</strong>), and
             <strong>M1 Hemidesmosome &amp; Lamina Densa</strong> (11/66, OR<sub>Fisher</sub> = <strong>17.2&times;</strong>, <em>p</em><sub>Fisher</sub> = 4.63&times;10<sup>&minus;10</sup>; OR<sub>len</sub> = <strong>2.4&times;</strong>, <em>p</em><sub>len</sub> = 0.0439).
-            <br><span style="color: #64748b; font-size: 0.74rem;"><em>Note on CARD9:</em> Although <em>CARD9</em> has a protective Sanger aggregate burden (<em>p</em><sub>meta</sub> = 4.78&times;10<sup>&minus;11</sup>, &beta;&#770; = &minus;0.492), its within-gene moderator slope across rare coding variants is flat (<em>p</em><sub>M7</sub> = 0.384 in <code>CD</code>, 0.559 in <code>IBD</code>, 0.759 in <code>UC</code> at AF &le; 0.001; 0.184 in <code>CD</code> at AF &le; 0.0001), so <em>CARD9</em> is not significant in meta-regression and is excluded from all enrichment counts.</span>
+            <br><span style="color: #64748b; font-size: 0.74rem;"><em>Note on CARD9 &amp; IL23R:</em> The canonical protective alleles in <em>CARD9</em> (<code>c.1434+1G&gt;C</code>, AF &approx; 0.45%) and <em>IL23R</em> (<code>p.R381Q</code>, AF &approx; 6.0%) have allele frequencies above AF &le; 0.001; across remaining rare coding variants (AF &le; 0.001), <em>CARD9</em> is non-significant in all models (<em>p</em><sub>M7</sub> = 0.384, <em>p</em><sub>M8</sub> = 0.518, <em>p</em><sub>M9</sub> = 0.171 in <code>CD</code>) and is excluded from all enrichment counts.</span>
           </div>
         </div>
       </div>
@@ -285,8 +314,8 @@
           <tbody id="enrichr-table-body"></tbody>
         </table>
       </div>
-      <div class="fig-grid" style="grid-template-columns: 1fr;">
-        <div class="fig-card">
+      <div class="fig-grid" style="grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));">
+        <div class="fig-card" style="grid-column: 1 / -1;">
           <a id="link-fig7-pathway-1" href="assets/fig7_pathway_enrichment_network_af001.png?v=20261028f" target="_blank">
             <img id="img-fig7-pathway" src="assets/fig7_pathway_enrichment_network_af001.png?v=20261028f" alt="Figure 7: Threshold-Specific Pathway Enrichment and Functional Architecture" />
           </a>
@@ -594,6 +623,14 @@
         </div>
       </div>
 
+      <!-- IMPORTANT CLARIFICATION ON LOW-FREQUENCY VS RARE PROTECTIVE LOCI (CARD9 & IL23R) -->
+      <div style="margin-bottom: 1.25rem; background: #fffbeb; border: 1px solid #fde68a; border-left: 4px solid #d97706; border-radius: 8px; padding: 0.9rem 1.15rem; font-size: 0.8rem; color: #78350f; line-height: 1.55;">
+        <div style="font-weight: 800; color: #92400e; margin-bottom: 0.25rem; font-size: 0.86rem;">
+          &#9432; Why Are Canonical Low-Frequency/Common Protective IBD Loci (<em>CARD9</em> &amp; <em>IL23R</em>) Not Significant in the AF &le; 0.001 Rare-Variant Scan?
+        </div>
+        In classical GWAS and unstratified sequencing studies, the best-known protective IBD alleles are the <strong><em>CARD9</em> C-terminal splice-site variant (<code>c.1434+1G&gt;C</code> / <code>rs141992399</code>, minor allele frequency AF &approx; 0.0045 = 0.45%)</strong> and the <strong><em>IL23R</em> coding variant (<code>p.R381Q</code> / <code>rs11209026</code>, AF &approx; 0.060 = 6.0%)</strong>. Because both canonical protective alleles have minor allele frequencies well above the strict <strong>AF &le; 0.001 (0.1%)</strong> and <strong>AF &le; 0.0001 (0.01%)</strong> rare-variant thresholds, they are excluded from the rare-variant set. Across the remaining <em>M<sub>g</sub></em> = 307 rare non-synonymous variants (AF &le; 0.001) within <em>CARD9</em> in Crohn's disease, <strong><em>CARD9</em> is not significant in any rare-variant model</strong>: <em>p</em><sub>M7</sub> = 0.384 (<code>CD</code>), 0.759 (<code>UC</code>), 0.559 (<code>IBD</code>); <em>p</em><sub>M8</sub> = 0.518 (<code>CD</code>, net rare coding location shift <em>Z</em><sub>loc</sub> = &minus;0.36); and <em>p</em><sub>M9</sub> = 0.171 (<code>CD</code>, <em>p</em><sub>mag</sub> = 0.103). Likewise, rare coding variants in <em>IL23R</em> (AF &le; 0.001) show a single-component risk slope (<em>p</em><sub>M7</sub> = 1.63&times;10<sup>&minus;5</sup>, <em>p</em><sub>M9</sub> = 4.62&times;10<sup>&minus;5</sup>) below the exome-wide threshold (<em>p</em> &lt; 3.4&times;10<sup>&minus;7</sup>). Instead, at <strong>AF &le; 0.001</strong>, Model 2 (<code>M8</code>) and Model 3 (<code>M9</code>) discover genuinely exome-wide significant rare protective shifts in <strong><em>ACVR2A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;6.11, <em>p</em><sub>M8</sub> = 1.09&times;10<sup>&minus;8</sup>), <strong><em>SMURF1</em></strong> (<em>Z</em><sub>loc</sub> = &minus;4.50, <em>p</em><sub>M8</sub> = 6.53&times;10<sup>&minus;9</sup>), <strong><em>SENP8</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.57, <em>p</em><sub>M8</sub> = 1.24&times;10<sup>&minus;7</sup>), and <strong><em>DNMT3A</em></strong> (<em>Z</em><sub>loc</sub> = &minus;5.81, <em>p</em><sub>M8</sub> = 2.31&times;10<sup>&minus;7</sup>), and 2-component bidirectional allelic series in <strong><em>CTSA</em></strong> (<em>p</em><sub>M9</sub> = 1.76&times;10<sup>&minus;12</sup>, &pi;&#770;<sub>+</sub> = 45.8%), <strong><em>CSF2RB</em></strong> (<em>p</em><sub>M9</sub> = 2.80&times;10<sup>&minus;10</sup>, &pi;&#770;<sub>+</sub> = 45.6%), <strong><em>ZNF341</em></strong> (<em>p</em><sub>M9</sub> = 3.00&times;10<sup>&minus;10</sup>), <strong><em>HECTD1</em></strong> (<em>p</em><sub>M9</sub> = 3.27&times;10<sup>&minus;9</sup>), and <strong><em>LPIN1</em></strong> (<em>p</em><sub>M9</sub> = 3.38&times;10<sup>&minus;9</sup>).
+      </div>
+
       <!-- INTERACTIVE 2-COMPONENT EM MIXTURE PROPORTIONS & MIRRORED SLOPES CHARTS -->
       <div style="margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid #e11d48; border-radius: 8px; padding: 0.95rem 1.1rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.55rem;">
@@ -615,21 +652,21 @@
       <!-- EMBEDDED HIGH-IMPACT FIGURE 13 & FIGURE 14 -->
       <div class="chart-row-2col" style="margin-bottom: 1.25rem;">
         <div class="fig-card">
-          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" target="_blank">
-            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
+          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">
+            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9) in IBD Exomes" />
           </a>
           <div class="fig-caption">
             <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Dispersion) Across IBD, CD, and UC Exomes.</strong></span>
-            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029b" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" target="_blank">
-            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
+          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">
+            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
           </a>
           <div class="fig-caption">
-            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci.</strong></span>
-            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029b" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci (<em>CTSA, CSF2RB, ZNF341, LPIN1</em>).</strong></span>
+            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
       </div>
@@ -765,7 +802,7 @@
       <div class="section-header">
         <div>
           <h2 class="section-title">7. Publication-Quality Figures (300 DPI — Click Any Figure to Open Full-Resolution PNG)</h2>
-          <p class="section-desc">All 7 figures from the collinearity-free rerun are embedded in the PDF technical report and displayed at full width below.</p>
+          <p class="section-desc">All 14 publication-grade figures (300 DPI) from the collinearity-free unified meta-regression, biological pathway architecture, and bidirectional EM mixture analysis are embedded in the PDF manuscripts and displayed below.</p>
         </div>
       </div>
 
@@ -879,12 +916,21 @@
           </div>
         </div>
         <div class="fig-card">
-          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" target="_blank">
-            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9)" />
+          <a href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">
+            <img src="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" alt="Figure 13: Incorporating Risk and Protective Effects via Model 2 (M8) and Model 3 (M9)" />
           </a>
           <div class="fig-caption">
             <span><strong>Figure 13. Incorporating Risk &amp; Protective Effects in Rare-Variant Meta-Regression: Model 2 (M8: Joint 4-d.f. Location + Slope) and Model 3 (M9: 2-Component Latent Sign-Mixture EM &amp; Folded-Normal Dispersion).</strong></span>
-            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029a" target="_blank">&#128269; Open 300-DPI PNG</a>
+            <a class="fig-open-link" href="assets/fig13_bidirectional_m8_m9_architecture.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
+          </div>
+        </div>
+        <div class="fig-card">
+          <a href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">
+            <img src="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" alt="Figure 14: Visualizing Two-Component EM Mixture Proportions (pi+ Risk vs pi- Protective) and Opposing Moderator Slopes in IBD" />
+          </a>
+          <div class="fig-caption">
+            <span><strong>Figure 14. Visualizing EM Mixture Proportions (&pi;&#770;<sub>+</sub> Risk vs. &pi;&#770;<sub>&minus;</sub> Protective), Opposing Moderator Slopes, Phase Space, and Bimodal Variant Responsibilities for Significant 2-Component IBD Loci.</strong></span>
+            <a class="fig-open-link" href="assets/fig14_em_2component_mixture_proportions.png?v=20261029c" target="_blank">&#128269; Open 300-DPI PNG</a>
           </div>
         </div>
       </div>

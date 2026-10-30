@@ -594,8 +594,8 @@
     if (pTitle) {
       pTitle.innerHTML =
         state.af === "af0001"
-          ? `4. Deep Biological Pathway Architecture — Paper 1: Ultra-Rare (AF &le; 0.0001) [${cohortLabelMap[state.group] || state.group}]`
-          : `4. Deep Biological Pathway Architecture — Paper 2: Rare (AF &le; 0.001) [${cohortLabelMap[state.group] || state.group}]`;
+          ? `4A. Unbiased Biological &amp; Clinical Pathway Architecture — Ultra-Rare (AF &le; 0.0001) [${cohortLabelMap[state.group] || state.group}]`
+          : `4A. Unbiased Biological &amp; Clinical Pathway Architecture — Rare Coding (AF &le; 0.001) [${cohortLabelMap[state.group] || state.group}]`;
     }
 
     const allAaTitle = document.getElementById("all-aa-unbiased-title");
