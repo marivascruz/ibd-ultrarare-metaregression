@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IBD, Crohn's Disease &amp; Ulcerative Colitis — Strictly Novel Non-M7 Exome Discoveries</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --blue: #1d4ed8;
+      --violet: #6d28d9;
+      --emerald: #047857;
+      --plum: #701a75;
+      --amber: #92400e;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .topbar {
+      width: min(1280px, 96vw);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #f8fafc;
+      margin-bottom: 14px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .topbar h1 { font-size: 1.02rem; font-weight: 700; letter-spacing: -0.01em; }
+    .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .btn {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn:hover { background: #334155; }
+    .btn.primary { background: #2563eb; border-color: #3b82f6; }
+    .btn.primary:hover { background: #1d4ed8; }
+    .slide-deck {
+      width: min(1280px, 96vw);
+      aspect-ratio: 16 / 9;
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .slide { display: none; flex-direction: column; height: 100%; width: 100%; }
+    .slide.active { display: flex; }
+    .slide-hdr {
+      background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
+      color: #ffffff;
+      padding: 15px 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slide-hdr h2 { font-size: 1.22rem; font-weight: 700; }
+    .slide-hdr .badge {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .slide-body {
+      flex: 1;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      gap: 10px;
+    }
+    .hero-img { width: 100%; max-height: 66%; object-fit: contain; border-radius: 8px; }
+    .cards-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .callout {
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-size: 0.80rem;
+      line-height: 1.40;
+      border: 1px solid var(--border);
+    }
+    .callout.green { background: #ecfdf5; border-color: #a7f3d0; }
+    .callout.blue { background: #eff6ff; border-color: #bfdbfe; }
+    .callout.plum { background: #fdf4ff; border-color: #f5d0fe; }
+    .callout.violet { background: #f5f3ff; border-color: #ddd6fe; }
+    .callout.amber { background: #fffbeb; border-color: #fde68a; }
+    .callout strong.title { display: block; font-size: 0.86rem; margin-bottom: 3px; }
+    table.scorecard { width: 100%; border-collapse: collapse; font-size: 0.76rem; }
+    table.scorecard th {
+      background: #f1f5f9;
+      color: #0f172a;
+      text-align: left;
+      padding: 7px 8px;
+      border-bottom: 2px solid #cbd5e1;
+      font-weight: 700;
+    }
+    table.scorecard td {
+      padding: 6px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+    table.scorecard tr:nth-child(even) td { background: #f8fafc; }
+    .slide-ftr {
+      background: #0f172a;
+      color: #cbd5e1;
+      padding: 8px 26px;
+      font-size: 0.76rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.71rem;
+      font-weight: 700;
+    }
+    .pill.prot { background: #d1fae5; color: #065f46; }
+    .pill.risk { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <h1>IBD, Crohn's Disease &amp; Ulcerative Colitis Exome Meta-Regression &mdash; Strictly Novel Non-M7 Discoveries</h1>
+    <div class="controls">
+      <a href="index.html" class="btn">&larr; Main Portal</a>
+      <a href="ibd_new_models_genes_slides.pdf" target="_blank" class="btn primary">&#128196; Download 16:9 PDF Slides</a>
+      <button class="btn" onclick="prevSlide()">&larr; Prev</button>
+      <span id="slide-indicator" style="font-size:0.85rem;font-weight:600;padding:0 6px;">1 / 4</span>
+      <button class="btn" onclick="nextSlide()">Next &rarr;</button>
+    </div>
+  </div>
+
+  <div class="slide-deck">
+
+    <!-- SLIDE 1 -->
+    <section class="slide active">
+      <div class="slide-hdr">
+        <h2>Strictly Novel IBD, CD &amp; UC Loci Missed by M7 &amp; Published Burden</h2>
+        <span class="badge">37,708 Cases &bull; Zero Overlap with Prior M7 / Browser Hits</span>
+      </div>
+      <div class="slide-body">
+        <img src="figures/ibd_slide_fig3_quantitative_rescue.png" alt="Quantitative Rescue Across IBD, CD, and UC" class="hero-img" />
+        <div class="cards-3">
+          <div class="callout blue">
+            <strong class="title" style="color:var(--blue);">1. Intercept + Slopes (M8, 4 d.f.)</strong>
+            Slope-only <code>M7</code> leaves coding intercept &beta;<sub>g0</sub> free. Adding synonymous-calibrated <em>Z</em><sub>loc</sub> rescues protective <strong>TRPA1</strong> (<code>UC</code>), bidirectional <strong>SENP8</strong> (<code>CD</code>), and <strong>MAP4K4</strong> / <strong>COL6A2</strong> (<code>CD</code>).
+          </div>
+          <div class="callout violet">
+            <strong class="title" style="color:var(--violet);">2. Folded-Normal Dispersion (M9)</strong>
+            Regresses |&beta;&#770;<sub>gj</sub> &minus; &beta;&#772;<sub>g</sub>| on AlphaMissense, pLoF, and WES constraint; uncovers brush-border <strong>SLC9A3</strong> (<code>CD</code>), PDZ scaffold <strong>NHERF2</strong> (<code>UC</code>), <strong>PTPRS</strong>, <strong>WDFY4</strong>, and <strong>GUCA2A</strong>.
+          </div>
+          <div class="callout green">
+            <strong class="title" style="color:var(--emerald);">3. Synonymous Baseline (Synbase)</strong>
+            Anchoring &beta;<sub>g0</sub> on within-gene neutral synonymous variants rescues pathognomonic UC autoantigen <strong>ITGB6</strong> (<code>UC</code>), antifungal GEF <strong>VAV3</strong> (<code>CD</code>), and brush-border <strong>VIL1</strong> (<code>CD</code>).
+          </div>
+        </div>
+      </div>
+      <div class="slide-ftr">
+        <span>IBD, Crohn's Disease (CD) &amp; Ulcerative Colitis (UC) Exome Meta-Regression | Strictly Non-M7 Discoveries</span>
+        <span>Slide 1 / 4 (Use &larr; &rarr; keys)</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="slide">
+      <div class="slide-hdr">
+        <h2>Model M8 (Intercept + Slopes): Newly Uncovered UC, CD &amp; IBD Mechanisms</h2>
+        <span class="badge">Protective &amp; Risk Coding Architecture</span>
+      </div>
+      <div class="slide-body">
+        <img src="figures/ibd_slide_fig1_m8_biology.jpg" alt="Model M8 Biological Pathways in UC, CD, and IBD" class="hero-img" />
+        <div class="cards-3">
+          <div class="callout green">
+            <strong class="title" style="color:var(--emerald);">TRPA1 Protective LoF (UC)</strong>
+            Best <code>M7</code> = 6.3e-6 &rarr; <strong>p<sub>M8</sub> = 1.67e-6</strong> &amp; <strong>p<sub>Syn</sub> = 7.90e-7</strong> (<em>Z</em><sub>loc</sub> = &minus;2.42; Pub 4.7e-3). 73 vs 1,696 pLoF alleles (<strong>0.62&times; protection</strong>, Syn 1.03&times;); blocks Substance P/CGRP colitis &rarr; <strong>gut TRPA1 antagonists</strong>.
+          </div>
+          <div class="callout blue">
+            <strong class="title" style="color:var(--blue);">SENP8 / DEN1 Neddylation Switch (CD)</strong>
+            Best <code>M7</code> = 4.9e-4 &rarr; <strong>p<sub>M8</sub> = 1.24e-7</strong> (<em>Z</em><sub>loc</sub> = &minus;5.57; Pub 0.38). Catalytic AM+/pLoF confer <strong>3.1&ndash;3.2&times; CD risk</strong> while a common benign allele (&beta;&#770; = &minus;0.46) cancels pooled burden; regulates Cullin-1/NF-&kappa;B.
+          </div>
+          <div class="callout plum">
+            <strong class="title" style="color:var(--plum);">MAP4K4 &amp; COL6A2 (CD / IBD)</strong>
+            <strong>MAP4K4</strong> (<strong>1.13e-6</strong>, 2.4&times; CD pLoF) mediates macrophage TNF-&alpha; &rarr; JNK/NF-&kappa;B inflammation; <strong>COL6A2</strong> (<strong>p<sub>M8</sub> = 1.93e-6</strong>, <strong>p<sub>M9</sub> = 8.84e-8</strong>) anchors crypt matrix &amp; releases <strong>PRO-C6 / Endotrophin</strong> in CD strictures.
+          </div>
+        </div>
+      </div>
+      <div class="slide-ftr">
+        <span>IBD, Crohn's Disease (CD) &amp; Ulcerative Colitis (UC) Exome Meta-Regression | Model M8 Biology</span>
+        <span>Slide 2 / 4</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="slide">
+      <div class="slide-hdr">
+        <h2>M9 Dispersion &amp; Synbase: Brush-Border Transport, Epithelial Junctions &amp; Mycobiome</h2>
+        <span class="badge">Convergent Subtype Biology Across CD, UC &amp; IBD</span>
+      </div>
+      <div class="slide-body">
+        <img src="figures/ibd_slide_fig2_m9_synbase_biology.jpg" alt="Model M9 and Synbase Biological Pathways" class="hero-img" />
+        <div class="cards-3">
+          <div class="callout violet">
+            <strong class="title" style="color:var(--violet);">SLC9A3 (CD), NHERF2 (UC) &amp; GUCA2A (CD)</strong>
+            Apical NHE3 antiporter <strong>SLC9A3</strong> (<strong>2.64e-8</strong>, 2.9&times; CD pLoF risk) &amp; its direct PDZ scaffold <strong>NHERF2</strong> (<strong>1.80e-8</strong> at 10<sup>&minus;4</sup>, 0.30&times; UC pLoF protection), plus Guanylin <strong>GUCA2A</strong> (<strong>2.15e-6</strong> &rarr; <strong>Linaclotide / GUCY2C agonists</strong>).
+          </div>
+          <div class="callout amber">
+            <strong class="title" style="color:var(--amber);">PTPRS (IBD/UC) &amp; ITGB6 (UC)</strong>
+            <strong>PTPRS</strong> (<strong>3.20e-8</strong> IBD, <strong>6.69e-8</strong> UC; paralog <strong>PTPRK</strong> 1.2e-7 CD) stabilizes E-cadherin/&beta;-catenin junctions; <strong>ITGB6</strong> (<strong>7.51e-7</strong> UC, 1.7&times; pLoF) activates TGF-&beta; &amp; is the target of &gt;90% pathognomonic UC autoantibodies.
+          </div>
+          <div class="callout green">
+            <strong class="title" style="color:var(--emerald);">VAV3 (CD), VIL1 (CD) &amp; WDFY4 (IBD)</strong>
+            <strong>VAV3</strong> (<strong>1.67e-7</strong>, 1.9&times; pLoF, Syn 0.91&times;) bridges Dectin-1/Syk to <strong>CARD9&ndash;BCL10&ndash;MALT1</strong> antifungal gut immunity; <strong>VIL1</strong> (<strong>5.24e-7</strong>, 2.1&times; pLoF) drives microvillar repair &amp; cDC1 <strong>WDFY4</strong> (<strong>2.40e-7</strong>).
+          </div>
+        </div>
+      </div>
+      <div class="slide-ftr">
+        <span>IBD, Crohn's Disease (CD) &amp; Ulcerative Colitis (UC) Exome Meta-Regression | M9 &amp; Synbase Biology</span>
+        <span>Slide 3 / 4</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="slide">
+      <div class="slide-hdr">
+        <h2>Scorecard: Strictly Novel IBD, CD &amp; UC Loci Missed Across All M7 Cohorts</h2>
+        <span class="badge">min p<sub>M7</sub> &ge; 2.5e-6 &amp; min Published p &ge; 2.5e-6</span>
+      </div>
+      <div class="slide-body" style="justify-content:flex-start; gap:8px;">
+        <table class="scorecard">
+          <thead>
+            <tr>
+              <th>Gene (Cohort)</th>
+              <th>Rescuing Model</th>
+              <th>Best Pub <em>p</em></th>
+              <th>Best M7 <em>p</em></th>
+              <th>New Model <em>p</em></th>
+              <th>AN-Matched Carriers (Syn RR)</th>
+              <th>Mucosal Biology &amp; Clinical Translation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>NHERF2</strong> (<code>UC</code>, 10<sup>&minus;4</sup>)</td>
+              <td>M9 Dispersion</td>
+              <td>9.76e-03</td>
+              <td>6.31e-02</td>
+              <td><strong>1.80e-08</strong></td>
+              <td><span class="pill prot">0.30&times; Prot</span> 6/82 pLoF (Syn 1.09&times;)</td>
+              <td>Apical PDZ scaffold tethering NHE3 (<em>SLC9A3</em>); partial NHE3 modulation (<strong>Tenapanor</strong>)</td>
+            </tr>
+            <tr>
+              <td><strong>SLC9A3</strong> (<code>CD</code>)</td>
+              <td>M9 Dispersion</td>
+              <td>1.35e-01</td>
+              <td>7.60e-06</td>
+              <td><strong>2.64e-08</strong></td>
+              <td><span class="pill risk">2.87&times; Risk</span> 4/5 pLoF (Syn 1.10&times;)</td>
+              <td>Brush-border <strong>NHE3</strong> Na<sup>+</sup>/H<sup>+</sup> antiporter; Mendelian congenital diarrhea &amp; VEO-IBD</td>
+            </tr>
+            <tr>
+              <td><strong>PTPRS</strong> (<code>IBD</code> / <code>UC</code>)</td>
+              <td>M9 + Synbase</td>
+              <td>1.28e-01</td>
+              <td>3.87e-06</td>
+              <td><strong>3.20e-08</strong> (6.7e-8)</td>
+              <td><span class="pill risk">1.74&times; Risk</span> 12/17 pLoF (Syn 1.16&times;)</td>
+              <td>Receptor PTP&sigma; stabilizing E-cadherin/&beta;-catenin junctions (paralog <strong>PTPRK</strong> 1.21e-7 in <code>CD</code>)</td>
+            </tr>
+            <tr>
+              <td><strong>COL6A2</strong> (<code>CD</code> / <code>IBD</code>)</td>
+              <td>M9 + M8 (4 d.f.)</td>
+              <td>8.74e-05</td>
+              <td>1.50e-05</td>
+              <td><strong>8.84e-08</strong> (1.9e-6)</td>
+              <td><span class="pill risk">1.33&times; Risk</span> 120/1067 AM+ (<em>Z</em><sub>loc</sub> +2.68)</td>
+              <td>Subepithelial Collagen VI microfibril; releases <strong>PRO-C6 / Endotrophin</strong> in fibrostenosing CD</td>
+            </tr>
+            <tr>
+              <td><strong>SENP8</strong> (<code>CD</code>)</td>
+              <td>M8 (4 d.f.)</td>
+              <td>3.80e-01</td>
+              <td>4.88e-04</td>
+              <td><strong>1.24e-07</strong></td>
+              <td><span class="pill risk">3.18&times; AM+</span> 8/20 (<em>Z</em><sub>loc</sub> &minus;5.57, Syn 0.99&times;)</td>
+              <td>NEDD8 protease (DEN1) de-neddylating <strong>Cullin-1 (SCF)</strong> to regulate I&kappa;B&alpha; / NF-&kappa;B</td>
+            </tr>
+            <tr>
+              <td><strong>VAV3</strong> (<code>CD</code>)</td>
+              <td>Synbase M7</td>
+              <td>1.14e-01</td>
+              <td>3.00e-06</td>
+              <td><strong>1.67e-07</strong></td>
+              <td><span class="pill risk">1.90&times; Risk</span> 27/144 pLoF (Syn 0.91&times;)</td>
+              <td>Myeloid Rho/Rac GEF bridging <strong>Dectin-1 / Syk</strong> to <strong>CARD9&ndash;BCL10&ndash;MALT1</strong> antifungal defense</td>
+            </tr>
+            <tr>
+              <td><strong>WDFY4</strong> (<code>IBD</code> / <code>CD</code>)</td>
+              <td>M9 Dispersion</td>
+              <td>1.67e-01</td>
+              <td>2.51e-06</td>
+              <td><strong>2.40e-07</strong></td>
+              <td><span class="pill risk">1.37&times; Risk</span> 288/1144 AM+ (Syn 1.16&times;)</td>
+              <td>Endosomal BEACH scaffold required for cDC1 CD8<sup>+</sup> T-cell cross-presentation</td>
+            </tr>
+            <tr>
+              <td><strong>VIL1</strong> (<code>CD</code>)</td>
+              <td>Synbase M7</td>
+              <td>5.89e-02</td>
+              <td>4.77e-06</td>
+              <td><strong>5.24e-07</strong></td>
+              <td><span class="pill risk">2.10&times; Risk</span> 42/203 pLoF (Syn 1.20&times;)</td>
+              <td>Enterocyte brush-border <strong>Villin-1</strong> actin-severing protein driving microvillar wound restitution</td>
+            </tr>
+            <tr>
+              <td><strong>ITGB6</strong> (<code>UC</code>)</td>
+              <td>Synbase M7</td>
+              <td>3.06e-02</td>
+              <td>2.01e-05</td>
+              <td><strong>7.51e-07</strong></td>
+              <td><span class="pill risk">1.73&times; Risk</span> 33/207 pLoF (Ben 1.06&times;)</td>
+              <td>Epithelial <strong>&alpha;<sub>v</sub>&beta;<sub>6</sub> integrin</strong> activating latent TGF-&beta;; target of &gt;90% pathognomonic UC autoantibodies</td>
+            </tr>
+            <tr>
+              <td><strong>TRPA1</strong> (<code>UC</code>)</td>
+              <td>Synbase + M8</td>
+              <td>4.71e-03</td>
+              <td>6.33e-06</td>
+              <td><strong>7.90e-07</strong> (1.7e-6)</td>
+              <td><span class="pill prot">0.62&times; Prot</span> 73/1696 pLoF (Syn 1.03&times;)</td>
+              <td>Colonic nociceptive sensory channel (Substance P/CGRP); validates <strong>gut TRPA1 antagonists</strong></td>
+            </tr>
+            <tr>
+              <td><strong>MAP4K4</strong> (<code>CD</code>)</td>
+              <td>M8 (4 d.f.)</td>
+              <td>1.53e-01</td>
+              <td>4.30e-06</td>
+              <td><strong>1.13e-06</strong></td>
+              <td><span class="pill risk">2.43&times; Risk</span> 5/8 pLoF (&beta;<sub>LoF</sub> = +0.92)</td>
+              <td>Ste20 kinase (HGK) driving macrophage <strong>TNF-&alpha; &rarr; JNK / NF-&kappa;B</strong> inflammation</td>
+            </tr>
+            <tr>
+              <td><strong>GUCA2A</strong> (<code>CD</code>)</td>
+              <td>M9 Dispersion</td>
+              <td>4.22e-01</td>
+              <td>3.91e-03</td>
+              <td><strong>2.15e-06</strong></td>
+              <td><span class="pill risk">1.99&times; Risk</span> 73/446 AM+ (Syn 1.10&times;)</td>
+              <td>Goblet/enterocyte <strong>Guanylin</strong> peptide; directly druggable via oral <strong>GUCY2C agonists</strong> (Linaclotide)</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout blue" style="font-size:0.75rem; padding:8px 12px;">
+          <strong>Strict Zero-Overlap &amp; QC Filter:</strong> Excludes all 317 genes reaching <em>p</em> &lt; 2.5e-6 in <code>M7</code> in <em>any</em> IBD cohort (<em>NOD2, IL23R, CARD9, CSF2RB, ZNF341, AFDN, SCNN1B</em>), all published single-mask exome hits (<em>TNFRSF6B, IL10RA, MST1R, RPS6KA1, PLCG1</em>), age-related CHIP blood artifacts (<em>DNMT3A, TET2</em>), and mucin/paralog/repeat loci (<em>MUC6, NBPF20, CYP2D7</em>).
+        </div>
+      </div>
+      <div class="slide-ftr">
+        <span>IBD, Crohn's Disease (CD) &amp; Ulcerative Colitis (UC) Exome Meta-Regression | Complete 12-Gene Scorecard</span>
+        <span>Slide 4 / 4</span>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const ind = document.getElementById('slide-indicator');
+    let idx = 0;
+    function show(i) {
+      idx = (i + slides.length) % slides.length;
+      slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+      ind.textContent = `${idx + 1} / ${slides.length}`;
+    }
+    function nextSlide() { show(idx + 1); }
+    function prevSlide() { show(idx - 1); }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prevSlide(); }
+    });
+  </script>
+</body>
+</html>
